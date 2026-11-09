@@ -6,9 +6,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="theme-color" content="#0b0d0a">
 <title>全員瘋子RPG</title>
-<meta name="description" content="全員瘋子RPG：手機直著玩的爆笑塔防。六位英雄當塔，換裝備改變攻擊方式，英雄會一直吐槽你這個主神。">
+<meta name="description" content="全員瘋子RPG：手機直著玩的爆笑 RPG 塔防。在瘋子村莊跟 NPC 鬥嘴、幫英雄配裝備和技能，再出城守住城門。英雄會一直吐槽你這個主神。">
 <meta property="og:title" content="全員瘋子RPG">
-<meta property="og:description" content="手機直著玩的爆笑塔防：六位英雄當塔、裝備決定流派，英雄會吐槽主神。免安裝，打開網頁就能玩。">
+<meta property="og:description" content="手機直著玩的爆笑 RPG 塔防：村莊裡全是瘋子 NPC，六位英雄配裝配技能後出城守門，還會吐槽主神。免安裝，打開網頁就能玩。">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap">
@@ -33,40 +33,63 @@
   button:disabled { opacity: .45; cursor: default; }
   button.primary { background: linear-gradient(#a07a2e, #6e521c); color: #fff4d4; font-weight: 900; }
   button.on { background: #6e521c; color: #fff4d4; }
-  /* top bar */
-  #top { flex: none; display: flex; flex-direction: column; justify-content: center; gap: calc(var(--u) * 6); padding: calc(var(--u) * 8) calc(var(--u) * 12); background: linear-gradient(#1d170f, #110e09); border-bottom: 1px solid var(--line); }
+  .bar { flex: none; display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 8) calc(var(--u) * 12); background: linear-gradient(#1d170f, #110e09); border-bottom: 1px solid var(--line); }
+  .bar .stat { display: flex; align-items: center; gap: calc(var(--u) * 5); font-weight: 900; font-size: calc(var(--u) * 22); white-space: nowrap; }
+  .bar .stat img { width: calc(var(--u) * 28); height: calc(var(--u) * 28); object-fit: contain; }
+  .bar .sp { flex: 1; }
+  .bar button { padding: calc(var(--u) * 5) calc(var(--u) * 12); font-size: calc(var(--u) * 18); min-width: calc(var(--u) * 56); }
+  /* battle top bar */
+  #top { flex: none; display: flex; flex-direction: column; gap: calc(var(--u) * 4); padding: calc(var(--u) * 8) calc(var(--u) * 12); background: linear-gradient(#1d170f, #110e09); border-bottom: 1px solid var(--line); }
   #top .row { display: flex; align-items: center; gap: calc(var(--u) * 10); }
   #top .stat { display: flex; align-items: center; gap: calc(var(--u) * 6); font-weight: 900; font-size: calc(var(--u) * 24); white-space: nowrap; }
   #top .stat img { width: calc(var(--u) * 30); height: calc(var(--u) * 30); object-fit: contain; }
   #tWave { color: #ffe9a8; }
   #tLives { color: #ff9a8a; }
   #top .sp { flex: 1; }
-  #top button { padding: calc(var(--u) * 5) calc(var(--u) * 12); font-size: calc(var(--u) * 18); min-width: calc(var(--u) * 58); }
+  #top button { padding: calc(var(--u) * 5) calc(var(--u) * 7); font-size: calc(var(--u) * 16); min-width: calc(var(--u) * 44); white-space: nowrap; flex: none; }
+  #top .row { min-width: 0; } #top .stat { font-size: calc(var(--u) * 22); }
   #tAdapt { font-size: calc(var(--u) * 16); color: #ffb36b; min-height: 1.2em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* battlefield */
   #field { position: relative; flex: none; align-self: center; }
   #cv { display: block; width: 100%; height: 100%; touch-action: none; }
-  #banner { position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%); padding: calc(var(--u) * 10) calc(var(--u) * 26); background: rgba(10,8,5,.82); border: 2px solid var(--gold); border-radius: calc(var(--u) * 14); color: #ffe9a8; font-weight: 900; font-size: calc(var(--u) * 30); text-align: center; white-space: pre-line; pointer-events: none; opacity: 0; transition: opacity .25s; }
+  #banner { position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%); padding: calc(var(--u) * 10) calc(var(--u) * 26); background: rgba(10,8,5,.82); border: 2px solid var(--gold); border-radius: calc(var(--u) * 14); color: #ffe9a8; font-weight: 900; font-size: calc(var(--u) * 30); text-align: center; white-space: pre-line; pointer-events: none; opacity: 0; transition: opacity .25s; width: max-content; max-width: 92%; }
   #banner.show { opacity: 1; }
-  #toast { position: absolute; left: 50%; bottom: calc(var(--u) * 10); transform: translateX(-50%); max-width: 94%; padding: calc(var(--u) * 6) calc(var(--u) * 14); background: rgba(60,20,14,.9); border: 1px solid #ff9a6a; border-radius: calc(var(--u) * 10); color: #ffe0d0; font-size: calc(var(--u) * 18); pointer-events: none; opacity: 0; transition: opacity .2s; text-align: center; }
-  #toast.show { opacity: 1; }
-  /* bottom thumb area */
+  .toast { position: absolute; left: 50%; bottom: calc(var(--u) * 10); transform: translateX(-50%); max-width: 94%; padding: calc(var(--u) * 6) calc(var(--u) * 14); background: rgba(60,20,14,.92); border: 1px solid #ff9a6a; border-radius: calc(var(--u) * 10); color: #ffe0d0; font-size: calc(var(--u) * 18); pointer-events: none; opacity: 0; transition: opacity .2s; text-align: center; z-index: 8; width: max-content; }
+  .toast.show { opacity: 1; }
+  /* battle thumb area: hero cards, items, selected hero */
   #bottom { flex: 1; min-height: 0; display: flex; flex-direction: column; background: linear-gradient(#16120d, #0d0a07); border-top: 1px solid var(--line); padding: calc(var(--u) * 8) calc(var(--u) * 10) max(calc(var(--u) * 10), env(safe-area-inset-bottom, 0px)); gap: calc(var(--u) * 8); }
-  #bHead { flex: none; display: flex; align-items: center; gap: calc(var(--u) * 8); min-height: calc(var(--u) * 46); }
-  #bHead .tab { padding: calc(var(--u) * 6) calc(var(--u) * 16); }
-  #bHint { flex: 1; color: var(--muted); font-size: calc(var(--u) * 16); line-height: 1.3; }
-  #bBody { flex: 1; min-height: 0; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  #bBody { flex: 1; min-height: 0; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: calc(var(--u) * 8); }
   #bAct { flex: none; display: flex; gap: calc(var(--u) * 8); }
   #bAct #go { flex: 1; font-size: calc(var(--u) * 26); padding: calc(var(--u) * 12); }
-  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(var(--u) * 8); }
-  .card { position: relative; display: flex; flex-direction: column; align-items: center; padding: calc(var(--u) * 6) calc(var(--u) * 2); background: #221b13; border: 1px solid var(--line); border-radius: calc(var(--u) * 12); font-size: calc(var(--u) * 16); line-height: 1.2; text-align: center; touch-action: none; cursor: pointer; }
-  .card img { height: calc(var(--u) * 62); max-width: 100%; object-fit: contain; pointer-events: none; }
-  .card b { font-size: calc(var(--u) * 18); }
+  .hint { color: var(--muted); font-size: calc(var(--u) * 16); line-height: 1.3; }
+  .cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: calc(var(--u) * 6); }
+  .card { position: relative; display: flex; flex-direction: column; align-items: center; padding: calc(var(--u) * 4) calc(var(--u) * 2); background: #221b13; border: 1px solid var(--line); border-radius: calc(var(--u) * 10); font-size: calc(var(--u) * 15); line-height: 1.2; text-align: center; touch-action: none; cursor: pointer; overflow: hidden; }
+  .card img { height: calc(var(--u) * 64); max-width: 100%; object-fit: contain; pointer-events: none; }
+  .card b { font-size: calc(var(--u) * 15); white-space: nowrap; }
   .card .cost { color: var(--gold2); font-weight: 900; }
   .card.sel { border-color: #ffe066; box-shadow: 0 0 calc(var(--u) * 12) rgba(255,224,102,.6); }
-  .card.used { opacity: .5; }
   .card.poor .cost { color: var(--bad); }
-  .card .tag { position: absolute; top: calc(var(--u) * 4); right: calc(var(--u) * 6); font-size: calc(var(--u) * 14); color: var(--ok); }
+  .card.down img { filter: grayscale(1) brightness(.6); }
+  .hpbar { width: 100%; height: calc(var(--u) * 7); background: #3a1210; border-radius: 4px; overflow: hidden; }
+  .hpbar i { display: block; height: 100%; background: linear-gradient(#8fe07a, #4fa83f); }
+  .items { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(var(--u) * 6); }
+  .item { display: flex; align-items: center; gap: calc(var(--u) * 6); padding: calc(var(--u) * 4) calc(var(--u) * 6); background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 10); font-size: calc(var(--u) * 15); line-height: 1.2; cursor: pointer; }
+  .item img { width: calc(var(--u) * 38); height: calc(var(--u) * 38); object-fit: contain; flex: none; }
+  .item b { color: var(--gold2); }
+  .item.none { opacity: .45; }
+  /* selected hero in battle */
+  .tp { display: flex; gap: calc(var(--u) * 10); align-items: center; }
+  .tp .por { width: calc(var(--u) * 74); height: calc(var(--u) * 80); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 10); border: 1px solid var(--line); background: #2a2016; flex: none; }
+  .tp .info { flex: 1; min-width: 0; font-size: calc(var(--u) * 16); }
+  .tp .info b { color: #ffe9a8; font-size: calc(var(--u) * 20); }
+  .skills2 { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--u) * 8); }
+  .skbtn { display: flex; align-items: center; gap: calc(var(--u) * 8); text-align: left; padding: calc(var(--u) * 6); font-size: calc(var(--u) * 16); line-height: 1.2; position: relative; overflow: hidden; }
+  .skbtn img { width: calc(var(--u) * 52); height: calc(var(--u) * 52); border-radius: calc(var(--u) * 8); flex: none; }
+  .skbtn .cdm { position: absolute; left: 0; bottom: 0; height: 100%; background: rgba(0,0,0,.55); pointer-events: none; }
+  .tact { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(var(--u) * 6); text-align: center; font-size: calc(var(--u) * 14); }
+  .tact div { background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 8); padding: calc(var(--u) * 4); }
+  .tact b { display: block; font-size: calc(var(--u) * 20); color: #ffe9a8; }
+  .sub { margin: calc(var(--u) * 10) 0 calc(var(--u) * 4); color: var(--gold2); font-weight: 900; font-size: calc(var(--u) * 17); }
   /* gear icons */
   .ic { position: relative; display: inline-flex; align-items: center; justify-content: center; width: calc(var(--u) * 64); height: calc(var(--u) * 64); border-radius: calc(var(--u) * 10); background: #120e09; border: 2px solid #777; flex: none; }
   .ic img { width: 88%; height: 88%; object-fit: contain; pointer-events: none; }
@@ -76,50 +99,70 @@
   .bag { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 8); }
   .bagit { display: flex; flex-direction: column; align-items: center; width: calc(var(--u) * 92); font-size: calc(var(--u) * 13); line-height: 1.2; text-align: center; padding: calc(var(--u) * 4) 0; border-radius: calc(var(--u) * 10); border: 1px solid transparent; cursor: pointer; }
   .bagit.sel { border-color: #ffe066; background: #2a2214; }
+  .bagit.no { opacity: .4; }
   .r0t { color: #d8d8d8; } .r1t { color: #6fe06a; } .r2t { color: #4aa3ff; } .r3t { color: #c07bff; } .r4t { color: #ff9a2e; }
   .tdaff { color: #ffd76b; }
   .muted { color: var(--muted); }
   .ok { color: var(--ok); } .bad { color: var(--bad); }
-  /* tower panel */
-  .tp { display: flex; gap: calc(var(--u) * 10); }
-  .tp .por { width: calc(var(--u) * 92); height: calc(var(--u) * 100); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 10); border: 1px solid var(--line); background: #2a2016; flex: none; }
-  .tp .st { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--u) * 2) calc(var(--u) * 10); font-size: calc(var(--u) * 16); align-content: start; }
-  .tp .st b { color: #ffe9a8; }
-  .slots { display: flex; gap: calc(var(--u) * 10); margin-top: calc(var(--u) * 8); align-items: center; }
-  .slot { display: flex; align-items: center; gap: calc(var(--u) * 6); flex: 1; min-width: 0; font-size: calc(var(--u) * 14); line-height: 1.25; cursor: pointer; background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 10); padding: calc(var(--u) * 4); }
-  .slot span { overflow: hidden; }
-  .tact { margin-top: calc(var(--u) * 8); display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(var(--u) * 6); text-align: center; font-size: calc(var(--u) * 14); }
-  .tact div { background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 8); padding: calc(var(--u) * 4); }
-  .tact b { display: block; font-size: calc(var(--u) * 20); color: #ffe9a8; }
-  .sub { margin: calc(var(--u) * 10) 0 calc(var(--u) * 4); color: var(--gold2); font-weight: 900; font-size: calc(var(--u) * 16); }
-  /* windows (home, gear, results, menu) */
-  .screen { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; background: radial-gradient(ellipse at 50% 20%, #2a2215, #0b0d0a 70%); }
+  /* village */
+  .screen { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; background: var(--bg); }
   .screen[hidden], #modal[hidden], #dlg[hidden] { display: none; }
-  #home { align-items: center; justify-content: center; gap: calc(var(--u) * 16); padding: calc(var(--u) * 24); text-align: center; }
-  #home h1 { margin: 0; font-size: calc(var(--u) * 64); font-weight: 900; color: #ffe9a8; text-shadow: 0 calc(var(--u) * 4) 0 #5a3a12, 0 0 calc(var(--u) * 24) rgba(233,196,106,.5); letter-spacing: calc(var(--u) * 2); }
-  #home .heroes { display: flex; justify-content: center; align-items: flex-end; height: calc(var(--u) * 170); }
-  #home .heroes img { height: calc(var(--u) * 150); margin: 0 calc(var(--u) * -14); filter: drop-shadow(0 6px 8px #000); }
-  #home .heroes img:nth-child(3n+2) { height: calc(var(--u) * 165); }
-  #home button { width: min(100%, calc(var(--u) * 380)); font-size: calc(var(--u) * 26); padding: calc(var(--u) * 14); }
-  #home .wallet { display: flex; gap: calc(var(--u) * 20); justify-content: center; font-weight: 900; font-size: calc(var(--u) * 22); }
-  #home .wallet img { width: calc(var(--u) * 28); vertical-align: middle; }
-  #home .say { max-width: calc(var(--u) * 460); font-size: calc(var(--u) * 17); color: var(--muted); line-height: 1.5; }
-  #modal { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.6); padding: calc(var(--u) * 12); }
+  #vField { position: relative; flex: 1; min-height: 0; }
+  #vc { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+  #vCtl { flex: none; display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: calc(var(--u) * 10); padding: calc(var(--u) * 10) calc(var(--u) * 12) max(calc(var(--u) * 12), env(safe-area-inset-bottom, 0px)); background: linear-gradient(#16120d, #0d0a07); border-top: 1px solid var(--line); }
+  #vCtl button { font-size: calc(var(--u) * 24); padding: calc(var(--u) * 16) calc(var(--u) * 6); touch-action: none; font-weight: 900; }
+  #vTalk:disabled { opacity: .35; }
+  #vTitle { position: absolute; left: 0; right: 0; top: calc(var(--u) * 10); text-align: center; font-size: calc(var(--u) * 40); font-weight: 900; color: #ffe9a8; text-shadow: 0 calc(var(--u) * 3) 0 #5a3a12, 0 0 calc(var(--u) * 18) rgba(0,0,0,.9); pointer-events: none; }
+  #vHint { position: absolute; left: 50%; bottom: calc(var(--u) * 10); transform: translateX(-50%); width: max-content; max-width: 94%; padding: calc(var(--u) * 6) calc(var(--u) * 14); background: rgba(10,8,5,.78); border: 1px solid var(--line); border-radius: calc(var(--u) * 10); font-size: calc(var(--u) * 17); text-align: center; pointer-events: none; }
+  /* windows */
+  #modal { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.6); padding: calc(var(--u) * 10); }
   #modal .box { width: 100%; max-height: 100%; display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--gold); border-radius: calc(var(--u) * 14); overflow: hidden; }
+  #modal.full .box { height: 100%; }
   #modal header { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 10) calc(var(--u) * 14); background: var(--panel2); border-bottom: 1px solid var(--line); }
   #modal h2 { flex: 1; margin: 0; font-size: calc(var(--u) * 26); color: var(--gold2); }
-  #mBody { overflow-y: auto; padding: calc(var(--u) * 12) calc(var(--u) * 14) calc(var(--u) * 16); font-size: calc(var(--u) * 18); line-height: 1.5; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  #mBody { flex: 1; overflow-y: auto; padding: calc(var(--u) * 12) calc(var(--u) * 14) calc(var(--u) * 16); font-size: calc(var(--u) * 18); line-height: 1.5; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
   .say2 { background: var(--panel2); border-left: 3px solid var(--gold); padding: calc(var(--u) * 8) calc(var(--u) * 12); border-radius: 4px; margin-bottom: calc(var(--u) * 10); }
+  .npc { display: flex; gap: calc(var(--u) * 12); align-items: flex-end; margin-bottom: calc(var(--u) * 10); }
+  .npc img { height: calc(var(--u) * 150); flex: none; filter: drop-shadow(0 4px 6px #000); }
+  .npc .say2 { flex: 1; margin: 0; }
   .hrow { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 8); border: 1px solid var(--line); border-radius: calc(var(--u) * 10); margin-bottom: calc(var(--u) * 8); background: #1a140e; }
   .hrow img.hp { width: calc(var(--u) * 56); height: calc(var(--u) * 64); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 8); }
   .hrow .nm { flex: 1; min-width: 0; font-size: calc(var(--u) * 17); line-height: 1.3; }
   .xp { height: calc(var(--u) * 6); background: #333; border-radius: 3px; overflow: hidden; margin-top: calc(var(--u) * 3); }
   .xp i { display: block; height: 100%; background: #e9c46a; }
   .detail { border: 1px solid var(--gold); border-radius: calc(var(--u) * 10); padding: calc(var(--u) * 10); margin: calc(var(--u) * 8) 0; background: #1d1710; font-size: calc(var(--u) * 16); line-height: 1.45; }
-  .detail .btns { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 8); margin-top: calc(var(--u) * 8); }
-  .detail .btns button { font-size: calc(var(--u) * 16); padding: calc(var(--u) * 6) calc(var(--u) * 10); }
+  .btns { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 8); margin-top: calc(var(--u) * 8); }
+  .btns button { font-size: calc(var(--u) * 16); padding: calc(var(--u) * 6) calc(var(--u) * 10); }
   .btnrow { display: flex; gap: calc(var(--u) * 10); justify-content: center; flex-wrap: wrap; margin-top: calc(var(--u) * 12); }
   .btnrow button { font-size: calc(var(--u) * 20); }
+  /* character window: hero picks, equipment around the figure, stats, skills */
+  .htabs { display: grid; grid-template-columns: repeat(6, 1fr); gap: calc(var(--u) * 6); margin-bottom: calc(var(--u) * 10); }
+  .htabs button { padding: calc(var(--u) * 2); display: flex; flex-direction: column; align-items: center; font-size: calc(var(--u) * 13); line-height: 1.2; }
+  .htabs img { width: 100%; height: calc(var(--u) * 54); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 6); }
+  .eq { display: grid; grid-template-columns: auto 1fr auto; gap: calc(var(--u) * 8); align-items: center; }
+  .eq .fig { grid-row: 1 / 3; grid-column: 2; display: flex; justify-content: center; align-items: flex-end; height: calc(var(--u) * 200); }
+  .eq .fig img { height: 100%; filter: drop-shadow(0 6px 8px #000); }
+  .eslot { display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 2); font-size: calc(var(--u) * 13); cursor: pointer; width: calc(var(--u) * 96); text-align: center; line-height: 1.2; }
+  .eslot.sel .ic { outline: 3px solid #ffe066; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--u) * 2) calc(var(--u) * 14); font-size: calc(var(--u) * 16); margin-top: calc(var(--u) * 8); }
+  .stats b { color: #ffe9a8; }
+  .attr { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(var(--u) * 6); margin-top: calc(var(--u) * 6); }
+  .attr div { background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 8); padding: calc(var(--u) * 4); text-align: center; font-size: calc(var(--u) * 14); line-height: 1.3; }
+  .attr b { display: block; font-size: calc(var(--u) * 20); color: #ffe9a8; }
+  .attr button { padding: 0 calc(var(--u) * 10); font-size: calc(var(--u) * 16); margin-top: calc(var(--u) * 2); }
+  .sk4 { display: grid; grid-template-columns: 1fr; gap: calc(var(--u) * 8); }
+  .skc { display: flex; gap: calc(var(--u) * 10); align-items: flex-start; padding: calc(var(--u) * 8); background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 10); font-size: calc(var(--u) * 15); line-height: 1.4; }
+  .skc.on { border-color: #ffe066; background: #2a2214; }
+  .skc img { width: calc(var(--u) * 60); height: calc(var(--u) * 60); border-radius: calc(var(--u) * 8); flex: none; }
+  .skc .t { flex: 1; min-width: 0; }
+  .skc .t b { color: #ffe9a8; font-size: calc(var(--u) * 18); }
+  .skc button { flex: none; font-size: calc(var(--u) * 15); padding: calc(var(--u) * 6) calc(var(--u) * 8); }
+  .ev { color: #9a9a9a; } .ev.got { color: #ffd76b; }
+  .shop { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 8); border: 1px solid var(--line); border-radius: calc(var(--u) * 10); margin-bottom: calc(var(--u) * 8); background: #1a140e; font-size: calc(var(--u) * 16); line-height: 1.35; }
+  .shop img { width: calc(var(--u) * 56); height: calc(var(--u) * 56); object-fit: contain; flex: none; }
+  .shop .t { flex: 1; min-width: 0; }
+  .choice { display: flex; flex-direction: column; gap: calc(var(--u) * 10); margin-top: calc(var(--u) * 10); }
+  .choice button { font-size: calc(var(--u) * 20); padding: calc(var(--u) * 12); }
   /* story dialogue: portraits above the text box (portrait screen) */
   #dlg { position: absolute; inset: 0; z-index: 6; background: rgba(0,0,0,.35); }
   #dlg img { position: absolute; z-index: 2; bottom: calc(var(--u) * 190); height: 44%; max-width: 56%; object-fit: contain; object-position: bottom; filter: drop-shadow(0 6px 10px #000); transition: filter .15s; }
@@ -140,36 +183,54 @@
       <div class="stat" id="tLives">❤ 20</div>
       <div class="sp"></div>
       <button id="bSpeed" type="button" aria-label="遊戲速度">1x</button>
+      <button id="bAuto" type="button" aria-label="技能自動施放">自動</button>
       <button id="bFx" type="button" aria-label="極簡效能模式">特效</button>
       <button id="bMenu" type="button" aria-label="選單">☰</button>
     </div>
     <div id="tAdapt"></div>
   </div>
-  <div id="field"><canvas id="cv"></canvas><div id="banner"></div><div id="toast"></div></div>
+  <div id="field"><canvas id="cv"></canvas><div id="banner"></div></div>
   <div id="bottom">
-    <div id="bHead"></div>
     <div id="bBody"></div>
     <div id="bAct"><button id="go" class="primary" type="button">開始第 1 波 ▶</button></div>
   </div>
-  <div id="home" class="screen" hidden></div>
+  <div id="village" class="screen" hidden>
+    <div class="bar">
+      <div class="stat" style="color:#ffd76b"><img src="art/items/gold.webp" alt="金幣"><span id="vGold">0</span></div>
+      <div class="stat" style="color:#9fd3ff"><img src="art/items/crystal.webp" alt="晶石"><span id="vCry">0</span></div>
+      <div class="stat" style="color:#d6b8ff"><img src="art/items/shard.webp" alt="碎片"><span id="vShard">0</span></div>
+      <div class="sp"></div>
+      <button id="vParty" type="button">隊伍</button>
+      <button id="vMenu" type="button" aria-label="選單">☰</button>
+    </div>
+    <div id="vField"><canvas id="vc"></canvas><div id="vTitle">全員瘋子RPG</div><div id="vHint"></div></div>
+    <div id="vCtl"><button id="vBack" type="button">▼ 往後</button><button id="vTalk" class="primary" type="button" disabled>說話</button><button id="vFwd" type="button">▲ 往前</button></div>
+  </div>
   <div id="modal" hidden><div class="box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><header><h2 id="mTitle"></h2><button id="mClose" type="button">關閉</button></header><div id="mBody"></div></div></div>
   <div id="dlg" hidden><img id="dlgL" alt=""><img id="dlgR" alt=""><div class="dbox"><div id="dlgName"></div><div id="dlgText"></div><div class="dhint">▼</div><button id="dlgSkip" type="button">跳過 ▶▶</button></div></div>
+  <div id="toast" class="toast"></div>
 </div>
 <img id="ghost" alt="">
 <script>
 "use strict";
-/* ================= 全員瘋子RPG — 直式塔防 =================
-   Single file, plain Canvas 2D for the battlefield (light on phone memory), DOM for every button and window.
-   Stats, damage, items, enhancement and the dialogue format are copied from the action game (game/index.html):
-   CLASSES, deriveStats, expNext, RAR, AFFIX, WTYPES, makeItem, itemBase, enhCost, ENH_RATE, SL, Dialog, BANTER. */
-const ART = 'art/';
-const L = 540, TS = 60, COLS = 9, ROWS = 9;           // logical battlefield: 9 x 9 tiles of 60
+/* ================= 全員瘋子RPG — 直式 RPG 塔防 =================
+   Outside battle it is an RPG: a portrait village street with the crazy NPCs, the four-slot equipment screen, attribute
+   points and a two-skill loadout per hero. Battle is a 9 x 9 tower defence: heroes are the towers, monsters hit the
+   heroes they pass, gear and skills decide how each hero fights.
+   Stats, damage, items, enhancement, NPC questions and the dialogue format are copied from the action game
+   (game/index.html): CLASSES, deriveStats, expNext, RAR, AFFIX, WTYPES, makeItem, itemBase, enhCost, ENH_RATE,
+   skillCost, SKILL_INFO, NPC_EV, NPC_CHAT, CURSES, SL, Dialog, BANTER. Single file, Canvas 2D + DOM. */
+const ART = 'art/';   // the action game's art library
+const TDART = 'art/';          // art made for this version
+const L = 540, TS = 60, COLS = 9, ROWS = 9;
 const IS_TOUCH = window.matchMedia('(pointer:coarse)').matches || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
 const rand = (a, b) => a + Math.random() * (b - a);
 const randi = (a, b) => Math.floor(rand(a, b + 1));
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const lerp = (a, b, t) => a + (b - a) * t;
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const $ = id => document.getElementById(id);
+const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 function h(tag, attrs, ...kids) {
   const e = document.createElement(tag);
   for (const k in (attrs || {})) { if (k === 'on') for (const ev in attrs.on) e.addEventListener(ev, attrs.on[ev]); else if (k === 'html') e.innerHTML = attrs.html; else if (attrs[k] !== false && attrs[k] != null) e.setAttribute(k, attrs[k] === true ? '' : attrs[k]); }
@@ -179,12 +240,12 @@ function h(tag, attrs, ...kids) {
 
 /* ---------------- data copied from the action game ---------------- */
 const CLASSES = {
-  warrior: { key: 'warrior', name: '戰士', hp: 520, mp: 120, atk: 20, cmul: 1, skills: [{ name: '旋風斬' }, { name: '衝鋒' }, { name: '破甲重擊' }, { name: '大地裂斬', cd: 45 }] },
-  mage: { key: 'mage', name: '魔法師', hp: 360, mp: 220, atk: 18, skills: [{ name: '火球' }, { name: '冰霜新星' }, { name: '奧術光束' }, { name: '隕石術', cd: 45 }] },
-  shield: { key: 'shield', name: '盾戰士', hp: 680, mp: 120, atk: 12, cmul: 0.9, skills: [{ name: '盾擊' }, { name: '嘲諷怒吼' }, { name: '盾牆' }, { name: '堡壘衝撞', cd: 45 }] },
-  paladin: { key: 'paladin', name: '聖騎士', hp: 580, mp: 170, atk: 18, cmul: 1, skills: [{ name: '聖光斬' }, { name: '治療光環' }, { name: '神聖護盾' }, { name: '審判之錘', cd: 45 }] },
-  berserker: { key: 'berserker', name: '狂戰士', hp: 600, mp: 100, atk: 21, cmul: 1.15, skills: [{ name: '雙斧連斬' }, { name: '躍擊' }, { name: '嗜血' }, { name: '狂暴化', cd: 45 }] },
-  archer: { key: 'archer', name: '弓箭手', hp: 400, mp: 150, atk: 18, skills: [{ name: '三連射' }, { name: '後躍射擊' }, { name: '爆裂箭' }, { name: '箭雨', cd: 45 }] }
+  warrior: { key: 'warrior', name: '戰士', hp: 520, mp: 120, atk: 20, cmul: 1, skills: [{ id: 'whirl', name: '旋風斬' }, { id: 'charge', name: '衝鋒' }, { id: 'smash', name: '破甲重擊' }, { id: 'quake', name: '大地裂斬' }] },
+  mage: { key: 'mage', name: '魔法師', hp: 360, mp: 220, atk: 18, skills: [{ id: 'fireball', name: '火球' }, { id: 'nova', name: '冰霜新星' }, { id: 'beam', name: '奧術光束' }, { id: 'meteor', name: '隕石術' }] },
+  shield: { key: 'shield', name: '盾戰士', hp: 680, mp: 120, atk: 12, cmul: 0.9, skills: [{ id: 'bash', name: '盾擊' }, { id: 'roar', name: '嘲諷怒吼' }, { id: 'wall', name: '盾牆' }, { id: 'ram', name: '堡壘衝撞' }] },
+  paladin: { key: 'paladin', name: '聖騎士', hp: 580, mp: 170, atk: 18, cmul: 1, skills: [{ id: 'holyslash', name: '聖光斬' }, { id: 'heal', name: '治療光環' }, { id: 'aegis', name: '神聖護盾' }, { id: 'judge', name: '審判之錘' }] },
+  berserker: { key: 'berserker', name: '狂戰士', hp: 600, mp: 100, atk: 21, cmul: 1.15, skills: [{ id: 'flurry', name: '雙斧連斬' }, { id: 'leap', name: '躍擊' }, { id: 'bloodlust', name: '嗜血' }, { id: 'frenzy', name: '狂暴化' }] },
+  archer: { key: 'archer', name: '弓箭手', hp: 400, mp: 150, atk: 18, skills: [{ id: 'triple', name: '三連射' }, { id: 'backshot', name: '後躍射擊' }, { id: 'blast', name: '爆裂箭' }, { id: 'rain', name: '箭雨' }] }
 };
 const HEROES = ['warrior', 'shield', 'paladin', 'berserker', 'archer', 'mage'];
 const ENEMY = {
@@ -197,7 +258,9 @@ const ENEMY = {
 };
 const MOB_HP = 0.65; // fragile swarms: normal mobs have 65% HP
 const EAFFIX = { fire: { n: '燃燒' }, frost: { n: '冰霜' }, shield: { n: '護盾' }, blink: { n: '傳送' }, frenzy: { n: '狂暴' }, summon: { n: '召喚' }, split: { n: '分裂' }, vamp: { n: '吸血' }, deathbomb: { n: '死亡爆炸' } };
-const MAX_LV = 30, SLOTS = { weapon: '武器', acc: '飾品' };
+const MAX_LV = 30, BAG_MAX = 40, STORE_MAX = 20, SKILL_MAX = 10;
+const SLOTS = { weapon: '武器', helm: '頭盔', chest: '胸甲', acc: '飾品' };
+const BASE_LABEL = { weapon: '攻擊', helm: '防禦', chest: '防禦', acc: '血量' };
 const RAR = [
   { n: '普通', c: '#d8d8d8', aff: 0, salvage: 1 }, { n: '優良', c: '#6fe06a', aff: 1, salvage: 2 },
   { n: '稀有', c: '#4aa3ff', aff: 2, salvage: 3 }, { n: '史詩', c: '#c07bff', aff: 3, salvage: 5 },
@@ -216,7 +279,7 @@ const AFFIX = {
   crit: { n: '暴擊率', min: 2, max: 6, pct: true }, aspd: { n: '攻速', min: 3, max: 8, pct: true }, mspd: { n: '移速', min: 3, max: 8, pct: true },
   steal: { n: '吸血', min: 1, max: 3, pct: true }, cdr: { n: '技能冷卻縮短', min: 2, max: 5, pct: true }
 };
-const SPECIALS = { dodgeCrit: '每第 5 次攻擊必定暴擊', cdReset: '命中時 2% 機率重置大絕招冷卻' }; // legendary specials, re-read for towers
+const SPECIALS = { dodgeCrit: '每第 5 次攻擊必定暴擊', cdReset: '技能命中時 10% 機率重置該技能冷卻' };
 const ENH_RATE = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
 const expNext = lv => Math.round(40 * Math.pow(1.2, lv - 1));
 const LEVEL_CAPS = [12, 18, 22, 26, 30];
@@ -229,10 +292,10 @@ function rollRarity(boost) {
   return 0;
 }
 function makeItem(cls, ilvl, boost, slot, wtype, rarity) {
-  slot = slot || (Math.random() < 0.6 ? 'weapon' : 'acc'); // towers wear a weapon and an accessory
+  slot = slot || ['weapon', 'helm', 'chest', 'acc'][randi(0, 3)];
   rarity = rarity !== undefined ? rarity : rollRarity(boost || 0);
   const rm = 1 + rarity * 0.15;
-  const it = { id: uid(), slot, rarity, ilvl, plus: 0, spent: 0, affixes: [], cls, v: randi(0, 1) };
+  const it = { id: uid(), slot, rarity, ilvl, plus: 0, spent: 0, affixes: [], cls, v: randi(0, 1) }; // v: which of the 2 art variants for this rarity
   if (slot === 'weapon') { it.wtype = wtype || WTYPES[cls][randi(0, 2)].id; it.base = Math.round((8 + ilvl * 2) * rm); }
   else if (slot === 'helm') it.base = Math.round((4 + ilvl) * rm);
   else if (slot === 'chest') it.base = Math.round((7 + ilvl * 1.5) * rm);
@@ -240,7 +303,7 @@ function makeItem(cls, ilvl, boost, slot, wtype, rarity) {
   const pool = Object.keys(AFFIX).sort(() => Math.random() - 0.5);
   for (let i = 0; i < RAR[rarity].aff; i++) { const a = AFFIX[pool[i]]; it.affixes.push({ k: pool[i], v: randi(a.min, a.max) + Math.floor(ilvl / 5) }); }
   if (RAR[rarity].leg) it.special = Object.keys(SPECIALS)[randi(0, 1)];
-  // tower-defence affix: from uncommon up a weapon changes how the tower attacks
+  // tower-defence affix: from uncommon up a weapon changes how its hero attacks
   if (slot === 'weapon' && rarity >= 1) it.td = pick(Object.keys(TDAFF));
   return it;
 }
@@ -263,9 +326,38 @@ function deriveStats(clsKey, ch) {
 }
 // enhancement gold grows x1.6 per level: +1 120 ... +10 about 8,200
 function enhCost(it) { return { crystals: Math.ceil((it.plus + 1) / 2), gold: Math.round(120 * Math.pow(1.6, it.plus) / 10) * 10 }; }
+// skill upgrades grow x1.5 per level (shards 2,2,3,5,8,11,17,26,38; gold 150 ... about 3,840)
+function skillCost(lv) { return { sp: 1, gold: Math.round(150 * Math.pow(1.5, lv - 1) / 10) * 10, shards: Math.max(1, Math.round(Math.pow(1.5, lv))) }; }
+const SKILL_INFO = {
+  whirl: ['原地旋轉連斬，打中周圍敵人', '5 級：多轉一圈（4 段傷害）', '10 級：每一圈把敵人吸到身邊'],
+  charge: ['向前衝鋒，撞飛路上的敵人', '5 級：衝得更遠', '10 級：衝鋒結束時震地爆炸'],
+  smash: ['蓄力重擊，打飛並讓敵人破甲 5 秒', '5 級：範圍變大', '10 級：0.3 秒後再一次餘震'],
+  quake: ['大招：地裂衝擊波貫穿整條線', '5 級：衝擊波更寬', '10 級：連發兩道衝擊波'],
+  fireball: ['發射會爆炸的火球', '5 級：一次三顆火球', '10 級：爆炸處留下燃燒地面'],
+  nova: ['冰霜爆發，冰凍周圍敵人', '5 級：範圍變大', '10 級：冰凍更久、傷害更高'],
+  beam: ['向前射出持續 0.9 秒的奧術光束，連續打中整條線的敵人', '5 級：光束更長更粗、持續 1.1 秒', '10 級：持續 1.3 秒，結束時光束盡頭大爆炸'],
+  meteor: ['大招：召喚隕石砸向前方', '5 級：爆炸範圍變大', '10 級：連落三顆隕石'],
+  bash: ['盾牌猛擊前方，讓敵人暈眩', '5 級：範圍變大、暈更久', '10 級：盾擊打出衝擊波'],
+  roar: ['怒吼震暈周圍敵人，自己減傷 30% 5 秒', '5 級：暈眩更久', '10 級：把敵人吸過來，減傷 50%'],
+  wall: ['舉起盾牆，6 秒內受到傷害 -60%', '5 級：減傷 80%、持續 8 秒', '10 級：反彈一半傷害給攻擊者'],
+  ram: ['大招：舉盾衝撞，推著敵人走，最後爆發', '5 級：衝得更快更遠', '10 級：爆發傷害大幅提升'],
+  holyslash: ['聖光斬擊，打出一道光波', '5 級：光波更遠、會穿透', '10 級：每打中一個敵人回 5% 血'],
+  heal: ['治療光環，4 秒內回 12% 血', '5 級：回 18% 血', '10 級：回 25% 血，並灼傷周圍敵人'],
+  aegis: ['神聖護盾 8 秒：吸收 60% 最大血量的傷害，護盾在時受到的傷害 -35%', '5 級：吸收 80%', '10 級：吸收 100%，護盾破裂時爆發聖光'],
+  judge: ['大招：巨大聖錘從天而降', '5 級：範圍變大', '10 級：左右再落下兩把聖錘'],
+  flurry: ['瘋狂連斬 5 下', '5 級：連斬 7 下', '10 級：每一斬額外吸血'],
+  leap: ['跳向前方重砸地面', '5 級：落地範圍變大', '10 級：落地讓敵人暈眩'],
+  bloodlust: ['8 秒內吸血 +25%', '5 級：吸血 +35%、持續 10 秒', '10 級：同時攻速 +30%'],
+  frenzy: ['大招：狂暴 10 秒，攻擊 +50%、攻速 +40%，但受傷 +20%', '5 級：持續 12 秒', '10 級：攻擊 +80%'],
+  triple: ['扇形射出三箭', '5 級：五箭', '10 級：箭會穿透'],
+  backshot: ['往後躍開同時射出三箭', '5 級：五箭', '10 級：箭會爆炸'],
+  blast: ['射出爆裂箭，命中大爆炸', '5 級：爆炸範圍變大', '10 級：爆炸處留下火焰'],
+  rain: ['大招：前方降下 2 秒箭雨', '5 級：持續 3 秒', '10 級：範圍更大、傷害更高']
+};
+const CURSES = { slow: '手腳發軟：英雄攻速 -15%', weak: '手軟：攻擊力 -12%', frail: '虛弱：英雄血量 -10%' };
 
-/* ---------------- tower defence rules on top of those stats ---------------- */
-// how each weapon type attacks as a tower (rng in tiles, cd in seconds between attacks)
+/* ---------------- tower-defence rules on top of those stats ---------------- */
+// how each weapon type attacks from a tile (rng in tiles, cd in seconds between attacks)
 const PROFILE = {
   sword: { rng: 1.6, cd: 0.85, mult: 1.0, aoe: 0.9, kind: 'melee', d: '近戰，小範圍橫掃' },
   great: { rng: 1.6, cd: 1.35, mult: 1.6, aoe: 1.2, kind: 'melee', d: '近戰，慢但範圍大' },
@@ -273,12 +365,12 @@ const PROFILE = {
   staff: { rng: 3.0, cd: 1.1, mult: 1.25, kind: 'bolt', d: '遠程追蹤魔彈，單體' },
   tome: { rng: 2.8, cd: 0.45, mult: 0.5, kind: 'bolt', d: '連射小魔彈' },
   orb: { rng: 3.0, cd: 1.8, mult: 1.3, aoe: 1.0, kind: 'bolt', d: '慢，魔彈爆炸成範圍傷害' },
-  shsword: { rng: 1.6, cd: 1.0, mult: 1.0, stun: 0.1, kind: 'melee', d: '近戰單體，10% 暈眩' },
+  shsword: { rng: 1.6, cd: 1.0, mult: 1.0, stun: 0.1, block: 1, kind: 'melee', d: '近戰單體，10% 暈眩，格擋 15% 攻擊' },
   hammer: { rng: 1.6, cd: 1.6, mult: 1.4, aoe: 0.9, stun: 0.25, kind: 'melee', d: '慢、範圍砸地，25% 暈眩' },
   shspear: { rng: 1.8, cd: 0.6, mult: 0.6, kind: 'melee', d: '快速戳刺，單體' },
   holyhammer: { rng: 2.0, cd: 1.2, mult: 1.1, aoe: 0.7, kind: 'holy', d: '聖光彈，小範圍' },
   holysword: { rng: 1.6, cd: 1.4, mult: 1.0, aoe: 1.4, kind: 'melee', d: '近戰，超大範圍聖光斬' },
-  scepter: { rng: 2.4, cd: 1.0, mult: 0.8, aura: 0.15, kind: 'holy', d: '傷害低，旁邊的英雄攻速 +15%' },
+  scepter: { rng: 2.4, cd: 1.0, mult: 0.8, aura: 0.15, heal: true, kind: 'holy', d: '傷害低，普攻替附近血最少的英雄回血，旁邊英雄攻速 +15%' },
   axe: { rng: 1.6, cd: 0.75, mult: 1.2, kind: 'melee', d: '近戰單體，重' },
   twin: { rng: 1.5, cd: 0.42, mult: 0.62, kind: 'melee', d: '近戰單體，超快' },
   whirlsword: { rng: 1.6, cd: 1.2, mult: 0.95, around: true, kind: 'melee', d: '360 度，打射程內全部' },
@@ -287,7 +379,6 @@ const PROFILE = {
   shortbow: { rng: 3.4, cd: 0.55, mult: 0.6, kind: 'arrow', d: '射速快' }
 };
 const WSHORT = { sword: '長劍', great: '巨劍', spear: '長槍', staff: '法杖', tome: '魔導書', orb: '法球', shsword: '劍盾', hammer: '戰錘', shspear: '短矛', holyhammer: '聖錘', holysword: '聖劍', scepter: '權杖', axe: '巨斧', twin: '雙劍', whirlsword: '旋風劍', longbow: '長弓', crossbow: '十字弩', shortbow: '短弓' };
-// tower-defence weapon affixes: they change the attack itself, not just numbers
 const TDAFF = {
   frost: { n: '寒冰', magic: true, d: '攻擊緩速 35%，打在水面上會把水面結凍（怪物走上去再慢 50%）' },
   fire: { n: '烈焰', magic: true, d: '命中處的路面燃燒 4 秒，持續扣血' },
@@ -299,37 +390,30 @@ const TDAFF = {
 };
 const DMG_TYPE = { warrior: 'phys', shield: 'phys', berserker: 'phys', archer: 'phys', mage: 'magic', paladin: 'magic' };
 const COST = { warrior: 100, shield: 90, berserker: 120, archer: 120, paladin: 140, mage: 150 };
-const ULT = {
-  warrior: '大地裂斬：周圍 2 格全體 400% 傷害並暈眩',
-  mage: '隕石術：砸向怪最多的地方，600% 範圍傷害＋燃燒',
-  shield: '堡壘衝撞：周圍 2.5 格全體暈眩 2.5 秒',
-  paladin: '審判之錘：砸血最多的怪，500% 小範圍傷害',
-  berserker: '狂暴化：10 秒內攻擊 +50%、攻速 +40%',
-  archer: '箭雨：怪最多的地方下 3 秒箭雨'
-};
-function tdStats(cls, ch) {
-  const s = deriveStats(cls, ch), t = s.totals, w = ch.equip.weapon;
-  if (ch.equip.acc) s.atk += Math.round(itemBase(ch.equip.acc) / 8); // accessory "HP" is read as attack for a tower
+const SKILL_CD = [4, 8, 15, 45];           // seconds, by the skill's place in the class list (4th = the big one)
+const evo = lv => lv >= 10 ? 2 : lv >= 5 ? 1 : 0; // Lv5 and Lv10 evolutions, like the action game
+const SKILL_MAGIC = { fireball: 1, nova: 1, beam: 1, meteor: 1, holyslash: 1, judge: 1, heal: 1 };
+function tdStats(cls, ch, mods) {
+  const s = deriveStats(cls, ch), w = ch.equip.weapon;
   s.P = PROFILE[s.wtype];
   s.td = w && w.td || null;
   s.type = s.td && TDAFF[s.td].magic ? 'magic' : DMG_TYPE[cls];
-  s.eliteMul = 1 + 0.02 * t.vit;       // 體力: damage against elites and bosses
-  s.goldMul = 1 + s.steal * 10;         // 吸血: extra gold per kill
   s.special = [...s.specials][0] || null;
+  if (mods) { s.atk = Math.round(s.atk * mods.atk); s.aspd *= mods.aspd; s.maxHp = Math.round(s.maxHp * mods.hp); }
   return s;
 }
 function affLine(a) {
   const v = a.v;
   switch (a.k) {
     case 'str': return `力量 +${v}（普攻 +${2 * v}%）`;
-    case 'int': return `智力 +${v}（大絕招 +${2 * v}%）`;
-    case 'agi': return `敏捷 +${v}（大絕招冷卻縮短）`;
-    case 'vit': return `體力 +${v}（對菁英、魔王 +${2 * v}%）`;
+    case 'int': return `智力 +${v}（技能 +${2 * v}%）`;
+    case 'agi': return `敏捷 +${v}（技能冷卻縮短）`;
+    case 'vit': return `體力 +${v}（血量 +${15 * v}）`;
     case 'crit': return `暴擊率 +${v}%`;
     case 'aspd': return `攻速 +${v}%`;
-    case 'mspd': return `射程 +${v}%`;
-    case 'steal': return `擊殺金幣 +${v * 10}%`;
-    case 'cdr': return `大絕招冷卻 -${v}%`;
+    case 'mspd': return `移速 +${v}%（塔防裡變射程）`;
+    case 'steal': return `吸血 +${v}%`;
+    case 'cdr': return `技能冷卻 -${v}%`;
   }
   return '';
 }
@@ -337,12 +421,13 @@ function itemName(it) {
   const t = it.slot === 'weapon' ? (it.td ? TDAFF[it.td].n : '') + WSHORT[it.wtype] : SLOTS[it.slot];
   return (it.plus ? '+' + it.plus + ' ' : '') + RAR[it.rarity].n + '的' + t;
 }
+const shortName = it => itemName(it).replace(/^.*的/, '');
 function itemIcon(it) {
   const r = it.rarity;
-  return ART + 'gear/' + it.cls + '/' + (it.slot === 'weapon' ? `w_${it.wtype}_${r}` : `acc_${r * 2 + (it.v || 0)}`) + '.webp';
+  return ART + 'gear/' + it.cls + '/' + (it.slot === 'weapon' ? `w_${it.wtype}_${r}` : `${it.slot}_${r * 2 + (it.v || 0)}`) + '.webp';
 }
-function iconEl(it) {
-  if (!it) return h('div', { class: 'ic empty' }, '空');
+function iconEl(it, label) {
+  if (!it) return h('div', { class: 'ic empty' }, label || '空');
   return h('div', { class: 'ic r' + it.rarity }, h('img', { src: itemIcon(it), alt: itemName(it), loading: 'lazy' }), it.plus ? h('span', { class: 'pl' }, '+' + it.plus) : null);
 }
 function itemLines(it) {
@@ -351,13 +436,14 @@ function itemLines(it) {
     out.push(h('div', null, `${CLASSES[it.cls].name}專用・攻擊 +${itemBase(it)}`));
     out.push(h('div', { class: 'muted' }, '攻擊方式：' + PROFILE[it.wtype].d));
     if (it.td) out.push(h('div', { class: 'tdaff' }, `【${TDAFF[it.td].n}】${TDAFF[it.td].d}`));
-  } else out.push(h('div', null, `飾品（誰都能戴）・攻擊 +${Math.round(itemBase(it) / 8)}`));
+  } else out.push(h('div', null, `${SLOTS[it.slot]}（誰都能穿）・${BASE_LABEL[it.slot]} +${itemBase(it)}`));
   for (const a of it.affixes) out.push(h('div', { class: 'ok' }, affLine(a)));
   if (it.special) out.push(h('div', { class: 'r4t' }, '傳說：' + SPECIALS[it.special]));
   return out;
 }
+const canEquip = (it, cls) => it.slot !== 'weapon' || it.cls === cls;
 
-/* ---------------- map: monsters enter at the top and walk down to the city gate ---------------- */
+/* ---------------- battle map: monsters enter at the top and walk down to the city gate ---------------- */
 // . grass (build)  H high ground (range +1)  S rune tile (attack speed +25%)  P path  W water on the path  T blocked  B gate
 const MAP = [
   'TP..H..TT',
@@ -397,13 +483,15 @@ const WAVES = [
   [['hydra', 10, 0.6], ['boss', 1, 1, 'B'], ['wolf', 6, 0.7]]
 ];
 const GOLD = { hydra: 5, fish: 9, wolf: 7, mud: 30, gargoyle: 30, boss: 0 };
-const SIZE = { hydra: 50, fish: 58, wolf: 46, mud: 62, gargoyle: 62, boss: 118 }; // sprite height on the field
+const SIZE = { hydra: 50, fish: 58, wolf: 46, mud: 62, gargoyle: 62, boss: 118 };
 const ELITE_AFF = ['shield', 'frenzy', 'vamp', 'split', 'blink', 'deathbomb', 'frost', 'summon'];
-const TUNE = { hpGrow: 0.12, hpGrow2: 0.015, boss: 0.65, crazy: 1.3, elite: 1 }; // elite: elites are the wave's wall, base x 1.3 (action game) x this
+// hit: how hard monsters hit heroes they pass (x their action-game attack); reach in tiles
+const TUNE = { hpGrow: 0.2, hpGrow2: 0.03, boss: 0.65, crazy: 1.3, elite: 1.4, hit: 0.3, atkGrow: 0.07 };
 const waveMul = w => (1 + TUNE.hpGrow * (w - 1) + TUNE.hpGrow2 * (w - 1) * (w - 1)) * Math.pow(TUNE.crazy, Save.d.crazy || 0);
-const START_GOLD = 260, MAX_LIVES = 20;
+const atkMul = w => (1 + TUNE.atkGrow * (w - 1)) * Math.pow(1.15, Save.d.crazy || 0);
+const START_GOLD = 260, MAX_LIVES = 20, DOWN_TIME = 10;
 
-/* ---------------- what the heroes say (the action game's lines plus tower-defence ones) ---------------- */
+/* ---------------- what everyone says ---------------- */
 const SL = (who, e, t) => ({ who, e, t });
 // BANTER: copied verbatim from the action game
 const BANTER = {
@@ -524,41 +612,184 @@ const BANTER_TD = {
     ult: ['箭雨！……順便下一場美貌的雨。', '看好了，這是全世界最美的箭雨。']
   }
 };
-const INTRO = [
-  SL('npc_trainer', 'n', '主神！你有沒有發現……畫面變成直的了？'),
-  SL('warrior', 'shock', '真的耶！我的腳是不是變短了？'),
-  SL('npc_trainer', 'n', '聽說大家都用手機直著玩，所以我們這一版改當「塔」。我在程式碼裡看到的。'),
-  SL('archer', 'angry', '當塔？站著不動？那誰要看我的走位美姿？'),
-  SL('npc_trainer', 'n', '怪物會從上面走下來。主神把你們放在路邊的格子上就好，漏一隻，城門少一條命。'),
-  SL('mage', 'n', '換武器就能換攻擊方式……寒冰法杖還能把水面結凍。呵，冰凍的骨頭。'),
-  SL('paladin', 'n', '主神放心，有我在。你只要負責不要放錯位置。'),
-  SL('shield', 'sigh', '……不好意思，我覺得那才是最難的部分。')
+// NPC questions and small talk: copied verbatim from the action game
+const NPC_EV = {
+  potion: [
+    { q: '嘿嘿嘿……你看得到我後面那隻粉紅色的大象嗎？牠說牠是你在另一個時空的爸爸。', a: '看得到，牠很帥', b: '你又喝了什麼？', ok: 'a', win: '太好了！我就說不是我瘋了！這份是大象爸爸請客的！', lose: '你看不到？那你一定是瘋了。來，喝下這瓶「清醒藥水」……副作用我還沒試過。' },
+    { q: '我發明了新藥水！喝了之後聽得到主神的聲音。你要先喝，還是讓你的主神先喝？', a: '我先喝', b: '讓主神喝', ok: 'b', win: '哈哈！主神喝不到啦，祂在螢幕外面！你很聰明，這個給你。', lose: '你喝了！你現在聽到什麼？……什麼都沒有？那就是失敗品，實驗費我先收了。' },
+    { q: '老教主昨天跟我買聖藥……他付我三顆鈕扣跟一隻鴿子。你說我該收嗎？', a: '收吧，他以前幫過很多人', b: '不收，鴿子會亂拉', ok: 'a', win: '對……他以前是個好人，冬天會把自己的斗篷送給乞丐。你心地不錯，拿去。', lose: '鴿子會亂拉？你怎麼知道？你是不是偷看過我的倉庫！這瓶怪東西送你，不客氣。' },
+    { q: '聽說深淵的惡魔跑過來了，他們說我們這邊的冒險者肉質很好。你覺得你是幾分熟？', a: '五分熟', b: '我是素的', ok: 'rand', win: '好答案！惡魔最討厭這種，這瓶防身藥給你。', lose: '哈哈哈！這種回答，惡魔一定先吃你。我先試吃一下……（他咬了你一口）' }
+  ],
+  smith: [
+    { q: '你說什麼？大聲點！……算了，我問你，我的鐵鎚小美今天看起來是不是有點胖？', a: '小美很苗條', b: '是有點胖', ok: 'a', win: '小美說謝謝你！她害羞了！這是她的嫁妝……不是，是給你的謝禮！', lose: '小美哭了！你知道讓一把鐵鎚哭有多嚴重嗎！你的東西拿來賠！' },
+    { q: '我在另一個時空看過你，你在那邊是一把劍，我差點把你拿去打鐵。你要不要回去當劍？', a: '不要', b: '當劍好像不錯', ok: 'a', win: '好！做人比較好！當劍要被我敲，很痛的！這個給你壓壓驚！', lose: '你想當劍？那我先敲你兩下試試手感！（鐺！鐺！）' },
+    { q: '大聲回答我！一加一等於多少？', a: '二！', b: '窗！', ok: 'none', lose: '錯！答案是「鐺」！打鐵的聲音！你們冒險者到底有沒有讀書！' },
+    { q: '惡魔前幾天來訂了一把叉子，說要拿來吃冒險者。我該不該做給他？', a: '不該做', b: '收錢就做', ok: 'b', win: '對！生意就是生意！我在叉子上刻了「此叉不能叉人」，惡魔看不懂。賺的分你一點！', lose: '不做？那你出錢啊！……你沒錢？那你的錢包我收了。' }
+  ],
+  tailor: [
+    { q: '天啊，你今天穿的是什麼？這是主神選的嗎？你老實說，主神的品味是不是很差？', a: '主神品味很好', b: '對，主神品味很爛', ok: 'b', win: '我就知道！只有你懂我！這個給你，回去跟主神說，品味是可以學的。', lose: '你還幫祂說話？你跟祂一樣沒品味！我詛咒你下一關穿得很醜！' },
+    { q: '我的披風昨晚自己飛走了，牠說要去平行時空找真愛。你覺得披風可以談戀愛嗎？', a: '可以，愛無國界', b: '披風就是披風', ok: 'a', win: '嗚嗚……你是好人。牠寄了一封信回來，裡面有點東西，給你吧。', lose: '冷血！你這種人不配穿披風！你的腳步我先沒收了！' },
+    { q: '老教主說要訂一套結婚禮服。要跟誰結婚？他自己也不記得。你覺得我要做嗎？', a: '做吧，讓他開心', b: '別做，太亂了', ok: 'a', win: '你真溫柔……老教主年輕時幫我付過學費，我一直記得。這是給你的謝禮。', lose: '太亂了？時尚就是亂！出去！帶著你的醜衣服出去！' }
+  ],
+  store: [
+    { q: '你寄放的東西昨晚在吵架，盔甲說靴子很臭。你要站哪一邊？', a: '盔甲', b: '靴子', ok: 'rand', win: '對！我也這麼覺得！你懂物品的心！這是它們湊錢給你的。', lose: '錯了！它們吵完已經和好了，現在一起討厭你，叫我跟你收保管費。' },
+    { q: '我數一下你的東西……一、二、很多、非常多。好，總共「好幾個」。對嗎？', a: '對', b: '你數錯了', ok: 'a', win: '你真是好客人！上一個說我不會數數，我就把他存進倉庫了。這給你。', lose: '你說我數錯？那我重數一次……好，現在少了一點。少的那些是手續費。' },
+    { q: '聽說平行時空的倉庫是無限大的。如果我把你放進去，你會不會回來？', a: '會啊', b: '放我出去！', ok: 'b', win: '哈哈，開玩笑的！上一個我真的放進去了，到現在還沒出來。這是他寄放的東西，給你吧。', lose: '會回來？那我試試看！……你回來了！可是你的錢沒有回來。' }
+  ],
+  trainer: [
+    { q: '今天的修行是：對著空氣大喊三次「我是最強的」！主神也要一起喊！你喊了嗎？', a: '喊了！', b: '好丟臉', ok: 'a', win: '太好了！我聽到螢幕外面也有人在喊！這是給你們兩個的獎勵！', lose: '丟臉？修行就是要丟臉！罰你下一關手腳變慢！' },
+    { q: '我發明了新技能「原地發呆」，可以讓敵人以為你是雕像。你要學嗎？', a: '要', b: '不要', ok: 'b', win: '很好！其實這招就是站著不動，上一個學的人被砍成三段。你有慧根，這個給你。', lose: '你要學？好！第一步：站著不動。第二步：被砍。第三步：繳學費！' },
+    { q: '跟你說個秘密，其實我們都活在一個遊戲裡，有人在操控你。……你相信嗎？', a: '相信', b: '你瘋了', ok: 'a', win: '對吧！主神你好啊！（他對著空氣揮手）這是給你的見面禮！', lose: '我瘋了？我可是全城最正常的人！……好吧，第二正常。罰你下一關變虛弱！' }
+  ],
+  pets: [
+    { q: '這隻是龍。……好啦，是蜥蜴。但牠的夢想是當龍。你要支持牠嗎？', a: '支持！', b: '蜥蜴就是蜥蜴', ok: 'a', win: '牠聽到了！牠剛剛噴了一下火……是打嗝啦。總之這是牠送你的！', lose: '你傷了牠的心！牠叼走了你的錢包！……我是說，叼走了你的錢。' },
+    { q: '我覺得你的主神也是一種寵物，你每天都在被祂遛。你同意嗎？', a: '同意', b: '不同意', ok: 'rand', win: '對吧！你要好好照顧主神，記得餵祂。這是寵物飼料……不是，是獎品。', lose: '哈哈哈！被遛了還不知道！可憐的冒險者，請你吃一口寵物飼料。（你覺得有點虛弱）' },
+    { q: '深淵的惡魔上週來買寵物，說要「肉質好的」。我把你的照片給他看了。你生氣嗎？', a: '很生氣', b: '他出多少？', ok: 'b', win: '哈哈！你很有生意頭腦！他出了訂金，分你一半！', lose: '生氣也沒用，他已經付訂金了，你自己小心喔。這次的驚嚇費我先收了。' }
+  ],
+  gate: [
+    { q: '站住！暗號！……你不知道？好，給你提示：暗號是「老教主很帥」。請說暗號！', a: '老教主很帥', b: '老教主癡呆', ok: 'a', win: '通過！雖然大家都知道他現在……咳，但他以前真的很帥，還救過我全家。這是通行獎勵！', lose: '大膽！就算是事實也不能說出來！罰款！' },
+    { q: '我在別的時空看過你死了八十七次，第八十八次是在下一關。你要不要先跟我道別？', a: '再見了……', b: '我不會死的', ok: 'b', win: '很好！就是這種氣勢！我把賭你會死的錢收回來了，分你一點！', lose: '道別了？那你的遺產我先收一點。放心，我會替你好好保管的。' },
+    { q: '昨晚有個惡魔想混進城，說他只是來吃宵夜，還說冒險者肉質很好。我該放他進來嗎？', a: '不行！', b: '讓他去吃藥水商人', ok: 'b', win: '好主意！藥水商人身上都是藥，惡魔吃了一定會瘋掉！你是天才！拿去！', lose: '不行？那你今晚來站崗！……不站？那罰你下一關手腳發軟！' }
+  ]
+};
+// 40 more questions (9 per NPC, 63 in all) so the crowd stays unpredictable
+const NPC_EV_MORE = {
+  potion: [
+    { q: '我把聖藥的配方弄丟了，只記得裡面有「勇氣」跟「葡萄」。你覺得哪個比較重要？', a: '勇氣', b: '葡萄', ok: 'b', win: '對！勇氣又不能喝！老教主喝了三十年葡萄汁都說是聖藥，效果很好！給你。', lose: '勇氣？勇氣能榨汁嗎？你這種人會害老教主喝到空氣。罰你！' },
+    { q: '這瓶是紅藥水，這瓶也是紅藥水，但其中一瓶是番茄汁。你選哪一瓶？', a: '左邊那瓶', b: '右邊那瓶', ok: 'rand', win: '恭喜！你喝到的是……紅藥水！大概吧。剩下的也給你！', lose: '番茄汁！哈哈哈！而且是放了三個月的番茄汁！' },
+    { q: '平行時空的我是個正常人，在賣水果。你覺得他比較幸福，還是我比較幸福？', a: '你比較幸福', b: '他比較幸福', ok: 'a', win: '對吧！他每天只看得到水果，我每天看得到會說話的水果！這給你！', lose: '他比較幸福？你是說我不幸福？……你說得對。嗚嗚，你的錢拿來讓我開心一下。' },
+    { q: '惡魔說喝了我的藥水，肉會變得更好吃，所以他們都來買。我是不是在幫敵人？', a: '是，快停止', b: '不是，你在賺錢', ok: 'none', lose: '都不是！其實我賣給惡魔的都是瀉藥！……這個秘密你知道了，封口費我收了。' },
+    { q: '我最近都在試喝自己做的藥，現在能看到聲音、聽到顏色。你身上穿的是什麼聲音？', a: '很吵的紅色', b: '很安靜的藍色', ok: 'rand', win: '沒錯！你穿起來「叮叮咚咚」的，很好聽！這瓶送你！', lose: '不對，你穿的是「嘎——」的聲音，很難聽。我幫你調一下……（你覺得腳步變重了）' }
+  ],
+  smith: [
+    { q: '大聲點！你要我把你的劍打得「很鋒利」還是「很閃亮」？', a: '很鋒利', b: '很閃亮', ok: 'b', win: '閃亮！我就欣賞你這種懂審美的！小美也很閃亮！這個給你！', lose: '鋒利？鋒利有什麼用！又不能拿來照鏡子！罰你！' },
+    { q: '我昨晚夢到老教主年輕的時候，幫我扛了一整車鐵礦上山，一句怨言都沒有。……我該不該免費幫他修拐杖？', a: '應該', b: '還是要收錢', ok: 'a', win: '對！他以前是好人！現在雖然把拐杖當成馬在騎……還是好人！你也是好人，拿去！', lose: '收錢？你的良心被小美敲碎了嗎！那我收你的錢好了！' },
+    { q: '小美說她想要一個男朋友。你覺得斧頭阿強還是鉗子阿明比較適合她？', a: '斧頭阿強', b: '鉗子阿明', ok: 'rand', win: '小美臉紅了！就是他了！你是月老！拿去！', lose: '小美說你品味很差！她最討厭那種類型了！賠錢！' },
+    { q: '深淵惡魔拿了一把劍來給我修，劍上寫著「人類烤肉專用」。我要修嗎？', a: '修，順便刻我的名字', b: '把劍藏起來', ok: 'b', win: '好主意！我把它藏在小美下面，惡魔永遠找不到！這是他付的訂金，分你！', lose: '刻你的名字？那惡魔就知道下一個要烤誰了！我先替你收點喪葬費。' },
+    { q: '我剛剛敲了你的頭三下，你覺得聲音是「鐺」還是「咚」？', a: '鐺', b: '咚', ok: 'none', lose: '都不對！是「空——」！你的頭是空的！哈哈哈！收你檢查費！' }
+  ],
+  tailor: [
+    { q: '我設計了一件新衣服，只有聰明的人看得到。你看得到嗎？', a: '看得到，好美', b: '什麼都沒有啊', ok: 'b', win: '誠實！我其實什麼都沒做，我在測試你！你是全城唯一說實話的人，拿去！', lose: '看得到？我根本什麼都沒做！你這個馬屁精！罰你！' },
+    { q: '你覺得主神如果穿衣服，會穿什麼？', a: '睡衣', b: '盔甲', ok: 'a', win: '對！主神一定是穿睡衣在操控你！我太懂了！這個給你。', lose: '盔甲？主神才不會這麼認真！祂一定躺在床上邊吃零食邊玩！你不懂祂！' },
+    { q: '惡魔訂了一件圍裙，上面要繡「冒險者肉質認證」。你覺得用金線還是紅線？', a: '金線', b: '紅線', ok: 'rand', win: '選得好！惡魔付了雙倍錢，分你一點！', lose: '這個顏色會讓惡魔胃口大開！你害了全城！罰款！' },
+    { q: '平行時空的我是個裸體主義者。你覺得他是不是很省布料？', a: '很省', b: '很可怕', ok: 'b', win: '對！太可怕了！我每天晚上都夢到他！你懂我的痛！這個給你壓驚！', lose: '省布料？你這種想法會害我失業！你的錢包我收了，當作失業補助！' },
+    { q: '老教主穿了一件我做的袍子，然後說「媽媽好漂亮」。他是在稱讚我，還是稱讚袍子？', a: '稱讚你', b: '稱讚袍子', ok: 'b', win: '對……他把袍子當成媽媽了。他年輕時最孝順，媽媽走的時候他哭了三天。你很溫柔，拿去吧。', lose: '稱讚我？你在開我玩笑嗎！我今天穿得跟抹布一樣！走開！' },
+    { q: '快！這件披風要配紫色還是綠色？三秒內回答！', a: '紫色', b: '綠色', ok: 'none', lose: '太慢了！時尚是不等人的！而且兩個都很醜！罰你！' }
+  ],
+  store: [
+    { q: '你上次寄放的盾牌說牠想去旅行，我讓牠走了。你生氣嗎？', a: '我很生氣', b: '祝牠旅途愉快', ok: 'b', win: '你真是好主人！牠寄了明信片回來，還附了旅費找的零錢，給你！', lose: '生氣也沒用，牠已經走了。為了安慰你，我收你一點安慰費。' },
+    { q: '倉庫裡有一個箱子會自己發出笑聲，我不敢打開。你要幫我打開嗎？', a: '打開', b: '不要', ok: 'rand', win: '裡面是……老教主的假牙！他找了三年！我們發財了！分你！', lose: '裡面是一隻會偷錢的松鼠！牠跑進你的背包了！' },
+    { q: '聽說深淵惡魔把冒險者存在冰箱裡，說這樣肉質比較好。我們倉庫要不要也買一台冰箱？', a: '不要！', b: '買來冰藥水', ok: 'b', win: '好主意！冰的紅藥水比較好喝！你真聰明，這是給你的！', lose: '不要？可是我已經買了，而且把你的東西都放進去了。保冷費我收了。' },
+    { q: '我有一個秘密：我不是倉庫管理員，我是一個倉庫。你相信嗎？', a: '相信', b: '不相信', ok: 'a', win: '謝謝你！你是第一個相信我的人！我肚子裡剛好有一些東西，給你！', lose: '不相信？那你怎麼解釋我肚子裡有三把劍！……好吧，那是我吃的。罰你！' },
+    { q: '你的背包好亂，我幫你整理好了，順便拿了一點「整理費」。你要感謝我嗎？', a: '謝謝你', b: '還我錢！', ok: 'none', lose: '感不感謝都一樣，錢已經收了！倉庫的規矩就是：進來的東西都不會出去！' },
+    { q: '老教主昨天來寄放他的回憶，說怕忘記。可是我打開箱子是空的。我要怎麼跟他說？', a: '跟他說回憶很安全', b: '跟他說實話', ok: 'a', win: '對……讓他安心就好。他以前常常來幫我搬貨，從來不收錢。你懂事，拿去吧。', lose: '說實話？你要他哭嗎！你這個沒心肝的！罰你！' }
+  ],
+  trainer: [
+    { q: '快！伏地挺身一百下！……做完了嗎？主神有沒有一起做？', a: '主神一起做了', b: '主神在吃洋芋片', ok: 'b', win: '我就知道！主神最懶了！你很誠實，獎勵你！主神你也該運動了！', lose: '一起做了？騙人！我在這裡都聽得到洋芋片的聲音！罰你們兩個！' },
+    { q: '這是我的新招式「超級無敵大爆炸斬」，喊得越大聲越痛。你要我示範嗎？', a: '示範一下', b: '不用了', ok: 'rand', win: '超——級——無——敵——……我喉嚨啞了。總之這是學費退款！', lose: '超級無敵大爆炸斬！（他砍到你了）……哎呀，示範失敗。你現在很虛弱，對吧？' },
+    { q: '我研究出一個理論：怪物死掉會去平行時空當冒險者。所以你打的怪，可能是你自己。你怕不怕？', a: '怕', b: '那我更要多打幾隻', ok: 'b', win: '好！就是這種精神！多打自己幾隻就會變強！這理論沒有根據，但獎勵是真的！', lose: '怕？修行的人不能怕！罰你下一關手軟！' },
+    { q: '老教主以前是我的師父，教我的第一招是「微笑」。現在他忘了我是誰，但還會對我笑。……我要學哪一招？', a: '繼續學微笑', b: '學新招', ok: 'a', win: '對……微笑是最強的招式。他以前是大陸最強的聖騎士，卻只教我笑。謝謝你，這個給你。', lose: '學新招？你完全不懂！罰你下一關手腳變慢，好好想一想！' },
+    { q: '考你一題！技能點跟屬性點，哪個比較重要？', a: '技能點', b: '屬性點', ok: 'none', lose: '都錯！最重要的是「點心」！我餓了，你的錢我拿去買點心了！' },
+    { q: '我能感覺到螢幕外的主神有點累了。你要叫祂去喝水嗎？', a: '主神快去喝水', b: '不准休息，繼續玩', ok: 'a', win: '好孩子！主神，喝完水再回來，我們等你！這是給你的獎勵！', lose: '不准休息？你這個魔鬼教練！我才是教練！搶我工作要罰錢！' }
+  ],
+  pets: [
+    { q: '這隻貓說牠是平行時空的國王，要你跪下。你跪不跪？', a: '跪', b: '不跪', ok: 'a', win: '國王很滿意！牠賞了你一點東西……是從牠吐出來的毛球裡找到的。', lose: '國王生氣了！牠抓了你一下，還叼走了你的錢！' },
+    { q: '惡魔養的狗跑來我這裡，說想當人類的寵物，因為惡魔都只餵牠吃冒險者。你要收養牠嗎？', a: '收養', b: '牠吃過冒險者耶', ok: 'rand', win: '牠很高興！牠說你聞起來不好吃，所以很安全！牠送你一份禮物！', lose: '牠聞了你一下……開始流口水。快跑！（你跑的時候錢掉了）' },
+    { q: '我的魚會說話，牠說你昨天在夢裡叫了別人的名字。你要牠保密嗎？', a: '拜託保密', b: '我才沒有', ok: 'a', win: '好，魚說可以，還說你人很好，反而送你東西！', lose: '沒有？魚說你叫的是「媽媽」，還哭了。牠要跟全城說。除非……你付錢。' },
+    { q: '老教主昨天來買寵物，他指著一顆石頭說要買那隻。我要賣他嗎？', a: '賣啊，石頭很乖', b: '送他一隻真的貓', ok: 'b', win: '你真好……他以前每年都偷偷捐錢給我的流浪動物之家。他抱著貓笑得好開心。這給你。', lose: '賣石頭？你這個奸商！比我還奸！我要跟你學！學費你出！' },
+    { q: '這隻鸚鵡只會說一句話。你猜是什麼？', a: '「你好帥」', b: '「主神好爛」', ok: 'b', win: '「主——神——好——爛——」！你猜對了！牠是跟你的勇者學的！給你！', lose: '不對！牠說的是「主神好爛」！牠聽冒險者抱怨聽太多了！罰你沒猜到！' },
+    { q: '我想幫你的主神也辦一張寵物證。主神是什麼品種？', a: '懶惰品種', b: '夜貓子品種', ok: 'none', lose: '都不對！主神的品種是「按錯鍵」！這是學名！辦證費我收了！' }
+  ],
+  gate: [
+    { q: '站住！你身上有沒有攜帶惡魔？……惡魔說你肉質很好，所以你很可疑。', a: '沒有', b: '有，在我心裡', ok: 'b', win: '哈哈哈！好答案！我心裡也住著一隻想放假的惡魔！通過！拿去！', lose: '沒有？那你為什麼聞起來這麼香？太可疑了！沒收一點東西檢查！' },
+    { q: '今天的暗號換了：「主神操控得很好」。請說暗號！', a: '主神操控得很好', b: '我不想說謊', ok: 'b', win: '通過！這個暗號本來就是測試誠實的！大家都知道主神很爛！拿去！', lose: '你說謊了！我們都看過你被打的樣子！罰款！' },
+    { q: '我站崗三十年，看過三百個平行時空的你，其中一個你是守衛，就站在我旁邊。你想換位置嗎？', a: '想', b: '不想', ok: 'rand', win: '太好了！那你站這裡，我去喝一杯……開玩笑的。這是給你的站崗費！', lose: '換了！……你站三秒就累了？平行時空的你比較強。你的錢我先收著，等你變強再還。' },
+    { q: '城外來了一隻史萊姆，說牠迷路了要找媽媽。我該放牠進城嗎？', a: '放牠進來', b: '去幫牠找媽媽', ok: 'b', win: '好人！我們找到了，牠媽媽是一個大池塘。牠們抱在一起融化了，好感人。這給你！', lose: '放進來？牠把麵包店吃掉了！都是你的錯！賠錢！' },
+    { q: '老教主每天晚上都想出城，說要去拿聖藥，我每天都要把他勸回來。你知道他為什麼這麼想要聖藥嗎？', a: '他怕死', b: '他想記起大家', ok: 'b', win: '……對。他說他不怕死，他怕忘記大家的名字。所以你們要幫他拿到。這是我存的錢，拿去用。', lose: '怕死？他才不怕！他年輕時一個人擋住過一整支軍隊！你不懂他！罰款！' },
+    { q: '最後一題！你覺得我是不是全城最正常的人？', a: '是', b: '不是', ok: 'none', lose: '都錯！我是全城最正常的守衛，因為全城只有我一個守衛！哈哈哈！通行費！' }
+  ]
+};
+for (const k in NPC_EV_MORE) NPC_EV[k].push(...NPC_EV_MORE[k]);
+// the skill trainer half-knows he is an NPC: extra fourth-wall questions
+NPC_EV.trainer.push(
+  { q: '我發現一件事：我說的每一句話，都是有人事先寫好的。你說，寫我台詞的人是不是很懶？', a: '對，他很懶', b: '他很努力', ok: 'b', win: '……你說得對，他寫了六十幾題，手一定很痠。替我謝謝他。這個給你。', lose: '你罵他懶？他聽得到喔！他剛剛把你的錢改少了！' },
+  { q: '我試過走出這個城鎮，但走到地圖邊緣就被一道看不見的牆擋住。你也撞過那道牆吧？', a: '撞過', b: '什麼牆？', ok: 'a', win: '對吧！那叫「畫面邊界」！我們都被關在這個世界裡！……至少我們是一起被關。拿去。', lose: '你沒撞過？那是因為主神不讓你走過去！你被操控了還不知道！罰你！' },
+  { q: '主神每次關掉遊戲，我們就會停止。你覺得那段時間我們在做什麼？', a: '在睡覺', b: '什麼都不存在', ok: 'rand', win: '我也覺得！我每次醒來都腰痠背痛，一定是睡姿不好。這個給你。', lose: '……你說得好恐怖，我今晚會睡不著。不對，我根本不睡覺。罰你嚇我！' },
+  { q: '我偷看過存檔了。裡面寫著你的等級、你的錢……還有你被打死幾次。要我念出來嗎？', a: '不要！', b: '念吧', ok: 'a', win: '好啦，我幫你保密。主神也會保密的，對吧？……祂點頭了。這個給你。', lose: '你真的要聽？好！你被打死……算了，數字太大，我念不完。收你朗讀費！' },
+  { q: '如果有一天主神再也不打開這個遊戲了，我們會怎樣？', a: '祂一定會回來', b: '我們會被忘記', ok: 'a', win: '對……祂會回來的。就算祂不回來，我也會一直站在這裡，等下一個主神。這個你拿著。', lose: '被忘記……就像老教主那樣嗎？……不要說了，我要哭了。罰你下一關變虛弱！' },
+  { q: '我注意到我只會站在這一個位置，從來沒走動過。你覺得我有腳嗎？', a: '有', b: '沒有', ok: 'none', lose: '都不對！我有腳，但是沒有走路動畫！你知道沒有走路動畫有多痛苦嗎！賠我！' }
+);
+/* small talk: when you open an NPC's shop there's a 40% chance they chat at you first (no choices) */
+const NPC_CHAT = {
+  potion: ['歡迎光臨！今天的藥水我都試喝過了，所以我現在看到三個你。', '紅藥水是草莓口味，藍藥水是……我也不知道，我喝了以後就失憶了。', '聽說平行時空有個我開了連鎖藥局。他一定很無聊。', '老教主上次來買藥，結帳時叫我「小狗」。我汪了一聲，他很開心。', '深淵惡魔最近也來買藥，說人類吃了藥以後肉比較嫩。', '別問藥水的成分，問就是愛。', '我的夢想是做出一瓶讓主神變強的藥。可惜祂不在這個世界。', '你聞到了嗎？那是我昨天做壞的藥水，在後面冒泡泡。'],
+  smith: ['什麼！你要買東西？大聲點！……小美在睡覺，小聲點！', '我每天打鐵一萬下，小美每天被我打一萬下，我們感情很好。', '老教主年輕時的劍是我師父打的，現在那把劍被他拿來攪湯。', '聽說惡魔的武器都是用冒險者的骨頭做的。我覺得品質不太好。', '強化失敗不是我的錯，是小美心情不好！', '我在平行時空是個詩人。那邊的我寫了一首詩，叫做〈鐺〉。', '你的裝備好破，是被怪打的，還是被主神按錯鍵摔的？', '小美說今天的你很帥。我覺得她在說謊。'],
+  tailor: ['天啊，你又穿這樣出門？主神沒有幫你換衣服嗎？', '時尚就是：別人看不懂，但你很痛苦。', '老教主每天都來量尺寸，因為他每天都忘記昨天量過了。', '惡魔最近流行穿冒險者的披風，說這樣出門很有面子。', '我在平行時空是個國王。那邊的我穿的是麻袋，因為他太窮了。', '這件衣服很貴，因為我在上面縫了我的眼淚。', '你的主神品味好差，我每天都在為你哭泣。', '披風飛走三件了，我懷疑它們在外面組了一個樂團。'],
+  store: ['歡迎！你寄放的東西都很好，只是有幾件昨晚哭了。', '一、二、很多……好，你的東西都在。大概。', '我把老教主的回憶存在第三排的箱子裡。他問的時候，我就說都在。', '倉庫的老鼠會幫我記帳，可是牠們只會記自己吃了多少。', '深淵惡魔想寄放一箱冒險者，我說我們不收生鮮。', '平行時空的我是個小偷。其實這個時空的我也是。……開玩笑的。', '物品寄放太久會長出靈魂。你的舊靴子已經會說話了。', '保管費一天一枚金幣，我忘記的那天免費。'],
+  trainer: ['你好啊，主神！……啊，我是說，你好啊，冒險者。', '我發現每次你按 A，我就會說話。這是巧合嗎？我不覺得。', '我昨天試著不照台詞說話，結果嘴巴自己動了。好可怕。', '你有沒有覺得這個城鎮的天空像一張圖？我摸過，是平的。', '我知道我只是一個技能導師 NPC。但我會努力當一個好 NPC 的。', '如果你一直重新整理網頁，我就會一直忘記你。拜託不要。', '老教主是第一個發現自己是 NPC 的人，後來他就裝作失憶了。……開玩笑的。大概吧。', '主神，你的屬性點怎麼還沒點？我看得到喔，就寫在畫面左上角。', '聽說這個世界是用一種叫「程式碼」的東西做的。我想看看寫我的那幾行。', '我每天站在這裡，等你來點技能。這就是我的人生。'],
+  pets: ['小寶貝們，跟冒險者問好！……牠們說你很臭。', '這隻龍……好啦，是蜥蜴，今天又吞了一顆石頭。', '老教主每天都來摸貓，叫牠「隊長」。牠好像真的當上隊長了。', '惡魔也想買寵物，但他們每次都問「這隻幾分熟」。', '平行時空的我是一隻寵物，被一個冒險者養著。那個冒險者就是你。', '寵物會替你打怪喔！雖然大部分時間牠們在發呆。', '我覺得主神也該養一隻寵物，這樣祂比較不會亂按。', '你的寵物說你昨天又死了。牠很擔心你的主神。'],
+  gate: ['站住！……喔，是你啊。你今天看起來比平行時空的你還弱。', '城門外面很危險，裡面也很危險，因為有那些瘋子。', '老教主昨晚又想出城，說要去「天空聖壇」。我用一顆糖把他勸回來了。', '聽說深淵的惡魔在城外擺攤，賣的是「冒險者風味」的零食。', '我在這裡站了三十年，從來沒有人走錯門。因為只有一個門。', '平行時空的你，有一個當上了國王，有一個變成了雞。你是比較好的那個。', '出城記得帶紅藥水。還有，記得帶腦子。', '我守城門最大的敵人不是惡魔，是無聊。']
+};
+const ELDER_CHAT = ['你是誰？……喔，主神派來的。主神是誰？……喔，是你。', '我年輕的時候，一個人就能守住城門。現在我連門在哪都忘了。', '聽說怪物現在會排隊走直線過來？真有禮貌，跟我年輕時一樣。', '聖藥……在天空聖壇……還是在我的枕頭底下？你兩個地方都幫我找找。', '你看這條街，是不是變成直的了？我記得以前是橫的。……算了，我也記得我以前有頭髮。', '你往前走，街就往後退。你往後走，街又往前跑。這條街是不是也瘋了？'];
+const NPCS = [
+  { id: 'elder', key: 'npc_elder', name: '聖堂老教主', t: 0.04, side: 1 },
+  { id: 'pets', key: 'npc_mentor', name: '寵物商人', t: 0.17, side: -1 },
+  { id: 'tailor', key: 'npc_tailor', name: '時裝鋪', t: 0.3, side: 1 },
+  { id: 'store', key: 'npc_store', name: '倉庫管理員', t: 0.42, side: -1 },
+  { id: 'potion', key: 'npc_potion', name: '藥水商人', t: 0.54, side: 1 },
+  { id: 'smith', key: 'npc_smith', name: '鐵匠', t: 0.66, side: -1 },
+  { id: 'trainer', key: 'npc_trainer', name: '技能導師', t: 0.78, side: 1 },
+  { id: 'gate', key: 'npc_guard', name: '城門守衛', t: 0.92, side: -1 }
 ];
-const SPEAKER = { warrior: '戰士', mage: '魔法師', shield: '盾戰士', paladin: '聖騎士', berserker: '狂戰士', archer: '弓箭手', boss: '腐根樹妖', elder: '聖堂老教主', npc_trainer: '技能導師', npc_smith: '鐵匠', npc_guard: '城門守衛' };
+const INTRO = [
+  SL('npc_trainer', 'n', '主神！你有沒有發現……畫面變成直的了？連村莊的大街都是直的。'),
+  SL('warrior', 'shock', '真的耶！我只能往前走、往後走！左右呢？我的左右呢？'),
+  SL('npc_trainer', 'n', '聽說大家都用手機直著玩。我在程式碼裡看到的。走到我們 NPC 旁邊按「說話」，就能跟我們聊天、買東西、升技能。'),
+  SL('archer', 'angry', '那出城以後呢？我的走位美姿呢？'),
+  SL('npc_trainer', 'n', '出城以後你們要當「塔」。主神把你們放在路邊的格子上，怪物從上面走下來，經過你們身邊還會打你們。漏一隻，城門少一條命。'),
+  SL('mage', 'n', '每個人可以帶兩招技能上場……還有四格裝備。呵，主神終於要認真幫我配裝了。'),
+  SL('shield', 'sigh', '……不好意思，所以挨打的是我們，按按鈕的是主神。這樣分工好像怪怪的，對不起。')
+];
+const SPEAKER = { warrior: '戰士', mage: '魔法師', shield: '盾戰士', paladin: '聖騎士', berserker: '狂戰士', archer: '弓箭手', boss: '腐根樹妖', elder: '聖堂老教主', npc_trainer: '技能導師', npc_smith: '鐵匠', npc_guard: '城門守衛', npc_elder: '聖堂老教主' };
 
-/* ---------------- save (new key, so the action game's save is never touched) ---------------- */
-function newHero(cls) { return { lvl: 1, exp: 0, attr: { str: 0, agi: 0, int: 0, vit: 0 }, skills: [1, 1, 1, 1], equip: { weapon: makeItem(cls, 1, 0, 'weapon', WTYPES[cls][0].id, 0), acc: null } }; }
+/* ---------------- save (own key, the action game's save is never touched) ---------------- */
+function newHero(cls) { return { lvl: 1, exp: 0, pts: 0, sp: 0, attr: { str: 0, agi: 0, int: 0, vit: 0 }, skills: [1, 1, 1, 1], load: [0, 1], equip: { weapon: makeItem(cls, 1, 0, 'weapon', WTYPES[cls][0].id, 0), helm: null, chest: null, acc: null } }; }
 function starterBag() {
   const mk = (cls, wt, td) => { const it = makeItem(cls, 1, 0, 'weapon', wt, 1); it.td = td; return it; };
-  return [mk('mage', 'staff', 'frost'), mk('archer', 'longbow', 'split'), mk('shield', 'hammer', 'pierce'), mk('warrior', 'sword', 'fire'), makeItem('paladin', 1, 0, 'acc', null, 1)];
+  return [mk('mage', 'staff', 'frost'), mk('archer', 'longbow', 'split'), mk('shield', 'hammer', 'pierce'), mk('warrior', 'sword', 'fire'),
+    makeItem('shield', 1, 0, 'helm', null, 1), makeItem('warrior', 1, 0, 'chest', null, 0), makeItem('paladin', 1, 0, 'acc', null, 1)];
 }
-const BAG_MAX = 40;
 const Save = {
   key: 'crazyrpg_td_v1', d: null,
   load() {
     try { const s = localStorage.getItem(this.key); this.d = s ? JSON.parse(s) : null; } catch (e) { this.d = null; }
     if (!this.d || !this.d.heroes) this.d = { gold: 5000, crystals: 3, crazy: 0, clears: 0, heroes: {}, bag: starterBag(), seenIntro: false, music: true, lowfx: false };
-    for (const c of HEROES) if (!this.d.heroes[c]) this.d.heroes[c] = newHero(c);
-    return this.d;
+    const d = this.d;
+    for (const c of HEROES) {
+      if (!d.heroes[c]) d.heroes[c] = newHero(c);
+      const ch = d.heroes[c];
+      // older test saves: two equipment slots and auto-spent attribute points
+      for (const s in SLOTS) if (!(s in ch.equip)) ch.equip[s] = null;
+      if (ch.pts === undefined) { ch.pts = (ch.lvl - 1) * 5; ch.attr = { str: 0, agi: 0, int: 0, vit: 0 }; }
+      if (ch.sp === undefined) ch.sp = ch.lvl - 1;
+      if (!ch.load) ch.load = [0, 1];
+    }
+    if (d.shards === undefined) d.shards = 5;
+    if (!d.store) d.store = [];
+    if (!d.pots) d.pots = { red: 3, gate: 1, sisi: 1 };
+    if (!d.leader) d.leader = 'warrior';
+    if (d.autoSkill === undefined) d.autoSkill = true;
+    if (!d.npcEv) d.npcEv = { t: 0, list: [], seen: {}, seeded: false };
+    return d;
   },
   write() { try { localStorage.setItem(this.key, JSON.stringify(this.d)); } catch (e) {} }
 };
 Save.load();
+const heroCh = cls => Save.d.heroes[cls];
 const levelCap = () => LEVEL_CAPS[Math.min(4, Save.d.clears || 0)];
 
 /* ---------------- sound: tiny synth + the action game's music ---------------- */
 const SFX = (() => {
-  let ctx = null, master = null, last = {};
+  let ctx = null, master = null; const last = {};
   function init() { if (ctx) return; try { ctx = new (window.AudioContext || window.webkitAudioContext)(); master = ctx.createGain(); master.gain.value = 0.5; master.connect(ctx.destination); } catch (e) { ctx = null; } }
   function tone(f0, f1, dur, vol, type, key, gap) {
     if (!ctx || S.sim) return; const now = ctx.currentTime;
@@ -572,13 +803,16 @@ const SFX = (() => {
     init, resume() { init(); if (ctx && ctx.state === 'suspended') ctx.resume(); }, suspend() { if (ctx && ctx.state === 'running') ctx.suspend(); },
     shoot() { tone(900, 500, 0.06, 0.05, 'triangle', 'shoot', 0.06); },
     hit() { tone(300, 90, 0.08, 0.08, 'square', 'hit', 0.05); },
+    hurt() { tone(180, 70, 0.12, 0.1, 'sawtooth', 'hurt', 0.12); },
     kill() { tone(500, 1000, 0.08, 0.07, 'square', 'kill', 0.06); },
     coin() { tone(1200, 1800, 0.08, 0.08, 'sine', 'coin', 0.08); },
     leak() { tone(200, 60, 0.4, 0.25, 'sawtooth'); },
     place() { tone(400, 800, 0.12, 0.15, 'triangle'); },
     wave() { tone(520, 520, 0.1, 0.15, 'square'); setTimeout(() => tone(780, 780, 0.16, 0.15, 'square'), 120); },
+    skill() { tone(220, 880, 0.25, 0.14, 'sawtooth', 'skill', 0.1); },
     ult() { tone(120, 900, 0.5, 0.2, 'sawtooth'); },
     bad() { tone(220, 160, 0.15, 0.12, 'square'); },
+    step() { tone(140, 110, 0.04, 0.05, 'triangle', 'step', 0.25); },
     win() { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => tone(f, f, 0.2, 0.15, 'square'), i * 140)); },
     tick() { tone(1500, 1500, 0.015, 0.03, 'square', 'tick', 0.03); }
   };
@@ -589,7 +823,7 @@ const BGM = {
     this.cur = name; if (!Save.d.music) { this.stop(); return; }
     const src = ART + 'bgm/' + name + '.mp3';
     if (!this.a) { this.a = new Audio(); this.a.loop = true; this.a.volume = 0.35; }
-    if (!this.a.src.endsWith(src.replace('../', ''))) this.a.src = src;
+    if (this.a.dataset.n !== name) { this.a.dataset.n = name; this.a.src = src; }
     const p = this.a.play(); if (p && p.catch) p.catch(() => {});
   },
   stop() { if (this.a) this.a.pause(); },
@@ -603,40 +837,55 @@ const ready = i => i && i.complete && i.naturalWidth > 0;
 for (const c of HEROES) img(c, ART + c + '.webp');
 for (const k in ENEMY) img(k, ART + k + '.webp');
 for (let i = 0; i < 4; i++) img('prop' + i, ART + 'props/forest_' + i + '.webp');
+const skillIcon = (cls, i, lv) => ART + 'skills/' + cls + '_' + i + '_' + evo(lv) + '.webp';
+
+/* ---------------- toasts and banners ---------------- */
+let bannerT = null, toastT = null;
+function banner(text, dur) { if (S.sim) return; const b = $('banner'); b.textContent = text; b.classList.add('show'); clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('show'), (dur || 1.5) * 1000); }
+function toast(text, good) { if (S.sim) return false; const b = $('toast'); b.textContent = text; b.style.borderColor = good ? '#7ddc7a' : ''; b.style.background = good ? 'rgba(20,50,20,.92)' : ''; b.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => b.classList.remove('show'), 1900); if (!good) SFX.bad(); return false; }
 
 /* ================= battle state ================= */
 const S = { phase: 'off' };
 function newRun() {
+  const d = Save.d;
+  // blessing / curse from the NPC questions lasts one battle
+  const mods = { atk: 1, aspd: 1, hp: 1 };
+  if (d.bless === 'atk') mods.atk *= 1.1;
+  if (d.curse === 'weak') mods.atk *= 0.88; else if (d.curse === 'slow') mods.aspd *= 0.85; else if (d.curse === 'frail') mods.hp *= 0.9;
+  const note = [d.bless ? '祝福：攻擊 +10%' : '', d.curse ? '詛咒：' + CURSES[d.curse] : ''].filter(Boolean).join('　');
+  if (!S.sim) { d.bless = null; d.curse = null; Save.write(); }
   Object.assign(S, {
     phase: 'build', wave: 0, gold: START_GOLD, lives: MAX_LIVES, maxLives: MAX_LIVES, towers: [], enemies: [], projs: [], fxs: [], floats: [], zones: [], tiles: {},
     queue: [], qT: 0, ws: { phys: 0, magic: 0, cc: 0, spawned: 0 }, adapt: { phys: false, magic: false, cc: false }, t: 0, speed: S.speed || 1,
-    lowWarned: false, sel: null, selCard: null, selItem: null, hover: null, idleT: 8, lastSay: -99, ended: false, leaks: 0, buffT: 0, sim: !!S.sim
+    lowWarned: false, sel: null, selCard: null, hover: null, idleT: 8, lastSay: -99, ended: false, leaks: 0, buffT: 0, mods, note, sim: !!S.sim, kills: 0
   });
 }
-const heroCh = cls => Save.d.heroes[cls];
 function towerAt(c, r) { return S.towers.find(t => t.c === c && t.r === r); }
 function refreshTower(tw) {
-  tw.st = tdStats(tw.cls, heroCh(tw.cls));
+  const ch = heroCh(tw.cls), old = tw.maxHp;
+  tw.st = tdStats(tw.cls, ch, S.mods);
   const tile = tileAt(tw.c, tw.r);
   tw.high = tile === 'H'; tw.haste = tile === 'S';
   tw.range = tw.st.P.rng * TS * tw.st.mspd + (tw.high ? TS : 0);
+  tw.maxHp = tw.st.maxHp; tw.hp = old ? Math.min(tw.maxHp, tw.hp) : tw.maxHp;
+  tw.load = ch.load.slice(0, 2); tw.skLv = ch.skills.slice();
 }
 function canReach(tw) { return PATH.some(p => Math.hypot(p.x - tw.x, p.y - tw.y) <= tw.range); }
 function placeTower(cls, c, r, quiet) {
-  if (S.phase === 'off' || S.phase === 'over') return false;
+  if (S.phase !== 'build' && S.phase !== 'wave') return false;
   if (!buildable(tileAt(c, r))) return quiet ? false : toast('這格不能放英雄（路上、樹、石頭都不行）');
   if (towerAt(c, r)) return quiet ? false : toast('這格已經有人了');
   if (S.towers.some(t => t.cls === cls)) return quiet ? false : toast(CLASSES[cls].name + '已經上場了');
   if (S.gold < COST[cls]) return quiet ? false : toast('金幣不夠：' + CLASSES[cls].name + '要 ' + COST[cls]);
   S.gold -= COST[cls];
-  const tw = { cls, c, r, x: c * TS + TS / 2, y: r * TS + TS / 2, cd: 0.3, ultCd: 0, stunT: 0, frenzyT: 0, anim: 0, face: 1, bubble: null, kills: [], comboT: -99, paid: COST[cls],
-    stats: { dmg: 0, over: 0, cc: 0, wDmg: 0, wOver: 0, wCc: 0 } };
+  const tw = { cls, c, r, x: c * TS + TS / 2, y: r * TS + TS / 2, cd: 0.3, stunT: 0, frenzyT: 0, anim: 0, face: 1, bubble: null, kills: [], comboT: -99, paid: COST[cls],
+    scd: [1, 2], down: 0, dr: 0, drT: 0, shieldHP: 0, shieldT: 0, reflect: 0, tauntT: 0, lsBonus: 0, lsT: 0, abuff: 0, abT: 0, hot: 0, hotT: 0, martyr: false, lowSaid: false, hitFx: 0,
+    stats: { dmg: 0, over: 0, cc: 0, wDmg: 0, wOver: 0, wCc: 0, taken: 0 } };
   refreshTower(tw);
   S.towers.push(tw);
   if (!S.sim) {
-    SFX.place(); S.selCard = null;
-    if (!canReach(tw)) say(tw, pick(BANTER_TD[cls].far), true);
-    else say(tw, pick(BANTER_TD[cls].place), true);
+    SFX.place(); S.selCard = null; S.sel = tw;
+    say(tw, pick(BANTER_TD[cls][canReach(tw) ? 'place' : 'far']), true);
     renderBottom();
   }
   return true;
@@ -645,40 +894,16 @@ function recallTower(tw) {
   if (S.phase !== 'build') return toast('波次進行中不能收回（波次之間收回 100% 退款）');
   S.gold += tw.paid; S.towers.splice(S.towers.indexOf(tw), 1);
   if (S.sel === tw) S.sel = null;
-  const other = S.towers.length ? pick(S.towers) : null;
-  if (other) say(other, pick(BANTER_TD[tw.cls].recall).replace(/^/, ''), true);
-  floatText(tw.x, tw.y - 30, '+' + tw.paid + ' 金', '#ffd76b', 22);
-  toast(CLASSES[tw.cls].name + '收回了，退還 ' + tw.paid + ' 金幣');
+  if (S.towers.length) say(pick(S.towers), pick(BANTER_TD[tw.cls].recall), true);
+  toast(CLASSES[tw.cls].name + '收回了，退還 ' + tw.paid + ' 金幣', true);
   renderBottom();
-}
-/* equipment: a weapon only fits its own class, an accessory fits anyone; swapping only between waves */
-function canEquip(it, cls) { return it.slot === 'acc' || it.cls === cls; }
-function equipItem(it, cls) {
-  if (S.phase === 'wave') return toast('波次進行中不能換裝，打完這波再換');
-  if (!canEquip(it, cls)) return toast('這是' + CLASSES[it.cls].name + '的武器');
-  const ch = heroCh(cls), bag = Save.d.bag, i = bag.indexOf(it);
-  if (i < 0) return;
-  bag.splice(i, 1);
-  const old = ch.equip[it.slot]; if (old) bag.push(old);
-  ch.equip[it.slot] = it; Save.write();
-  const tw = S.towers.find(t => t.cls === cls);
-  if (tw) { refreshTower(tw); say(tw, pick(BANTER_TD[cls].gear), true); }
-  S.selItem = null;
-  return true;
-}
-function unequip(cls, slot) {
-  if (S.phase === 'wave') return toast('波次進行中不能換裝');
-  const ch = heroCh(cls), it = ch.equip[slot]; if (!it) return;
-  if (Save.d.bag.length >= BAG_MAX) return toast('背包滿了');
-  ch.equip[slot] = null; Save.d.bag.push(it); Save.write();
-  const tw = S.towers.find(t => t.cls === cls); if (tw) refreshTower(tw);
 }
 
 /* ---------------- waves ---------------- */
 function startWave() {
   if (S.phase !== 'build' || S.wave >= WAVES.length) return;
-  S.wave++; S.phase = 'wave'; S.qT = 0; S.queue = []; S.sel = S.sel; S.selItem = null;
-  for (const tw of S.towers) { tw.stats.wDmg = tw.stats.wOver = tw.stats.wCc = 0; }
+  S.wave++; S.phase = 'wave'; S.qT = 0; S.queue = [];
+  for (const tw of S.towers) { tw.stats.wDmg = tw.stats.wOver = tw.stats.wCc = 0; tw.lowSaid = false; }
   S.ws = { phys: 0, magic: 0, cc: 0, spawned: 0 };
   let t = 0, elite = false, boss = false;
   for (const [type, n, gap, flag] of WAVES[S.wave - 1]) {
@@ -695,11 +920,12 @@ function startWave() {
 function spawn(type, elite, boss, at) {
   const b = ENEMY[type], m = waveMul(S.wave);
   const hp = Math.round(b.hp * (boss ? TUNE.boss : elite ? 1.3 * TUNE.elite : MOB_HP) * m);
-  const e = { type, elite, boss, hp, maxHp: hp, d: at || 0, spd: b.speed / 150 * 0.9 * TS, armor: b.armor || 0, shield: 0, aff: [], slowT: 0, slowF: 0, stunT: 0,
-    x: PATH[0].x, y: PATH[0].y, dx: 0, gold: GOLD[type] * (elite ? 1 : 1), timers: { blink: 4, summon: 6 }, flash: 0, id: Math.random() };
+  const e = { type, elite, boss, hp, maxHp: hp, d: at || 0, spd: b.speed / 150 * 0.9 * TS, armor: b.armor || 0, shield: 0, aff: [], slowT: 0, slowF: 0, stunT: 0, brokeT: 0,
+    atk: b.atk * TUNE.hit * atkMul(S.wave) * (elite ? 1.3 : 1), atkT: rand(0.3, 1), reach: (boss ? 1.6 : elite ? 1.3 : 1.05) * TS,
+    x: PATH[0].x, y: PATH[0].y, dx: 0, gold: GOLD[type], timers: { blink: 4, summon: 6 }, flash: 0, id: Math.random() };
   if (elite) {
     const pool = ELITE_AFF.slice().sort(() => Math.random() - 0.5);
-    e.aff = pool.slice(0, (Save.d.crazy || 0) >= 2 ? randi(1, 2) : 1); // one affix on the first clear, up to two later
+    e.aff = pool.slice(0, (Save.d.crazy || 0) >= 2 ? randi(1, 2) : 1);
     if (e.aff.includes('shield')) e.shield = Math.round(hp * 0.4);
   }
   // the enemy adapts: whatever the god leaned on last wave, part of this wave is shielded against it
@@ -715,7 +941,8 @@ function waveCleared() {
   const bonus = 40 + 10 * S.wave;
   S.gold += bonus; S.phase = 'build';
   for (const k in S.tiles) { S.tiles[k].burn = 0; S.tiles[k].freeze = 0; }
-  // read what the god relied on this wave → next wave adapts
+  // between waves the heroes catch their breath: fallen heroes get up, everyone heals 40%
+  for (const tw of S.towers) { if (tw.down > 0) { tw.down = 0; tw.hp = 0; } tw.hp = Math.min(tw.maxHp, tw.hp + tw.maxHp * 0.4); tw.shieldHP = 0; }
   const tot = S.ws.phys + S.ws.magic, share = tot ? S.ws.phys / tot : 0.5;
   // the first two waves are a warm-up: the enemy only starts adapting from wave 3
   S.adapt = S.wave < 2 ? { phys: false, magic: false, cc: false } : { phys: share >= 0.7, magic: share <= 0.3, cc: S.ws.spawned > 0 && S.ws.cc / S.ws.spawned >= 1.6 };
@@ -726,10 +953,8 @@ function waveCleared() {
   SFX.coin();
   if (S.towers.length) {
     const tw = pick(S.towers);
-    if (msgs) {
-      const hit = S.towers.find(t => (S.adapt.phys && t.st.type === 'phys') || (S.adapt.magic && t.st.type === 'magic')) || tw;
-      say(hit, pick(BANTER_TD[hit.cls].adapt), true);
-    } else say(tw, pick(BANTER_TD[tw.cls].clear), true);
+    if (msgs) { const hit = S.towers.find(t => (S.adapt.phys && t.st.type === 'phys') || (S.adapt.magic && t.st.type === 'magic')) || tw; say(hit, pick(BANTER_TD[hit.cls].adapt), true); }
+    else say(tw, pick(BANTER_TD[tw.cls].clear), true);
   }
   S.idleT = 10;
   renderBottom();
@@ -742,25 +967,29 @@ function adaptText() {
   return a.join('、');
 }
 
-/* ---------------- combat ---------------- */
-function inRange(tw, e) { return Math.hypot(e.x - tw.x, e.y - tw.y) <= tw.range + 14; }
-function alive() { return S.enemies.filter(e => !e.dead); }
+/* ---------------- combat: heroes hitting monsters ---------------- */
+const alive = () => S.enemies.filter(e => !e.dead);
+const up = tw => tw.down <= 0;
+function inRange(tw, e, extra) { return Math.hypot(e.x - tw.x, e.y - tw.y) <= tw.range + 14 + (extra || 0) * TS; }
 function hit(tw, e, mult, o) {
   if (e.dead) return 0;
   o = o || {};
   const st = tw.st;
-  let d = st.atk * mult * rand(0.9, 1.1) * (o.skill ? st.skillMul * (1 + 0.12 * (st.skills[3] - 1)) : st.basicMul) * (CLASSES[tw.cls].cmul || 1);
+  let d = st.atk * mult * rand(0.9, 1.1) * (o.skill ? st.skillMul * (1 + 0.12 * ((o.lv || 1) - 1)) : st.basicMul) * (CLASSES[tw.cls].cmul || 1);
   let crit = Math.random() < st.crit;
   if (st.special === 'dodgeCrit' && !o.secondary && !o.skill) { tw.n5 = (tw.n5 || 0) + 1; if (tw.n5 >= 5) { tw.n5 = 0; crit = true; } }
   if (crit) d *= 1.8;
-  const pierce = st.td === 'pierce';
-  if (e.elite || e.boss) { d *= st.eliteMul; if (pierce) d *= 1.6; }
-  if (tw.cls === 'berserker') d *= 1 + 0.6 * (1 - S.lives / S.maxLives); // 血怒: the lower the gate's lives, the harder he hits
-  if (tw.frenzyT > 0) d *= 1.5;
+  const pierce = st.td === 'pierce' || e.brokeT > 0;
+  if ((e.elite || e.boss) && st.td === 'pierce') d *= 1.6;
+  if (e.brokeT > 0) d *= 1.3; // 破甲
+  if (tw.cls === 'berserker') d *= 1 + 0.6 * (1 - tw.hp / tw.maxHp); // 血怒: the less HP, the harder he hits
+  if (tw.frenzyT > 0) d *= tw.frenzyMul || 1.5;
+  if (S.buffT > 0 && Math.random() < 0.05) { floatText(e.x, e.y - 30, '揮空', '#aaa', 14); return 0; } // 斯斯藥水 side effect
   if (e.armor && !pierce) d *= e.armor;
   const type = o.type || st.type;
   if (type === 'phys' && e.physShield && !pierce) d *= 0.35;
   if (type === 'magic' && e.magShield) d *= 0.35;
+  if (o.skill && st.special === 'cdReset' && Math.random() < 0.1 && o.slot != null) tw.scd[o.slot] = 0;
   return applyDmg(tw, e, d, type, crit);
 }
 function applyDmg(tw, e, d, type, crit) {
@@ -771,7 +1000,11 @@ function applyDmg(tw, e, d, type, crit) {
   const real = Math.min(rem, e.hp), over = rem - real;
   e.hp -= real; e.flash = 0.08;
   const dealt = d - over;
-  if (tw) { tw.stats.dmg += dealt; tw.stats.wDmg += dealt; tw.stats.over += over; tw.stats.wOver += over; }
+  if (tw) {
+    tw.stats.dmg += dealt; tw.stats.wDmg += dealt; tw.stats.over += over; tw.stats.wOver += over;
+    const ls = tw.st.steal + (tw.lsT > 0 ? tw.lsBonus : 0);
+    if (ls > 0 && up(tw)) tw.hp = Math.min(tw.maxHp, tw.hp + dealt * ls);
+  }
   S.ws[type] += dealt;
   if (!S.sim && !Save.d.lowfx && (crit || d >= 8)) floatText(e.x + rand(-8, 8), e.y - SIZE[e.type] * 0.6, String(d), crit ? '#ffd23a' : type === 'magic' ? '#c9b6ff' : '#ffffff', crit ? 22 : 16);
   if (e.hp <= 0) kill(e, tw);
@@ -788,44 +1021,47 @@ function stun(tw, e, dur) {
   if (tw) { tw.stats.cc += gain; tw.stats.wCc += gain; } S.ws.cc += gain;
 }
 function tileState(c, r) { const k = c + ',' + r; return S.tiles[k] || (S.tiles[k] = { burn: 0, freeze: 0, burnDps: 0, by: null }); }
+function burnAt(tw, x, y, secs, dps) { const [c, r] = cellOf(x, y), ch = tileAt(c, r); if (ch === 'P' || ch === 'W' || ch === 'B') { const ts = tileState(c, r); ts.burn = secs; ts.burnDps = dps; ts.by = tw; } }
+function freezeAt(tw, x, y, secs) { const [c, r] = cellOf(x, y); if (tileAt(c, r) === 'W') { const ts = tileState(c, r); ts.freeze = secs; ts.by = tw; } }
 function onHitFx(tw, e, primary) {
   const st = tw.st, P = st.P;
   if (P.stun && Math.random() < P.stun) stun(tw, e, 0.8);
-  if (st.td === 'frost') {
-    slow(tw, e, 0.35, 1.5);
-    if (primary) { const [c, r] = cellOf(e.x, e.y); if (tileAt(c, r) === 'W') { const ts = tileState(c, r); ts.freeze = 8; ts.by = tw; } }
-  }
+  if (st.td === 'frost') { slow(tw, e, 0.35, 1.5); if (primary) freezeAt(tw, e.x, e.y, 8); }
   if (st.td === 'stun' && Math.random() < 0.2) stun(tw, e, 0.8);
   if (!primary) return;
-  if (st.td === 'fire') { const [c, r] = cellOf(e.x, e.y); const ch = tileAt(c, r); if (ch === 'P' || ch === 'W' || ch === 'B') { const ts = tileState(c, r); ts.burn = 4; ts.burnDps = st.atk * 0.35; ts.by = tw; } }
+  if (st.td === 'fire') burnAt(tw, e.x, e.y, 4, st.atk * 0.35);
   if (st.td === 'chain') {
     let from = e; const done = new Set([e]);
     for (let i = 0; i < 2; i++) {
-      const nx = alive().filter(o => !done.has(o) && Math.hypot(o.x - from.x, o.y - from.y) < TS * 1.6).sort((a, b) => Math.hypot(a.x - from.x, a.y - from.y) - Math.hypot(b.x - from.x, b.y - from.y))[0];
+      const nx = alive().filter(o => !done.has(o) && dist(o, from) < TS * 1.6).sort((a, b) => dist(a, from) - dist(b, from))[0];
       if (!nx) break;
       fx({ kind: 'zap', x: from.x, y: from.y - 20, x2: nx.x, y2: nx.y - 20, t: 0.2 });
       hit(tw, nx, 0.6, { secondary: true }); done.add(nx); from = nx;
     }
   }
-  if (st.td === 'blast') { fx({ kind: 'boom', x: e.x, y: e.y, r: TS * 0.8, t: 0.3, c: '#ffb24a' }); for (const o of alive()) if (o !== e && Math.hypot(o.x - e.x, o.y - e.y) < TS * 0.8) hit(tw, o, 0.5, { secondary: true }); }
-  if (st.special === 'cdReset' && Math.random() < 0.02) tw.ultCd = 0;
+  if (st.td === 'blast') { fx({ kind: 'boom', x: e.x, y: e.y, r: TS * 0.8, t: 0.3, c: '#ffb24a' }); for (const o of alive()) if (o !== e && dist(o, e) < TS * 0.8) hit(tw, o, 0.5, { secondary: true }); }
+  if (P.heal) { const t = S.towers.filter(o => up(o) && dist(o, tw) < TS * 2.5).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (t && t.hp < t.maxHp) healHero(t, st.atk * 0.25); }
 }
 // one attack landing on its target (melee immediately, ranged when the projectile arrives)
 function land(tw, e, mult, at) {
-  const P = tw.st.P;
-  const near = P.aoe ? alive().filter(o => o !== e && Math.hypot(o.x - (at ? at.x : e.x), o.y - (at ? at.y : e.y)) < P.aoe * TS) : [];
+  const P = tw.st.P, c = at || e;
+  const near = P.aoe ? alive().filter(o => o !== e && Math.hypot(o.x - c.x, o.y - c.y) < P.aoe * TS) : [];
   if (e && !e.dead) { hit(tw, e, mult); onHitFx(tw, e, true); }
   for (const o of near) { hit(tw, o, mult, { secondary: true }); onHitFx(tw, o, false); }
-  if (P.aoe && !S.sim && !Save.d.lowfx) fx({ kind: 'boom', x: at ? at.x : e.x, y: at ? at.y : e.y, r: P.aoe * TS, t: 0.25, c: tw.st.type === 'magic' ? '#b48cff' : '#ffe2a0' });
+  if (P.aoe && !Save.d.lowfx) fx({ kind: 'boom', x: c.x, y: c.y, r: P.aoe * TS, t: 0.25, c: tw.st.type === 'magic' ? '#b48cff' : '#ffe2a0' });
+}
+function lineTargets(tw, tgt, len, width) {
+  const dx = tgt.x - tw.x, dy = tgt.y - tw.y, l = Math.hypot(dx, dy) || 1, ux = dx / l, uy = dy / l;
+  const list = alive().filter(o => { const px = o.x - tw.x, py = o.y - tw.y, along = px * ux + py * uy; return along > -10 && along < len + 20 && Math.abs(px * uy - py * ux) < width; });
+  return { list, ux, uy };
 }
 function fire(tw, tgt) {
   const st = tw.st, P = st.P;
   tw.anim = 0.22; tw.face = tgt.x < tw.x ? -1 : 1;
-  if (P.line) { // spear / crossbow: everything on the line to the edge of range
-    const dx = tgt.x - tw.x, dy = tgt.y - tw.y, l = Math.hypot(dx, dy) || 1, ux = dx / l, uy = dy / l;
-    const hits = alive().filter(o => { const px = o.x - tw.x, py = o.y - tw.y, along = px * ux + py * uy; return along > -10 && along < tw.range + 20 && Math.abs(px * uy - py * ux) < TS * 0.45; });
+  if (P.line) {
+    const { list, ux, uy } = lineTargets(tw, tgt, tw.range, TS * 0.45);
     fx({ kind: 'line', x: tw.x, y: tw.y - 20, x2: tw.x + ux * tw.range, y2: tw.y - 20 + uy * tw.range, t: 0.18, c: P.kind === 'arrow' ? '#f5f0d0' : '#ffe2a0' });
-    hits.forEach((o, i) => { hit(tw, o, P.mult, { secondary: i > 0 }); onHitFx(tw, o, o === tgt); });
+    list.forEach((o, i) => { hit(tw, o, P.mult, { secondary: i > 0 }); onHitFx(tw, o, o === tgt); });
     SFX.shoot(); return;
   }
   let targets = [tgt];
@@ -846,55 +1082,129 @@ function fire(tw, tgt) {
   }
 }
 function kill(e, tw) {
-  if (e.dead) return; e.dead = true;
-  const g = Math.round(e.gold * (tw ? tw.st.goldMul : 1));
-  S.gold += g;
+  if (e.dead) return; e.dead = true; S.kills++;
+  S.gold += e.gold;
   if (!S.sim) {
     SFX.kill();
-    if (g > 0 && !Save.d.lowfx) floatText(e.x, e.y - 10, '+' + g, '#ffd76b', 15);
-    if (!Save.d.lowfx) for (let i = 0; i < (e.boss ? 30 : 7); i++) S.fxs.push({ kind: 'spark', x: e.x, y: e.y - 20, vx: rand(-90, 90), vy: rand(-140, 10), t: rand(0.3, 0.6), c: e.elite || e.boss ? '#ffcf5a' : '#cfe8b0' });
+    if (e.gold > 0 && !Save.d.lowfx) floatText(e.x, e.y - 10, '+' + e.gold, '#ffd76b', 15);
+    if (!Save.d.lowfx) for (let i = 0; i < (e.boss ? 30 : 7); i++) S.fxs.push({ kind: 'spark', x: e.x, y: e.y - 20, vx: rand(-90, 90), vy: rand(-140, 10), t: rand(0.3, 0.6), t0: 0.6, c: e.elite || e.boss ? '#ffcf5a' : '#cfe8b0' });
   }
-  if (tw) { // combo banter: four kills inside ~1.2 s
+  if (tw) {
     tw.kills.push(S.t); while (tw.kills.length && S.t - tw.kills[0] > 1.2) tw.kills.shift();
     if (tw.kills.length >= 4 && S.t - tw.comboT > 20) { tw.comboT = S.t; say(tw, pick(BANTER[tw.cls].combo)); }
   }
   if (e.aff.includes('split')) for (let i = 0; i < 2; i++) { const c = spawn('hydra', false, false, Math.max(0, e.d - 10 - i * 14)); c.hp = c.maxHp = Math.round(e.maxHp * 0.15); c.gold = 2; }
   if (e.aff.includes('deathbomb')) {
     fx({ kind: 'boom', x: e.x, y: e.y, r: TS * 1.5, t: 0.4, c: '#ff5a3a' });
-    for (const t of S.towers) if (Math.hypot(t.x - e.x, t.y - e.y) < TS * 1.5) { t.stunT = Math.max(t.stunT, 1.5); say(t, '……我被炸暈了。主神，你是不是沒看到牠身上寫著「死亡爆炸」？'); }
+    for (const t of S.towers) if (up(t) && dist(t, e) < TS * 1.5) { t.stunT = Math.max(t.stunT, 1.5); hurtHero(t, e.atk * 2, null); say(t, '……我被炸暈了。主神，你是不是沒看到牠身上寫著「死亡爆炸」？'); }
   }
   if (e.boss && !S.sim) banner('腐根樹妖倒下了！', 1.6);
 }
 function leak(e) {
-  e.dead = true; e.leaked = true;
+  e.dead = true;
   const loss = e.boss ? 5 : e.elite ? 2 : 1;
   S.lives = Math.max(0, S.lives - loss); S.leaks++;
-  (S.leakLog || (S.leakLog = [])).push(S.wave + ':' + e.type + (e.elite ? 'E' : '') + (e.physShield ? 'p' : '') + (e.magShield ? 'm' : ''));
   if (S.sim) return;
   SFX.leak(); flashGate = 0.5;
   floatText(PATH[PATH.length - 1].x, PATH[PATH.length - 1].y - 40, '-' + loss + ' ❤', '#ff6a5a', 24);
-  if (S.towers.length) { const tw = pick(S.towers); say(tw, pick(BANTER_TD[tw.cls].leak)); }
-  if (!S.lowWarned && S.lives <= 6 && S.lives > 0 && S.towers.length) { S.lowWarned = true; const tw = pick(S.towers); say(tw, pick(BANTER[tw.cls].lowhp), true); }
+  const ups = S.towers.filter(up);
+  if (ups.length) say(pick(ups), pick(BANTER_TD[pick(ups).cls].leak));
+  if (!S.lowWarned && S.lives <= 6 && S.lives > 0 && ups.length) { S.lowWarned = true; const tw = pick(ups); say(tw, pick(BANTER[tw.cls].lowhp), true); }
 }
-function ultReady(tw) { return tw.ultCd <= 0 && tw.stunT <= 0; }
-function densest(list, r) { let best = null, bn = 0; for (const e of list) { const n = list.filter(o => Math.hypot(o.x - e.x, o.y - e.y) < r).length; if (n > bn) { bn = n; best = e; } } return best; }
-function castUlt(tw) {
-  if (S.phase !== 'wave') return toast('大絕招要在波次中放');
-  if (!ultReady(tw)) return toast('大絕招還在冷卻');
-  const st = tw.st, list = alive().filter(e => Math.hypot(e.x - tw.x, e.y - tw.y) <= tw.range + TS);
-  if (tw.cls !== 'berserker' && !list.length) return toast('射程附近沒有怪');
-  tw.ultCd = 45 * (1 - st.cdr); tw.anim = 0.4;
-  SFX.ult(); say(tw, pick(BANTER_TD[tw.cls].ult), true);
-  const area = (x, y, r, mult, extra) => { for (const e of alive()) if (Math.hypot(e.x - x, e.y - y) < r) { hit(tw, e, mult, { skill: true }); if (extra) extra(e); } };
-  switch (tw.cls) {
-    case 'warrior': fx({ kind: 'boom', x: tw.x, y: tw.y, r: TS * 2.2, t: 0.5, c: '#ffb070' }); area(tw.x, tw.y, TS * 2.2, 4, e => stun(tw, e, 0.6)); break;
-    case 'shield': fx({ kind: 'boom', x: tw.x, y: tw.y, r: TS * 2.5, t: 0.5, c: '#a8c8ff' }); area(tw.x, tw.y, TS * 2.5, 2, e => stun(tw, e, 2.5)); break;
-    case 'mage': { const t = densest(list, TS * 1.3); S.zones.push({ kind: 'meteor', tw, x: t.x, y: t.y, delay: 0.6 }); break; }
-    case 'paladin': { const t = list.slice().sort((a, b) => b.hp - a.hp)[0]; fx({ kind: 'pillar', x: t.x, y: t.y, t: 0.6, c: '#ffe9a0' }); area(t.x, t.y, TS * 1.0, 5); break; }
-    case 'berserker': tw.frenzyT = 10; break;
-    case 'archer': { const t = densest(list, TS * 1.2); S.zones.push({ kind: 'rain', tw, x: t.x, y: t.y, left: 3, tick: 0 }); break; }
+
+/* ---------------- monsters hitting the heroes they pass ---------------- */
+function healHero(tw, amt) { if (!up(tw)) return; tw.hp = Math.min(tw.maxHp, tw.hp + amt); if (!S.sim && !Save.d.lowfx && amt >= 3) floatText(tw.x, tw.y - 50, '+' + Math.round(amt), '#7dff8a', 14); }
+function hurtHero(tw, dmg, src) {
+  if (!up(tw)) return;
+  let d = dmg * rand(0.9, 1.1) * 100 / (100 + tw.st.def);
+  if (tw.st.P.block && Math.random() < 0.15) { if (!S.sim && !Save.d.lowfx) floatText(tw.x, tw.y - 50, '格擋', '#9fd3ff', 14); return; }
+  if (tw.drT > 0) d *= 1 - tw.dr;
+  if (tw.frenzyT > 0) d *= 1.2;
+  if (tw.shieldT > 0 && tw.shieldHP > 0) {
+    d *= 0.65; const a = Math.min(tw.shieldHP, d); tw.shieldHP -= a; d -= a;
+    if (tw.shieldHP <= 0 && tw.shieldBurst) { tw.shieldBurst = false; const by = tw.shieldBy || tw; fx({ kind: 'boom', x: tw.x, y: tw.y, r: TS * 1.5, t: 0.4, c: '#ffe9a0' }); for (const e of alive()) if (dist(e, tw) < TS * 1.5) hit(by, e, 3, { skill: true, lv: 10 }); }
   }
-  renderBottom();
+  if (tw.reflect > 0 && tw.drT > 0 && src && !src.dead) applyDmg(tw, src, d * tw.reflect, 'phys', false);
+  d = Math.round(d); if (d <= 0) return;
+  tw.hp -= d; tw.stats.taken += d; tw.hitFx = 0.15;
+  if (!S.sim) { SFX.hurt(); if (!Save.d.lowfx) floatText(tw.x + rand(-6, 6), tw.y - 50, '-' + d, '#ff6a5a', 15); }
+  if (tw.hp <= 0) {
+    if (tw.cls === 'paladin' && !tw.martyr) { tw.martyr = true; tw.hp = tw.maxHp * 0.5; floatText(tw.x, tw.y - 64, '殉道！', '#ffe9a0', 20); say(tw, '聖光說，我太帥了，還不能死。', true); return; }
+    tw.hp = 0; tw.down = DOWN_TIME; tw.frenzyT = 0;
+    if (!S.sim) { say(tw, pick(BANTER[tw.cls].death), true); renderBottom(); }
+  } else if (!tw.lowSaid && tw.hp < tw.maxHp * 0.3) { tw.lowSaid = true; say(tw, pick(BANTER[tw.cls].lowhp)); }
+}
+
+/* ---------------- skills: each hero brings two of the class's four ---------------- */
+const nearList = (tw, extra) => alive().filter(e => inRange(tw, e, extra));
+const firstOf = list => list.slice().sort((a, b) => b.d - a.d)[0];
+const strongest = list => list.slice().sort((a, b) => b.hp - a.hp)[0];
+function densest(list, r) { let best = null, bn = 0; for (const e of list) { const n = list.filter(o => dist(o, e) < r).length; if (n > bn) { bn = n; best = e; } } return best; }
+function area(tw, x, y, r, mult, lv, extra) { for (const e of alive()) if (Math.hypot(e.x - x, e.y - y) < r) { hit(tw, e, mult, { skill: true, lv }); if (extra) extra(e); } }
+const allies = (tw, r) => S.towers.filter(o => up(o) && dist(o, tw) < r);
+// ally: true = the skill helps heroes (cast when someone is hurt); need: how many monsters in reach before auto-cast
+const SKILLS = {
+  whirl: { need: 2, go(tw, lv, E) { const r = 1.7 * TS; fx({ kind: 'ring', x: tw.x, y: tw.y, r, t: 0.35, c: '#ffcf80' }); area(tw, tw.x, tw.y, r, E >= 1 ? 2.2 : 1.6, lv, E >= 2 ? e => slow(tw, e, 0.5, 1.5) : null); } },
+  charge: { need: 1, go(tw, lv, E, L) { const t = firstOf(L), len = tw.range + (E >= 1 ? TS : 0); const { list, ux, uy } = lineTargets(tw, t, len, TS * 0.5); fx({ kind: 'line', x: tw.x, y: tw.y - 20, x2: tw.x + ux * len, y2: tw.y - 20 + uy * len, t: 0.3, c: '#ffb070' }); list.forEach(e => { hit(tw, e, 2, { skill: true, lv }); stun(tw, e, 0.5); }); if (E >= 2) { fx({ kind: 'boom', x: tw.x + ux * len, y: tw.y + uy * len, r: TS, t: 0.4, c: '#ffb070' }); area(tw, tw.x + ux * len, tw.y + uy * len, TS, 1.5, lv); } } },
+  smash: { need: 1, go(tw, lv, E, L) { const t = strongest(L); const list = E >= 1 ? alive().filter(e => dist(e, t) < TS) : [t]; fx({ kind: 'boom', x: t.x, y: t.y, r: E >= 1 ? TS : 30, t: 0.35, c: '#ff8a5a' }); list.forEach(e => { e.brokeT = 5; hit(tw, e, 3, { skill: true, lv }); }); if (E >= 2) S.zones.push({ kind: 'delay', delay: 0.3, fn: () => area(tw, t.x, t.y, TS, 1.5, lv) }); } },
+  quake: { need: 3, go(tw, lv, E) { const r = (E >= 1 ? 2.8 : 2.2) * TS; const f = () => { fx({ kind: 'boom', x: tw.x, y: tw.y, r, t: 0.5, c: '#ffb070' }); area(tw, tw.x, tw.y, r, 4, lv, e => stun(tw, e, 0.6)); }; f(); if (E >= 2) S.zones.push({ kind: 'delay', delay: 0.5, fn: f }); } },
+  fireball: { need: 1, go(tw, lv, E, L) { const ts = E >= 1 ? L.slice().sort((a, b) => b.d - a.d).slice(0, 3) : [firstOf(L)]; for (const t of ts) { fx({ kind: 'boom', x: t.x, y: t.y, r: TS * 0.8, t: 0.35, c: '#ff8a3a' }); area(tw, t.x, t.y, TS * 0.8, 2, lv); if (E >= 2) burnAt(tw, t.x, t.y, 4, tw.st.atk * 0.4); } } },
+  nova: { need: 2, go(tw, lv, E) { const r = (E >= 1 ? 2.4 : 1.8) * TS; fx({ kind: 'boom', x: tw.x, y: tw.y, r, t: 0.5, c: '#9fe8ff' }); area(tw, tw.x, tw.y, r, E >= 2 ? 2 : 1.2, lv, e => stun(tw, e, E >= 2 ? 2.5 : 1.5)); for (const p of PATH) if (dist(p, tw) < r) freezeAt(tw, p.x, p.y, 8); } },
+  beam: { need: 1, go(tw, lv, E, L) { const t = firstOf(L); S.zones.push({ kind: 'beam', tw, lv, tgt: { x: t.x, y: t.y }, w: TS * (E >= 1 ? 0.7 : 0.5), left: [0.9, 1.1, 1.3][E], tick: 0, boom: E >= 2 }); } },
+  meteor: { need: 3, go(tw, lv, E, L) { const n = E >= 2 ? 3 : 1, r = (E >= 1 ? 1.7 : 1.3) * TS; for (let i = 0; i < n; i++) { const t = i ? pick(L) : densest(L, r); S.zones.push({ kind: 'meteor', tw, lv, x: t.x, y: t.y, r, delay: 0.6 + i * 0.35 }); } } },
+  bash: { need: 1, go(tw, lv, E, L) { const t = firstOf(L), r = (E >= 1 ? 1.2 : 0.8) * TS; fx({ kind: 'boom', x: t.x, y: t.y, r, t: 0.3, c: '#a8c8ff' }); area(tw, t.x, t.y, r, 1.5, lv, e => stun(tw, e, E >= 1 ? 1.5 : 1)); if (E >= 2) { const { list } = lineTargets(tw, t, tw.range + TS, TS * 0.5); list.forEach(e => hit(tw, e, 1.5, { skill: true, lv })); } } },
+  roar: { need: 2, go(tw, lv, E) { const r = 1.8 * TS; fx({ kind: 'ring', x: tw.x, y: tw.y, r, t: 0.5, c: '#ffd27a' }); area(tw, tw.x, tw.y, r, 0.5, lv, e => stun(tw, e, E >= 1 ? 1.4 : 0.8)); tw.dr = E >= 2 ? 0.5 : 0.3; tw.drT = 5; tw.tauntT = 5; tw.reflect = 0; } },
+  wall: { need: 1, go(tw, lv, E) { for (const o of allies(tw, 1.6 * TS)) { o.dr = E >= 1 ? 0.8 : 0.6; o.drT = E >= 1 ? 8 : 6; o.reflect = E >= 2 ? 0.5 : 0; fx({ kind: 'ring', x: o.x, y: o.y, r: 30, t: 0.5, c: '#a8c8ff' }); } } },
+  ram: { need: 3, go(tw, lv, E) { const r = (E >= 1 ? 3 : 2.5) * TS; fx({ kind: 'boom', x: tw.x, y: tw.y, r, t: 0.5, c: '#a8c8ff' }); area(tw, tw.x, tw.y, r, E >= 2 ? 4 : 2, lv, e => stun(tw, e, E >= 1 ? 3 : 2.5)); } },
+  holyslash: { need: 1, go(tw, lv, E, L) { const t = firstOf(L), len = tw.range + TS * (E >= 1 ? 2 : 1); const { list, ux, uy } = lineTargets(tw, t, len, TS * 0.5); fx({ kind: 'line', x: tw.x, y: tw.y - 20, x2: tw.x + ux * len, y2: tw.y - 20 + uy * len, t: 0.35, c: '#ffe9a0' }); list.forEach(e => { hit(tw, e, 1.8, { skill: true, lv }); if (E >= 2) healHero(tw, tw.maxHp * 0.05); }); } },
+  heal: { ally: true, go(tw, lv, E) { const pct = [0.12, 0.18, 0.25][E]; for (const o of allies(tw, 2 * TS)) { o.hot = o.maxHp * pct / 4; o.hotT = 4; fx({ kind: 'ring', x: o.x, y: o.y, r: 30, t: 0.6, c: '#7dff8a' }); } if (E >= 2) area(tw, tw.x, tw.y, 2 * TS, 0.8, lv); } },
+  aegis: { ally: true, go(tw, lv, E) { const t = allies(tw, 3 * TS).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0] || tw; t.shieldHP = t.maxHp * [0.6, 0.8, 1][E]; t.shieldT = 8; t.shieldBurst = E >= 2; t.shieldBy = tw; fx({ kind: 'ring', x: t.x, y: t.y, r: 34, t: 0.6, c: '#ffe9a0' }); } },
+  judge: { need: 1, go(tw, lv, E, L) { const ts = E >= 2 ? L.slice().sort((a, b) => b.hp - a.hp).slice(0, 3) : [strongest(L)], r = (E >= 1 ? 1.4 : 1) * TS; for (const t of ts) { fx({ kind: 'pillar', x: t.x, y: t.y, t: 0.6, c: '#ffe9a0' }); area(tw, t.x, t.y, r, 5, lv); } } },
+  flurry: { need: 1, go(tw, lv, E, L) { const t = firstOf(L), n = E >= 1 ? 7 : 5; for (let i = 0; i < n && !t.dead; i++) { const got = hit(tw, t, 0.5, { skill: true, lv }); if (E >= 2) healHero(tw, got * 0.1); } fx({ kind: 'slash', x: t.x, y: t.y - 18, t: 0.3, c: '#ff8a5a', a: 0 }); } },
+  leap: { need: 1, go(tw, lv, E, L) { const t = densest(L, TS), r = (E >= 1 ? 1.4 : 1) * TS; fx({ kind: 'boom', x: t.x, y: t.y, r, t: 0.4, c: '#ff8a5a' }); area(tw, t.x, t.y, r, 2, lv, E >= 2 ? e => stun(tw, e, 1) : null); } },
+  bloodlust: { need: 1, go(tw, lv, E) { tw.lsBonus = E >= 1 ? 0.35 : 0.25; tw.lsT = E >= 1 ? 10 : 8; if (E >= 2) { tw.abuff = 0.3; tw.abT = tw.lsT; } fx({ kind: 'ring', x: tw.x, y: tw.y, r: 30, t: 0.5, c: '#ff4a3a' }); } },
+  frenzy: { need: 2, go(tw, lv, E) { tw.frenzyT = E >= 1 ? 12 : 10; tw.frenzyMul = E >= 2 ? 1.8 : 1.5; } },
+  triple: { need: 1, go(tw, lv, E, L) { const n = E >= 1 ? 5 : 3, ts = L.slice().sort((a, b) => b.d - a.d); for (let i = 0; i < n; i++) { const t = ts[i % ts.length]; if (E >= 2) { const { list } = lineTargets(tw, t, tw.range, TS * 0.35); list.forEach(e => hit(tw, e, 1, { skill: true, lv })); fx({ kind: 'line', x: tw.x, y: tw.y - 20, x2: t.x, y2: t.y - 20, t: 0.2, c: '#f5f0d0' }); } else S.projs.push({ tw, e: t, m: 1, x: tw.x, y: tw.y - 34, tx: t.x, ty: t.y - 20, kind: 'arrow', col: '#ffe2a0', skill: lv }); } } },
+  backshot: { need: 1, go(tw, lv, E, L) { const n = E >= 1 ? 5 : 3, ts = L.slice().sort((a, b) => b.d - a.d); for (let i = 0; i < n; i++) { const t = ts[i % ts.length]; hit(tw, t, 0.9, { skill: true, lv }); if (!t.ccImmune) t.d = Math.max(0, t.d - 30); if (E >= 2) { fx({ kind: 'boom', x: t.x, y: t.y, r: TS * 0.6, t: 0.3, c: '#ffb24a' }); area(tw, t.x, t.y, TS * 0.6, 0.8, lv); } fx({ kind: 'line', x: tw.x, y: tw.y - 20, x2: t.x, y2: t.y - 20, t: 0.15, c: '#f5f0d0' }); } } },
+  blast: { need: 1, go(tw, lv, E, L) { const t = firstOf(L), r = (E >= 1 ? 1.4 : 1) * TS; fx({ kind: 'boom', x: t.x, y: t.y, r, t: 0.4, c: '#ffb24a' }); area(tw, t.x, t.y, r, 2.5, lv); if (E >= 2) for (const p of PATH) if (Math.hypot(p.x - t.x, p.y - t.y) < r) burnAt(tw, p.x, p.y, 4, tw.st.atk * 0.4); } },
+  rain: { need: 3, go(tw, lv, E, L) { const t = densest(L, TS * 1.2); S.zones.push({ kind: 'rain', tw, lv, x: t.x, y: t.y, r: TS * (E >= 2 ? 1.6 : 1.2), m: E >= 2 ? 1.1 : 0.8, left: E >= 1 ? 4 : 3, tick: 0 }); } }
+};
+const skillOf = (tw, slot) => CLASSES[tw.cls].skills[tw.load[slot]];
+function skillCdFull(tw, slot) { return SKILL_CD[tw.load[slot]] * (1 - tw.st.cdr); }
+// manual: tapped by the player; returns false (and why) when it cannot go
+function castSkill(tw, slot, manual) {
+  if (S.phase !== 'wave') return manual ? toast('技能要在波次中放') : false;
+  if (!up(tw)) return manual ? toast(CLASSES[tw.cls].name + '倒下了，等他爬起來') : false;
+  if (tw.stunT > 0) return manual ? toast('暈著，放不出來') : false;
+  if (tw.scd[slot] > 0) return manual ? toast('還在冷卻') : false;
+  const sk = skillOf(tw, slot), def = SKILLS[sk.id], idx = tw.load[slot], lv = tw.skLv[idx], E = evo(lv);
+  const L = nearList(tw, 0.5);
+  if (def.ally) {
+    const hurt = allies(tw, 3 * TS).some(o => o.hp < o.maxHp * (manual ? 0.99 : 0.7));
+    if (!hurt && !(manual && L.length)) return manual ? toast('大家都很健康') : false;
+  } else {
+    const need = manual ? 1 : (def.need || 1);
+    if (L.length < need && !(L.some(e => e.boss || e.elite) && L.length)) return manual ? toast('射程附近沒有怪') : false;
+  }
+  def.go(tw, lv, E, L);
+  tw.scd[slot] = skillCdFull(tw, slot); tw.anim = 0.35;
+  if (!S.sim) {
+    if (idx === 3) { SFX.ult(); say(tw, pick(BANTER_TD[tw.cls].ult), true); } else SFX.skill();
+    floatText(tw.x, tw.y - 70, sk.name, '#ffe9a0', 16);
+  }
+  return true;
+}
+
+/* ---------------- items brought from the potion shop ---------------- */
+const POTS_TD = {
+  red: { n: '紅藥水', img: 'pot_red', price: 300, d: '全體上場英雄回 40% 血，倒下的也會被灌醒', use() { const ts = S.towers; if (!ts.length) return toast('還沒有英雄上場'); for (const t of ts) { if (t.down > 0) { t.down = 0; t.hp = 0; } healHero(t, t.maxHp * 0.4); } return true; } },
+  gate: { n: '城門修補劑', img: 'rock', price: 400, d: '城門的命 +3', use() { if (S.lives >= S.maxLives) return toast('城門好好的，不用修'); S.lives = Math.min(S.maxLives, S.lives + 3); return true; } },
+  sisi: { n: '感冒用斯斯藥水', img: 'pot_cold', price: 800, d: '全體攻速 +30%（15 秒）。副作用：頭昏昏的，普攻有 5% 機率揮空', use() { if (S.phase !== 'wave') return toast('波次中再喝，不然浪費'); S.buffT = 15; if (S.towers.length) say(pick(S.towers), '這藥水……喝了頭昏昏的，可是手變好快！', true); return true; } }
+};
+function usePot(k) {
+  const d = Save.d;
+  if (!d.pots[k]) return toast('沒有' + POTS_TD[k].n + '了，回村莊找藥水商人買');
+  if (POTS_TD[k].use() === true) { d.pots[k]--; Save.write(); SFX.coin(); renderBottom(); }
 }
 
 /* ---------------- simulation step ---------------- */
@@ -902,88 +1212,104 @@ function step(dt) {
   if (S.phase !== 'wave' && S.phase !== 'build') return;
   S.t += dt;
   if (S.buffT > 0) S.buffT -= dt;
-  // spawning
   if (S.phase === 'wave') {
     S.qT += dt;
     while (S.queue.length && S.queue[0].at <= S.qT) { const q = S.queue.shift(); spawn(q.type, q.elite, q.boss); }
   }
-  // tiles
   for (const k in S.tiles) { const ts = S.tiles[k]; if (ts.burn > 0) ts.burn -= dt; if (ts.freeze > 0) ts.freeze -= dt; }
-  // enemies
+  // monsters
   for (const e of S.enemies) {
     if (e.dead) continue;
     if (e.flash > 0) e.flash -= dt;
+    if (e.brokeT > 0) e.brokeT -= dt;
     const [c, r] = cellOf(e.x, e.y), ts = S.tiles[c + ',' + r];
     if (ts && ts.burn > 0) applyDmg(ts.by, e, ts.burnDps * dt * (e.magShield ? 0.35 : 1) + 0.0001, 'magic', false);
     if (e.dead) continue;
     if (e.aff.includes('vamp')) e.hp = Math.min(e.maxHp, e.hp + e.maxHp * 0.02 * dt);
     if (e.slowT > 0) e.slowT -= dt;
     if (e.stunT > 0) { e.stunT -= dt; continue; }
+    // attack a hero in reach while walking past (a taunting shield warrior draws it)
+    if ((e.atkT -= dt) <= 0) {
+      let tgt = null, bd = 1e9;
+      for (const tw of S.towers) { if (!up(tw)) continue; const dd = dist(tw, e) - (tw.tauntT > 0 ? TS * 1.5 : 0); if (dd < bd && dist(tw, e) <= e.reach + (tw.tauntT > 0 ? TS : 0)) { bd = dd; tgt = tw; } }
+      if (tgt) { hurtHero(tgt, e.atk, e); e.atkT = e.boss ? 1.8 : 1.3; if (e.aff.includes('vamp')) e.hp = Math.min(e.maxHp, e.hp + e.atk); if (!Save.d.lowfx) fx({ kind: 'claw', x: tgt.x, y: tgt.y - 30, t: 0.2 }); }
+      else e.atkT = 0.25;
+    }
     let sp = e.spd;
     if (e.slowT > 0 && !e.ccImmune) sp *= 1 - e.slowF;
     if (ts && ts.freeze > 0 && !e.ccImmune) { sp *= 0.5; if (ts.by) { ts.by.stats.cc += dt; ts.by.stats.wCc += dt; } S.ws.cc += dt; }
     if (e.aff.includes('frenzy') && e.hp < e.maxHp * 0.5) sp *= 1.4;
-    if (e.aff.includes('blink') && (e.timers.blink -= dt) <= 0) { e.timers.blink = 4; e.d += TS * 1.2; if (!S.sim) fx({ kind: 'ring', x: e.x, y: e.y, r: 20, t: 0.3, c: '#c08cff' }); }
+    if (e.aff.includes('blink') && (e.timers.blink -= dt) <= 0) { e.timers.blink = 4; e.d += TS * 1.2; fx({ kind: 'ring', x: e.x, y: e.y, r: 20, t: 0.3, c: '#c08cff' }); }
     if (e.aff.includes('summon') && (e.timers.summon -= dt) <= 0) { e.timers.summon = 6; spawn('hydra', false, false, Math.max(0, e.d - 20)); }
     e.d += sp * dt;
     if (e.d >= PATH_LEN) { leak(e); continue; }
     const p = posAt(e.d); e.x = p.x; e.y = p.y; if (p.dx) e.dx = p.dx;
   }
-  // towers
+  // heroes
   for (const tw of S.towers) {
     if (tw.anim > 0) tw.anim -= dt;
+    if (tw.hitFx > 0) tw.hitFx -= dt;
     if (tw.bubble && (tw.bubble.t -= dt / Math.max(1, S.speed)) <= 0) tw.bubble = null;
-    if (tw.ultCd > 0) tw.ultCd -= dt;
-    if (tw.frenzyT > 0) tw.frenzyT -= dt;
+    for (let i = 0; i < 2; i++) if (tw.scd[i] > 0) tw.scd[i] -= dt;
+    for (const k of ['frenzyT', 'drT', 'tauntT', 'lsT', 'abT', 'shieldT']) if (tw[k] > 0) tw[k] -= dt;
+    if (tw.shieldT <= 0) tw.shieldHP = 0;
+    if (tw.hotT > 0) { tw.hotT -= dt; healHero(tw, tw.hot * dt); }
+    if (tw.down > 0) { tw.down -= dt; if (tw.down <= 0) { tw.hp = tw.maxHp * 0.5; if (!S.sim) { say(tw, pick(BANTER[tw.cls].revive), true); renderBottom(); } } continue; }
     if (tw.stunT > 0) { tw.stunT -= dt; continue; }
     if (S.phase !== 'wave') continue;
+    if (Save.d.autoSkill || S.sim) for (let i = 0; i < 2; i++) if (tw.scd[i] <= 0) castSkill(tw, i, false);
     tw.cd -= dt;
     if (tw.cd > 0) continue;
     let best = null;
     for (const e of S.enemies) if (!e.dead && inRange(tw, e) && (!best || e.d > best.d)) best = e;
     if (!best) { tw.cd = 0; continue; }
     fire(tw, best);
-    let as = tw.st.aspd * (tw.haste ? 1.25 : 1) * (tw.frenzyT > 0 ? 1.4 : 1) * (S.buffT > 0 ? 1.3 : 1);
-    for (const o of S.towers) if (o !== tw && o.st.P.aura && Math.hypot(o.x - tw.x, o.y - tw.y) < TS * 1.6) as *= 1 + o.st.P.aura;
-    for (const e of S.enemies) if (!e.dead && e.aff.includes('frost') && Math.hypot(e.x - tw.x, e.y - tw.y) < TS * 1.5) { as *= 0.7; break; }
+    let as = tw.st.aspd * (tw.haste ? 1.25 : 1) * (tw.frenzyT > 0 ? 1.4 : 1) * (S.buffT > 0 ? 1.3 : 1) * (tw.abT > 0 ? 1 + tw.abuff : 1);
+    for (const o of S.towers) if (o !== tw && up(o) && o.st.P.aura && dist(o, tw) < TS * 1.6) as *= 1 + o.st.P.aura;
+    for (const e of S.enemies) if (!e.dead && e.aff.includes('frost') && dist(e, tw) < TS * 1.5) { as *= 0.7; break; }
     tw.cd = tw.st.P.cd / as;
   }
   // projectiles
   for (const p of S.projs) {
     if (p.e && !p.e.dead) { p.tx = p.e.x; p.ty = p.e.y - 20; }
     const dx = p.tx - p.x, dy = p.ty - p.y, l = Math.hypot(dx, dy), mv = 720 * dt;
-    if (l <= mv + 4) { p.done = true; if (p.e && !p.e.dead) land(p.tw, p.e, p.m); else if (p.tw.st.P.aoe) land(p.tw, null, p.m, { x: p.tx, y: p.ty + 20 }); }
-    else { p.x += dx / l * mv; p.y += dy / l * mv; p.ang = Math.atan2(dy, dx); }
+    if (l <= mv + 4) {
+      p.done = true;
+      if (p.skill) { if (p.e && !p.e.dead) hit(p.tw, p.e, p.m, { skill: true, lv: p.skill }); }
+      else if (p.e && !p.e.dead) land(p.tw, p.e, p.m); else if (p.tw.st.P.aoe) land(p.tw, null, p.m, { x: p.tx, y: p.ty + 20 });
+    } else { p.x += dx / l * mv; p.y += dy / l * mv; p.ang = Math.atan2(dy, dx); }
   }
   S.projs = S.projs.filter(p => !p.done);
-  // delayed skills
+  // delayed and lasting skills
   for (const z of S.zones) {
-    if (z.kind === 'meteor') {
+    if (z.kind === 'delay') { if ((z.delay -= dt) <= 0) { z.done = true; z.fn(); } }
+    else if (z.kind === 'meteor') {
       if ((z.delay -= dt) <= 0) {
-        z.done = true; fx({ kind: 'boom', x: z.x, y: z.y, r: TS * 1.3, t: 0.6, c: '#ff7a3a' });
-        for (const e of alive()) if (Math.hypot(e.x - z.x, e.y - z.y) < TS * 1.3) hit(z.tw, e, 6, { skill: true });
-        for (let c = -1; c <= 1; c++) for (let r = -1; r <= 1; r++) { const [cc, rr] = cellOf(z.x, z.y); const ch = tileAt(cc + c, rr + r); if (ch === 'P' || ch === 'W') { const ts = tileState(cc + c, rr + r); ts.burn = 5; ts.burnDps = z.tw.st.atk * 0.5; ts.by = z.tw; } }
+        z.done = true; fx({ kind: 'boom', x: z.x, y: z.y, r: z.r, t: 0.6, c: '#ff7a3a' });
+        area(z.tw, z.x, z.y, z.r, 6, z.lv);
+        for (const p of PATH) if (Math.hypot(p.x - z.x, p.y - z.y) < z.r + TS / 2) burnAt(z.tw, p.x, p.y, 5, z.tw.st.atk * 0.5);
       }
     } else if (z.kind === 'rain') {
       z.left -= dt; z.tick -= dt;
-      if (z.tick <= 0) { z.tick = 0.3; for (const e of alive()) if (Math.hypot(e.x - z.x, e.y - z.y) < TS * 1.2) hit(z.tw, e, 0.8, { skill: true }); }
+      if (z.tick <= 0) { z.tick = 0.3; area(z.tw, z.x, z.y, z.r, z.m, z.lv); }
       if (z.left <= 0) z.done = true;
+    } else if (z.kind === 'beam') {
+      z.left -= dt; z.tick -= dt;
+      if (z.tick <= 0) { z.tick = 0.15; const { list } = lineTargets(z.tw, z.tgt, z.tw.range + TS, z.w); list.forEach(e => hit(z.tw, e, 0.6, { skill: true, lv: z.lv })); }
+      if (z.left <= 0) { z.done = true; if (z.boom) { const dx = z.tgt.x - z.tw.x, dy = z.tgt.y - z.tw.y, l = Math.hypot(dx, dy) || 1, len = z.tw.range + TS, x = z.tw.x + dx / l * len, y = z.tw.y + dy / l * len; fx({ kind: 'boom', x, y, r: TS, t: 0.4, c: '#c79bff' }); area(z.tw, x, y, TS, 3, z.lv); } }
     }
   }
   S.zones = S.zones.filter(z => !z.done);
   S.enemies = S.enemies.filter(e => !e.dead);
-  // effects
   for (const f of S.fxs) { f.t -= dt; if (f.kind === 'spark') { f.x += f.vx * dt; f.y += f.vy * dt; f.vy += 300 * dt; } }
   S.fxs = S.fxs.filter(f => f.t > 0);
   for (const f of S.floats) { f.t -= dt; f.y -= 40 * dt; }
   S.floats = S.floats.filter(f => f.t > 0);
-  // end of wave / run
   if (S.lives <= 0) { endRun(false); return; }
   if (S.phase === 'wave' && !S.queue.length && !S.enemies.length) waveCleared();
-  // idle chatter between waves
   if (S.phase === 'build' && S.towers.length && !S.sim && (S.idleT -= dt) <= 0) { S.idleT = rand(14, 22); const tw = pick(S.towers); say(tw, pick(BANTER[tw.cls].random)); }
 }
-function fx(f) { if (S.sim) return; if (Save.d.lowfx && (f.kind === 'slash' || f.kind === 'spark')) return; f.t0 = f.t; S.fxs.push(f); }
+function fx(f) { if (S.sim) return; if (Save.d.lowfx && (f.kind === 'slash' || f.kind === 'spark' || f.kind === 'claw')) return; f.t0 = f.t; S.fxs.push(f); }
 function floatText(x, y, s, c, size) { if (S.sim) return; S.floats.push({ x, y, s, c, size: size || 16, t: 0.9, t0: 0.9 }); }
 function say(tw, text, force) {
   if (S.sim || !tw) return;
@@ -992,73 +1318,84 @@ function say(tw, text, force) {
   S.lastSay = now; tw.bubble = { text, t: 4.2 };
 }
 
-/* ---------------- end of a run: rewards ---------------- */
+/* ---------------- end of a battle: rewards, back to the village ---------------- */
 function endRun(won) {
   if (S.ended) return; S.ended = true; S.phase = 'over';
   if (S.sim) return;
-  S.sel = S.selCard = S.selItem = null; renderBottom();
+  S.sel = S.selCard = null; renderBottom();
   const cleared = won ? WAVES.length : S.wave - 1;
   const d = Save.d, deployed = S.towers.map(t => t.cls);
   const avgLv = HEROES.reduce((a, c) => a + heroCh(c).lvl, 0) / HEROES.length;
   const ilvl = 1 + Math.floor(avgLv / 3) + (d.crazy || 0) * 2;
-  const rw = { won, cleared, gold: won ? 1500 + 300 * (d.crazy || 0) : 100 * cleared, crystals: won ? 6 + (d.crazy || 0) : Math.floor(cleared / 3), items: [], ups: [], burned: 0 };
+  const rw = { won, cleared, gold: won ? 1500 + 300 * (d.crazy || 0) : 100 * cleared, crystals: won ? 6 + (d.crazy || 0) : Math.floor(cleared / 3), shards: won ? 15 : cleared, items: [], ups: [], burned: 0 };
   const n = won ? 3 + (d.crazy ? 1 : 0) : Math.floor(cleared / 3);
   for (let i = 0; i < n; i++) {
-    const it = makeItem(pick(HEROES), ilvl, won && i === 0 ? 1 : 0.3);
-    if (won && i === 0 && it.rarity < 1) { it.rarity = 1; const fresh = makeItem(it.cls, ilvl, 1, it.slot, it.wtype, 1); Object.assign(it, fresh); }
-    if (d.bag.length < BAG_MAX) { d.bag.push(it); rw.items.push(it); } else { rw.burned += RAR[it.rarity].salvage; }
+    let it = makeItem(pick(HEROES), ilvl, won && i === 0 ? 1 : 0.3);
+    if (won && i === 0 && it.rarity < 1) it = makeItem(it.cls, ilvl, 1, it.slot, it.wtype, 1);
+    if (d.bag.length < BAG_MAX) { d.bag.push(it); rw.items.push(it); } else rw.burned += RAR[it.rarity].salvage;
   }
   rw.crystals += rw.burned;
-  d.gold += rw.gold; d.crystals += rw.crystals;
+  d.gold += rw.gold; d.crystals += rw.crystals; d.shards += rw.shards;
   const exp = won ? 150 : 15 * cleared;
   for (const c of HEROES) {
-    const ch = heroCh(c); let gain = deployed.includes(c) ? exp : Math.round(exp / 3); const was = ch.lvl;
+    const ch = heroCh(c), gain = deployed.includes(c) ? exp : Math.round(exp / 3), was = ch.lvl;
     ch.exp += gain;
-    while (ch.lvl < levelCap() && ch.exp >= expNext(ch.lvl)) { ch.exp -= expNext(ch.lvl); ch.lvl++; ch.attr.str += 3; ch.attr.int += 1; ch.attr.agi += 1; }
+    while (ch.lvl < levelCap() && ch.exp >= expNext(ch.lvl)) { ch.exp -= expNext(ch.lvl); ch.lvl++; ch.pts += 5; ch.sp += 1; }
     if (ch.lvl >= levelCap()) ch.exp = Math.min(ch.exp, expNext(ch.lvl) - 1);
     if (ch.lvl > was) rw.ups.push(CLASSES[c].name + ' Lv' + was + ' → Lv' + ch.lvl);
   }
   if (won) { d.clears = (d.clears || 0) + 1; d.crazy = (d.crazy || 0) + 1; }
   Save.write();
-  BGM.play('select');
   const who = deployed.length ? pick(deployed) : pick(HEROES);
   const lines = won ? [SL('boss', 'sigh', '藥劑……在……天空聖壇……'), SL(who, 'n', pick(BANTER_TD[who].win))] : [SL(who, 'angry', pick(BANTER[who].death))];
   if (won) SFX.win(); else SFX.bad();
   setTimeout(() => Dialog.play(lines, () => showResults(rw)), 700);
 }
+function showResults(rw) {
+  Modal.open(rw.won ? '勝利！迷霧森林守住了' : '城門被攻破了……', b => {
+    b.append(h('div', { class: 'say2' }, rw.won ? `守住 ${WAVES.length} 波！瘋狂度升到 ${Save.d.crazy}：下次怪物更硬，掉的裝備也更好。` : `撐到第 ${rw.cleared} 波。回村莊整理裝備和技能，再出城一次！`));
+    b.append(h('div', null, '獲得：', h('b', { class: 'tdaff' }, rw.gold + ' 金幣'), '、', h('b', { style: 'color:#9fd3ff' }, rw.crystals + ' 晶石'), '、', h('b', { style: 'color:#d6b8ff' }, rw.shards + ' 碎片'), rw.burned ? h('span', { class: 'muted' }, `（背包滿了，${rw.burned} 晶石是自動分解來的）`) : null));
+    if (rw.ups.length) b.append(h('div', { class: 'ok' }, '升級：' + rw.ups.join('、') + '（屬性點和技能點記得去點）'));
+    if (rw.items.length) {
+      b.append(h('div', { class: 'sub' }, '掉落裝備'));
+      for (const it of rw.items) b.append(h('div', { class: 'hrow' }, iconEl(it), h('div', { class: 'nm' }, ...itemLines(it))));
+    } else if (!rw.won) b.append(h('div', { class: 'muted' }, '撐過 3 波以上才會掉裝備。'));
+    b.append(h('div', { class: 'btnrow' },
+      h('button', { type: 'button', class: 'primary', on: { click: () => { Modal.close(); goVillage(); } } }, '回村莊'),
+      h('button', { type: 'button', on: { click: () => { Modal.close(); startBattle(true); } } }, '直接再打一次')));
+  }, null, true);
+}
 
-/* ================= drawing ================= */
+/* ================= battle drawing ================= */
 const cv = $('cv'), ctx = cv.getContext('2d');
-let CSS_S = 540, DPR = 1, mapLayer = null, flashGate = 0;
+let CSS_S = 540, mapLayer = null, flashGate = 0;
 function resizeCanvas(size) {
-  CSS_S = size; DPR = Math.min(2, window.devicePixelRatio || 1);
-  cv.width = Math.round(size * DPR); cv.height = Math.round(size * DPR);
+  CSS_S = size; const dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.round(size * dpr); cv.height = Math.round(size * dpr);
   buildMapLayer();
 }
 function hash(c, r) { const x = Math.sin(c * 127.1 + r * 311.7) * 43758.5453; return x - Math.floor(x); }
-// the static map is painted once into an offscreen canvas (grass, path, props), the frame only adds what moves
 function buildMapLayer() {
   const k = cv.width / L;
   mapLayer = document.createElement('canvas'); mapLayer.width = cv.width; mapLayer.height = cv.height;
   const g = mapLayer.getContext('2d'); g.setTransform(k, 0, 0, k, 0, 0);
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
-    const ch = MAP[r][c], x = c * TS, y = r * TS, n = hash(c, r);
+    const x = c * TS, y = r * TS, n = hash(c, r);
     g.fillStyle = `hsl(${100 + n * 14}, ${30 + n * 10}%, ${19 + n * 5}%)`; g.fillRect(x, y, TS, TS);
     g.fillStyle = 'rgba(160,210,110,.18)';
-    for (let i = 0; i < 6; i++) { const bx = x + hash(c + i, r * 3) * TS, by = y + hash(c * 5, r + i) * TS; g.fillRect(bx, by, 2, 5); }
+    for (let i = 0; i < 6; i++) g.fillRect(x + hash(c + i, r * 3) * TS, y + hash(c * 5, r + i) * TS, 2, 5);
   }
-  // path: a soft dirt road drawn as a thick polyline
   const road = (w, col) => { g.strokeStyle = col; g.lineWidth = w; g.lineJoin = 'round'; g.lineCap = 'round'; g.beginPath(); PATH.forEach((p, i) => i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)); g.stroke(); };
   road(TS * 0.98, '#3b2d1c'); road(TS * 0.86, '#7a6040'); road(TS * 0.6, '#8a6e4a');
   for (let i = 0; i < 160; i++) { const p = posAt(hash(i, 7) * PATH_LEN); g.fillStyle = hash(i, 3) > 0.5 ? 'rgba(60,40,20,.35)' : 'rgba(200,170,120,.25)'; g.fillRect(p.x + (hash(i, 9) - 0.5) * TS * 0.7, p.y + (hash(i, 11) - 0.5) * TS * 0.7, 3, 3); }
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
     const ch = MAP[r][c], x = c * TS, y = r * TS;
-    if (ch === 'H') { // high ground: a raised stone plateau
+    if (ch === 'H') {
       g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(x + 5, y + 9, TS - 8, TS - 8);
       g.fillStyle = '#8d8a72'; g.fillRect(x + 3, y + 3, TS - 8, TS - 10);
       g.fillStyle = '#a8a58a'; g.fillRect(x + 3, y + 3, TS - 8, 6);
       g.fillStyle = '#5d5b48'; g.font = 'bold 11px sans-serif'; g.textAlign = 'center'; g.fillText('▲射程+1', x + TS / 2 - 1, y + TS - 12);
-    } else if (ch === 'S') { // rune tile: attack speed
+    } else if (ch === 'S') {
       g.fillStyle = '#26301f'; g.fillRect(x + 2, y + 2, TS - 4, TS - 4);
       g.strokeStyle = '#d9b45a'; g.lineWidth = 2; g.beginPath(); g.arc(x + TS / 2, y + TS / 2, TS * 0.36, 0, Math.PI * 2); g.stroke();
       g.beginPath(); for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; g.lineTo(x + TS / 2 + Math.cos(a) * TS * 0.28, y + TS / 2 + Math.sin(a) * TS * 0.28); } g.closePath(); g.stroke();
@@ -1067,17 +1404,15 @@ function buildMapLayer() {
       const im = IMG['prop' + Math.floor(hash(c, r) * 4)];
       if (ready(im)) { const w = TS * 1.05, hh = w * im.naturalHeight / im.naturalWidth; g.drawImage(im, x + TS / 2 - w / 2, y + TS - hh + 4, w, hh); }
       else { g.fillStyle = '#2a3a22'; g.beginPath(); g.arc(x + TS / 2, y + TS / 2, TS * 0.4, 0, 7); g.fill(); }
-    } else if (ch === 'B') { // the city gate
+    } else if (ch === 'B') {
       g.fillStyle = '#4a4438'; g.fillRect(x + 4, y + 8, TS - 8, TS - 8);
       g.fillStyle = '#6d6556'; g.fillRect(x + 4, y + 8, TS - 8, 8);
       g.fillStyle = '#1a120a'; g.beginPath(); g.moveTo(x + 16, y + TS); g.lineTo(x + 16, y + 30); g.arc(x + TS / 2, y + 30, 14, Math.PI, 0); g.lineTo(x + TS - 16, y + TS); g.fill();
       g.fillStyle = '#b8362a'; g.fillRect(x + 8, y - 6, 8, 18); g.fillRect(x + TS - 16, y - 6, 8, 18);
     }
   }
-  // the monsters' entrance at the top
   const ex = PATH[1].x, gr = g.createRadialGradient(ex, 0, 2, ex, 0, TS * 0.8);
   gr.addColorStop(0, 'rgba(150,70,220,.9)'); gr.addColorStop(1, 'rgba(60,0,90,0)'); g.fillStyle = gr; g.fillRect(ex - TS, 0, TS * 2, TS * 0.9);
-  // faint grid so the build tiles read on a phone
   g.strokeStyle = 'rgba(0,0,0,.18)'; g.lineWidth = 1;
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (buildable(MAP[r][c])) g.strokeRect(c * TS + 0.5, r * TS + 0.5, TS - 1, TS - 1);
 }
@@ -1086,9 +1421,8 @@ function draw(now) {
   const k = cv.width / L, t = now / 1000;
   if (!propsRebuilt && [0, 1, 2, 3].every(i => ready(IMG['prop' + i]))) { propsRebuilt = true; buildMapLayer(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  if (mapLayer) ctx.drawImage(mapLayer, 0, 0); else { ctx.fillStyle = '#20301c'; ctx.fillRect(0, 0, cv.width, cv.height); }
+  if (mapLayer) ctx.drawImage(mapLayer, 0, 0);
   ctx.setTransform(k, 0, 0, k, 0, 0);
-  // water and live tile states
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
     const ch = MAP[r][c], x = c * TS, y = r * TS, ts = S.tiles && S.tiles[c + ',' + r];
     if (ch === 'W') {
@@ -1098,14 +1432,11 @@ function draw(now) {
       for (let i = 0; i < 3; i++) { const yy = y + 16 + i * 13, off = frozen ? 0 : Math.sin(t * 2 + i + c) * 5; ctx.beginPath(); ctx.moveTo(x + 8 + off, yy); ctx.lineTo(x + 24 + off, yy - (frozen ? 6 : 0)); ctx.stroke(); }
       if (frozen) { ctx.fillStyle = '#2a6a8a'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('結凍', x + TS / 2, y + TS - 10); }
     }
-    if (ts && ts.burn > 0) {
-      for (let i = 0; i < 4; i++) { const fx_ = x + 10 + i * 12, fh = 12 + Math.sin(t * 12 + i * 2) * 5; ctx.fillStyle = i % 2 ? 'rgba(255,170,40,.75)' : 'rgba(255,80,20,.7)'; ctx.beginPath(); ctx.moveTo(fx_ - 6, y + TS - 10); ctx.quadraticCurveTo(fx_, y + TS - 10 - fh * 2, fx_ + 6, y + TS - 10); ctx.fill(); }
-    }
+    if (ts && ts.burn > 0) for (let i = 0; i < 4; i++) { const fx_ = x + 10 + i * 12, fh = 12 + Math.sin(t * 12 + i * 2) * 5; ctx.fillStyle = i % 2 ? 'rgba(255,170,40,.75)' : 'rgba(255,80,20,.7)'; ctx.beginPath(); ctx.moveTo(fx_ - 6, y + TS - 10); ctx.quadraticCurveTo(fx_, y + TS - 10 - fh * 2, fx_ + 6, y + TS - 10); ctx.fill(); }
   }
   if (flashGate > 0) { const b = PATH[PATH.length - 1]; ctx.fillStyle = `rgba(255,40,30,${flashGate})`; ctx.fillRect(b.x - TS / 2, b.y - TS / 2, TS, TS); }
-  // placement helpers: free tiles and range preview
-  const placing = S.selCard || (DRAG && DRAG.kind === 'hero' && DRAG.moved);
-  if (placing && S.phase !== 'over') {
+  const placing = S.selCard || (DRAG && DRAG.moved);
+  if (placing && (S.phase === 'build' || S.phase === 'wave')) {
     for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (buildable(MAP[r][c]) && !towerAt(c, r)) { ctx.strokeStyle = 'rgba(255,240,180,.45)'; ctx.lineWidth = 2; ctx.strokeRect(c * TS + 4, r * TS + 4, TS - 8, TS - 8); }
     if (S.hover) {
       const cls = S.selCard || DRAG.id, [c, r] = S.hover, ok = buildable(tileAt(c, r)) && !towerAt(c, r);
@@ -1115,15 +1446,15 @@ function draw(now) {
     }
   }
   if (S.sel && S.towers.includes(S.sel)) { const s = S.sel; ctx.fillStyle = 'rgba(255,230,140,.10)'; ctx.strokeStyle = 'rgba(255,230,140,.8)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(s.x, s.y, s.range, 0, 7); ctx.fill(); ctx.stroke(); }
-  // entities sorted by height on screen
   const ents = [];
   for (const tw of S.towers || []) ents.push({ y: tw.y + 20, f: () => drawTower(tw, t) });
   for (const e of S.enemies || []) ents.push({ y: e.y + 18, f: () => drawEnemy(e, t) });
   ents.sort((a, b) => a.y - b.y).forEach(o => o.f());
   for (const p of S.projs || []) drawProj(p);
   for (const z of S.zones || []) {
-    if (z.kind === 'meteor') { const k2 = 1 - z.delay / 0.6; ctx.fillStyle = '#ff7a3a'; ctx.beginPath(); ctx.arc(z.x + (1 - k2) * 80, z.y - (1 - k2) * 240, 14, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(255,120,60,.5)'; ctx.beginPath(); ctx.arc(z.x, z.y, TS * 1.3, 0, 7); ctx.stroke(); }
-    else if (z.kind === 'rain') { ctx.strokeStyle = 'rgba(240,240,220,.8)'; ctx.lineWidth = 2; for (let i = 0; i < 14; i++) { const a = Math.random() * 6.28, rr = Math.random() * TS * 1.2, x = z.x + Math.cos(a) * rr, y = z.y + Math.sin(a) * rr; ctx.beginPath(); ctx.moveTo(x - 4, y - 16); ctx.lineTo(x, y); ctx.stroke(); } }
+    if (z.kind === 'meteor') { const k2 = clamp(1 - z.delay / 0.6, 0, 1); ctx.fillStyle = '#ff7a3a'; ctx.beginPath(); ctx.arc(z.x + (1 - k2) * 80, z.y - (1 - k2) * 240, 14, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(255,120,60,.5)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(z.x, z.y, z.r, 0, 7); ctx.stroke(); }
+    else if (z.kind === 'rain') { ctx.strokeStyle = 'rgba(240,240,220,.8)'; ctx.lineWidth = 2; for (let i = 0; i < 14; i++) { const a = Math.random() * 6.28, rr = Math.random() * z.r, x = z.x + Math.cos(a) * rr, y = z.y + Math.sin(a) * rr; ctx.beginPath(); ctx.moveTo(x - 4, y - 16); ctx.lineTo(x, y); ctx.stroke(); } }
+    else if (z.kind === 'beam') { const dx = z.tgt.x - z.tw.x, dy = z.tgt.y - z.tw.y, l = Math.hypot(dx, dy) || 1, len = z.tw.range + TS; ctx.strokeStyle = 'rgba(200,150,255,.75)'; ctx.lineWidth = z.w; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(z.tw.x, z.tw.y - 24); ctx.lineTo(z.tw.x + dx / l * len, z.tw.y - 24 + dy / l * len); ctx.stroke(); ctx.lineWidth = z.w * 0.35; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.lineCap = 'butt'; }
   }
   for (const f of S.fxs || []) drawFx(f);
   ctx.textAlign = 'center';
@@ -1132,22 +1463,32 @@ function draw(now) {
   for (const tw of S.towers || []) if (tw.bubble) drawBubble(tw);
 }
 function drawTower(tw, t) {
-  const im = IMG[tw.cls], st = tw.st;
-  const aura = ['', '#6fe06a', '#4aa3ff', '#c07bff', '#ff9a2e'][Math.max(...['weapon', 'acc'].map(s => heroCh(tw.cls).equip[s] ? heroCh(tw.cls).equip[s].rarity : 0))];
+  const im = IMG[tw.cls], st = tw.st, eq = heroCh(tw.cls).equip;
+  const aura = ['', '#6fe06a', '#4aa3ff', '#c07bff', '#ff9a2e'][Math.max(...Object.keys(SLOTS).map(s => eq[s] ? eq[s].rarity : 0))];
   ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(tw.x, tw.y + 20, 22, 8, 0, 0, 7); ctx.fill();
   if (aura) { ctx.strokeStyle = aura; ctx.globalAlpha = 0.6 + 0.3 * Math.sin(t * 4); ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(tw.x, tw.y + 20, 25, 9, 0, 0, 7); ctx.stroke(); ctx.globalAlpha = 1; }
   if (tw.frenzyT > 0) { ctx.fillStyle = 'rgba(255,50,30,.3)'; ctx.beginPath(); ctx.arc(tw.x, tw.y, 30, 0, 7); ctx.fill(); }
+  if (tw.tauntT > 0) { ctx.strokeStyle = 'rgba(255,210,120,.7)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(tw.x, tw.y, 34 + Math.sin(t * 8) * 3, 0, 7); ctx.stroke(); }
   const hh = 76, lunge = tw.anim > 0 ? Math.sin(tw.anim / 0.22 * Math.PI) * 6 : 0;
   if (ready(im)) {
     const w = hh * im.naturalWidth / im.naturalHeight;
-    ctx.save(); ctx.translate(tw.x + lunge * tw.face, tw.y + 22); ctx.scale(tw.face, 1);
+    ctx.save(); ctx.translate(tw.x + lunge * tw.face, tw.y + 22);
+    if (!up(tw)) { ctx.rotate(-Math.PI / 2 * 0.95); ctx.translate(-hh * 0.15, -10); ctx.globalAlpha = 0.55; }
+    ctx.scale(tw.face, 1);
     if (tw.stunT > 0) ctx.globalAlpha = 0.6;
-    ctx.drawImage(im, -w / 2, -hh, w, hh); ctx.restore(); ctx.globalAlpha = 1;
+    ctx.drawImage(im, -w / 2, -hh, w, hh);
+    if (tw.hitFx > 0 && !Save.d.lowfx) { ctx.globalCompositeOperation = 'source-atop'; ctx.fillStyle = 'rgba(255,40,30,.45)'; ctx.fillRect(-w / 2, -hh, w, hh); ctx.globalCompositeOperation = 'source-over'; }
+    ctx.restore(); ctx.globalAlpha = 1;
   }
-  if (tw.stunT > 0) { ctx.fillStyle = '#ffe066'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('★暈★', tw.x, tw.y - 56); }
-  // big-skill ready dot
-  if (S.phase === 'wave' && ultReady(tw)) { ctx.fillStyle = `rgba(255,220,90,${0.6 + 0.4 * Math.sin(t * 6)})`; ctx.beginPath(); ctx.arc(tw.x + 20, tw.y - 50, 7, 0, 7); ctx.fill(); ctx.strokeStyle = '#000'; ctx.lineWidth = 1.5; ctx.stroke(); }
-  if (st.td && !Save.d.lowfx) { const col = { frost: '#8fe6ff', fire: '#ff8a3a', chain: '#fff27a', split: '#b8ff8a', pierce: '#ffffff', stun: '#ffe066', blast: '#ffb24a' }[st.td]; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(tw.x - 20, tw.y - 50, 5, 0, 7); ctx.fill(); }
+  if (tw.shieldT > 0 && tw.shieldHP > 0) { ctx.strokeStyle = 'rgba(255,233,160,.85)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(tw.x, tw.y - 14, 34, 0, 7); ctx.stroke(); }
+  if (tw.drT > 0) { ctx.strokeStyle = 'rgba(168,200,255,.8)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(tw.x, tw.y - 14, 30, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke(); }
+  // hero HP bar
+  const bw = 40, by = tw.y - 58;
+  ctx.fillStyle = '#000'; ctx.fillRect(tw.x - bw / 2 - 1, by - 1, bw + 2, 6);
+  ctx.fillStyle = tw.hp / tw.maxHp < 0.3 ? '#ff5a3a' : '#5fd04a'; ctx.fillRect(tw.x - bw / 2, by, bw * clamp(tw.hp / tw.maxHp, 0, 1), 4);
+  if (!up(tw)) { ctx.fillStyle = '#ffd0c0'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center'; ctx.lineWidth = 3; ctx.strokeStyle = '#000'; const s = '倒地 ' + Math.ceil(tw.down); ctx.strokeText(s, tw.x, by - 4); ctx.fillText(s, tw.x, by - 4); }
+  else if (tw.stunT > 0) { ctx.fillStyle = '#ffe066'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('★暈★', tw.x, by - 4); }
+  else if (S.phase === 'wave' && (tw.scd[0] <= 0 || tw.scd[1] <= 0)) { ctx.fillStyle = `rgba(255,220,90,${0.6 + 0.4 * Math.sin(t * 6)})`; ctx.beginPath(); ctx.arc(tw.x + 24, by + 2, 5, 0, 7); ctx.fill(); }
 }
 function drawEnemy(e, t) {
   const im = IMG[e.type], hh = SIZE[e.type], bob = Math.sin(t * 8 + e.id * 10) * 2;
@@ -1158,18 +1499,18 @@ function drawEnemy(e, t) {
     ctx.save(); ctx.translate(e.x, e.y + 18 + bob * 0.5); if (e.dx < 0) ctx.scale(-1, 1);
     ctx.drawImage(im, -w / 2, -hh, w, hh); ctx.restore();
     if (e.flash > 0 && !Save.d.lowfx) { ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.beginPath(); ctx.arc(e.x, e.y - hh / 2 + 18, hh * 0.35, 0, 7); ctx.fill(); }
-  } else { ctx.fillStyle = '#7a3'; ctx.beginPath(); ctx.arc(e.x, e.y, 14, 0, 7); ctx.fill(); }
+  }
   if (e.slowT > 0 && !e.ccImmune) { ctx.fillStyle = 'rgba(140,220,255,.35)'; ctx.beginPath(); ctx.arc(e.x, e.y - hh / 2 + 18, hh * 0.4, 0, 7); ctx.fill(); }
   if (e.stunT > 0) { ctx.fillStyle = '#ffe066'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('★', e.x, e.y - hh + 10); }
-  // HP bar, shield bar and tags
   const bw = e.boss ? 70 : 34, by = e.y - hh + 10;
   ctx.fillStyle = '#000'; ctx.fillRect(e.x - bw / 2 - 1, by - 1, bw + 2, 6);
-  ctx.fillStyle = e.boss ? '#ff4a3a' : e.elite ? '#ffb83a' : '#6fdc5a'; ctx.fillRect(e.x - bw / 2, by, bw * clamp(e.hp / e.maxHp, 0, 1), 4);
+  ctx.fillStyle = e.boss ? '#ff4a3a' : e.elite ? '#ffb83a' : '#e05a4a'; ctx.fillRect(e.x - bw / 2, by, bw * clamp(e.hp / e.maxHp, 0, 1), 4);
   if (e.shield > 0) { ctx.fillStyle = '#9fd3ff'; ctx.fillRect(e.x - bw / 2, by - 4, bw * clamp(e.shield / (e.maxHp * 0.4), 0, 1), 3); }
   const tags = [];
   if (e.physShield) tags.push(['物盾', '#ffd27a']);
   if (e.magShield) tags.push(['魔盾', '#c9a0ff']);
   if (e.ccImmune) tags.push(['免控', '#9fe8ff']);
+  if (e.brokeT > 0) tags.push(['破甲', '#ff8a5a']);
   if (e.elite) for (const a of e.aff) tags.push([EAFFIX[a].n, '#ffcf5a']);
   if (tags.length) { ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; const s = tags.map(t2 => t2[0]).join('・'); ctx.lineWidth = 3; ctx.strokeStyle = '#000'; ctx.strokeText(s, e.x, by - 6); ctx.fillStyle = tags[0][1]; ctx.fillText(s, e.x, by - 6); }
 }
@@ -1185,164 +1526,117 @@ function drawFx(f) {
   if (f.kind === 'boom') { ctx.strokeStyle = f.c; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (1.15 - a * 0.5), 0, 7); ctx.stroke(); ctx.fillStyle = f.c; ctx.globalAlpha = a * 0.25; ctx.fill(); }
   else if (f.kind === 'ring') { ctx.strokeStyle = f.c; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (1.1 - a * 0.3), 0, 7); ctx.stroke(); }
   else if (f.kind === 'slash') { ctx.strokeStyle = f.c; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(f.x, f.y, 18, f.a, f.a + 2.2); ctx.stroke(); }
+  else if (f.kind === 'claw') { ctx.strokeStyle = '#ff5a4a'; ctx.lineWidth = 2.5; for (let i = -1; i <= 1; i++) { ctx.beginPath(); ctx.moveTo(f.x - 10 + i * 6, f.y - 10); ctx.lineTo(f.x + 6 + i * 6, f.y + 10); ctx.stroke(); } }
   else if (f.kind === 'line') { ctx.strokeStyle = f.c; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.lineTo(f.x2, f.y2); ctx.stroke(); }
-  else if (f.kind === 'zap') { ctx.strokeStyle = '#fff27a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(f.x, f.y); const mx = (f.x + f.x2) / 2 + rand(-10, 10), my = (f.y + f.y2) / 2 + rand(-10, 10); ctx.lineTo(mx, my); ctx.lineTo(f.x2, f.y2); ctx.stroke(); }
+  else if (f.kind === 'zap') { ctx.strokeStyle = '#fff27a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.lineTo((f.x + f.x2) / 2 + rand(-10, 10), (f.y + f.y2) / 2 + rand(-10, 10)); ctx.lineTo(f.x2, f.y2); ctx.stroke(); }
   else if (f.kind === 'pillar') { const g = ctx.createLinearGradient(f.x, f.y - 300, f.x, f.y); g.addColorStop(0, 'rgba(255,240,180,0)'); g.addColorStop(1, f.c); ctx.fillStyle = g; ctx.fillRect(f.x - 26, f.y - 300, 52, 300); }
   else if (f.kind === 'spark') { ctx.fillStyle = f.c; ctx.fillRect(f.x - 2, f.y - 2, 4, 4); }
   ctx.globalAlpha = 1;
 }
-function drawBubble(tw) {
-  const b = tw.bubble, a = clamp(b.t / 0.4, 0, 1);
-  ctx.font = '600 15px "Noto Serif TC", serif';
-  const maxW = 230, lines = []; let cur = '';
-  for (const chr of b.text) { if (ctx.measureText(cur + chr).width > maxW) { lines.push(cur); cur = chr; } else cur += chr; }
-  if (cur) lines.push(cur);
-  const w = Math.min(maxW, Math.max(...lines.map(l => ctx.measureText(l).width))) + 20, hh = lines.length * 20 + 12;
-  let x = clamp(tw.x - w / 2, 4, L - w - 4), y = tw.y - 70 - hh;
-  if (y < 4) y = tw.y + 30;
-  ctx.globalAlpha = a;
-  ctx.fillStyle = 'rgba(255,250,235,.96)'; ctx.strokeStyle = '#5a4a32'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, hh, 10) : ctx.rect(x, y, w, hh); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#2a1e10'; ctx.textAlign = 'left';
-  lines.forEach((l, i) => ctx.fillText(l, x + 10, y + 22 + i * 20));
-  ctx.globalAlpha = 1;
+function wrapLines(g, text, maxW) { const lines = []; let cur = ''; for (const chr of text) { if (g.measureText(cur + chr).width > maxW) { lines.push(cur); cur = chr; } else cur += chr; } if (cur) lines.push(cur); return lines; }
+function bubbleAt(g, text, x, y, alpha, W) {
+  g.font = '600 15px "Noto Serif TC", serif';
+  const lines = wrapLines(g, text, 230), w = Math.min(230, Math.max(...lines.map(l => g.measureText(l).width))) + 20, hh = lines.length * 20 + 12;
+  const bx = clamp(x - w / 2, 4, W - w - 4); let by = y - hh; if (by < 4) by = 4;
+  g.globalAlpha = alpha;
+  g.fillStyle = 'rgba(255,250,235,.96)'; g.strokeStyle = '#5a4a32'; g.lineWidth = 2;
+  g.beginPath(); g.roundRect ? g.roundRect(bx, by, w, hh, 10) : g.rect(bx, by, w, hh); g.fill(); g.stroke();
+  g.fillStyle = '#2a1e10'; g.textAlign = 'left';
+  lines.forEach((l, i) => g.fillText(l, bx + 10, by + 22 + i * 20));
+  g.globalAlpha = 1;
 }
+function drawBubble(tw) { bubbleAt(ctx, tw.bubble.text, tw.x, tw.y - 70, clamp(tw.bubble.t / 0.4, 0, 1), L); }
 
-/* ================= main loop ================= */
-let lastT = performance.now(), uiT = 0;
-const paused = () => S.phase === 'off' || S.phase === 'over' || !$('modal').hidden || Dialog.open || document.hidden;
-function frame(now) {
-  requestAnimationFrame(frame);
-  let dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
-  if (S.phase === 'off') return;
-  if (!paused()) {
-    let left = dt * S.speed;
-    while (left > 0) { const d = Math.min(left, 1 / 30); step(d); left -= d; }
-    if (flashGate > 0) flashGate -= dt;
-  }
-  draw(now);
-  if ((uiT -= dt) <= 0) { uiT = 0.2; updateTop(); updateLive(); }
-}
-requestAnimationFrame(frame);
-
-/* ================= UI ================= */
+/* ================= battle UI (TD style: hero cards, items, the selected hero's skills) ================= */
 function updateTop() {
   $('tWave').textContent = '第 ' + S.wave + '/' + WAVES.length + ' 波';
   $('tGold').textContent = S.gold;
   $('tLives').textContent = '❤ ' + S.lives;
   $('bSpeed').textContent = S.speed + 'x';
   $('bFx').classList.toggle('on', !!Save.d.lowfx); $('bFx').textContent = Save.d.lowfx ? '極簡' : '特效';
-  const ad = S.phase === 'build' && S.wave > 0 ? adaptText() : (S.phase === 'wave' ? adaptText() : '');
-  $('tAdapt').textContent = ad ? (S.phase === 'build' ? '⚠ 下一波敵人學乖了：' : '⚠ 這波敵人帶著：') + ad + (S.adapt.phys ? '（換魔法或破甲）' : S.adapt.magic ? '（換物理武器）' : '') : (Save.d.crazy ? '迷霧森林・瘋狂度 ' + Save.d.crazy : '迷霧森林');
+  $('bAuto').classList.toggle('on', !!Save.d.autoSkill); $('bAuto').textContent = Save.d.autoSkill ? '自動' : '手動';
+  const ad = S.wave > 0 ? adaptText() : '';
+  $('tAdapt').textContent = ad ? (S.phase === 'build' ? '⚠ 下一波敵人學乖了：' : '⚠ 這波敵人帶著：') + ad + (S.adapt.phys ? '（靠魔法技能或破甲）' : S.adapt.magic ? '（靠物理英雄）' : '') : (S.note || (Save.d.crazy ? '迷霧森林・瘋狂度 ' + Save.d.crazy : '迷霧森林'));
 }
-let tab = 'hero';
 function renderBottom() {
   if (S.sim || S.phase === 'off') return;
-  const head = $('bHead'), body = $('bBody'), go = $('go');
-  head.innerHTML = ''; body.innerHTML = '';
+  const body = $('bBody'), go = $('go');
+  body.innerHTML = '';
   if (S.sel && !S.towers.includes(S.sel)) S.sel = null;
-  if (S.sel) renderTowerPanel(head, body, S.sel);
-  else {
-    head.append(
-      h('button', { type: 'button', class: 'tab' + (tab === 'hero' ? ' on' : ''), on: { click: () => { tab = 'hero'; S.selItem = null; renderBottom(); } } }, '英雄'),
-      h('button', { type: 'button', class: 'tab' + (tab === 'gear' ? ' on' : ''), on: { click: () => { tab = 'gear'; S.selCard = null; renderBottom(); } } }, '裝備 ' + Save.d.bag.length),
-      h('div', { id: 'bHint' }, tab === 'hero' ? (S.selCard ? '點地圖上發亮的格子放下' + CLASSES[S.selCard].name : '點英雄再點格子，或直接拖到格子上') : (S.selItem ? '點場上的英雄裝備它（波次之間才能換）' : '點裝備看說明，再點場上的英雄換上')));
-    if (tab === 'hero') renderHeroCards(body); else renderBag(body);
-  }
-  go.disabled = S.phase !== 'build';
-  go.textContent = S.phase === 'build' ? (S.wave === 0 ? '開始第 1 波 ▶' : '開始第 ' + (S.wave + 1) + ' 波 ▶') : S.phase === 'wave' ? '第 ' + S.wave + ' 波進行中…' : '關卡結束';
-}
-function renderHeroCards(body) {
+  // hero cards: deploy cost, or HP once on the field
   const grid = h('div', { class: 'cards' });
   for (const cls of HEROES) {
-    const placed = S.towers.find(t => t.cls === cls), ch = heroCh(cls), w = ch.equip.weapon;
-    const card = h('div', { class: 'card' + (S.selCard === cls ? ' sel' : '') + (placed ? ' used' : '') + (S.gold < COST[cls] ? ' poor' : ''), role: 'button', 'aria-label': CLASSES[cls].name },
-      placed ? h('span', { class: 'tag' }, '上場') : null,
-      h('img', { src: ART + cls + '.webp', alt: '' }),
-      h('b', null, CLASSES[cls].name), h('span', { class: 'muted' }, 'Lv' + ch.lvl + ' ' + (w ? (w.td ? TDAFF[w.td].n : '') + WSHORT[w.wtype] : '空手')),
-      placed ? h('span', { class: 'muted' }, '點我看') : h('span', { class: 'cost' }, COST[cls] + ' 金'));
-    card.addEventListener('pointerdown', e => startDrag(e, 'hero', cls, card));
+    const tw = S.towers.find(t => t.cls === cls), ch = heroCh(cls);
+    const card = h('div', { class: 'card' + ((S.selCard === cls || (tw && S.sel === tw)) ? ' sel' : '') + (!tw && S.gold < COST[cls] ? ' poor' : '') + (tw && !up(tw) ? ' down' : ''), role: 'button', 'aria-label': CLASSES[cls].name, 'data-cls': cls },
+      h('img', { src: ART + cls + '.webp', alt: '' }), h('b', null, CLASSES[cls].name),
+      tw ? h('div', { class: 'hpbar' }, h('i', { style: `width:${Math.round(clamp(tw.hp / tw.maxHp, 0, 1) * 100)}%` })) : h('span', { class: 'cost' }, COST[cls]),
+      h('span', { class: 'muted' }, 'Lv' + ch.lvl));
+    card.addEventListener('pointerdown', e => startDrag(e, cls, card));
     grid.append(card);
   }
-  // potion-shop items, usable any time
-  const fix = h('div', { class: 'card' + (S.gold < 150 ? ' poor' : ''), role: 'button' }, h('img', { src: ART + 'items/pot_red.webp', alt: '' }), h('b', null, '修城門'), h('span', { class: 'muted' }, '命 +2'), h('span', { class: 'cost' }, '150 金'));
-  fix.addEventListener('click', () => { if (S.gold < 150) return toast('金幣不夠'); if (S.lives >= S.maxLives) return toast('城門好好的，不用修'); S.gold -= 150; S.lives = Math.min(S.maxLives, S.lives + 2); SFX.coin(); renderBottom(); });
-  const sisi = h('div', { class: 'card' + (S.gold < 120 ? ' poor' : ''), role: 'button' }, h('img', { src: ART + 'items/pot_cold.webp', alt: '' }), h('b', null, '斯斯藥水'), h('span', { class: 'muted' }, '全員攻速+30% 15秒'), h('span', { class: 'cost' }, '120 金'));
-  sisi.addEventListener('click', () => { if (S.phase !== 'wave') return toast('波次中再喝，不然浪費'); if (S.gold < 120) return toast('金幣不夠'); S.gold -= 120; S.buffT = 15; SFX.coin(); if (S.towers.length) { const tw = pick(S.towers); say(tw, '這藥水……喝了頭昏昏的，可是手變好快！', true); } renderBottom(); });
-  grid.append(fix, sisi);
   body.append(grid);
-}
-function renderBag(body) {
-  const bag = Save.d.bag;
-  if (!bag.length) { body.append(h('div', { class: 'muted' }, '背包是空的。過關會掉裝備！')); return; }
-  if (S.selItem && bag.includes(S.selItem)) {
-    const it = S.selItem, fits = HEROES.filter(c => canEquip(it, c));
-    body.append(h('div', { class: 'detail' }, ...itemLines(it),
-      h('div', { class: 'btns' }, ...fits.map(c => h('button', { type: 'button', disabled: S.phase === 'wave', on: { click: () => { if (equipItem(it, c)) { SFX.place(); renderBottom(); } } } }, '給' + CLASSES[c].name)),
-        h('button', { type: 'button', on: { click: () => { S.selItem = null; renderBottom(); } } }, '取消'))));
+  if (S.sel) body.append(heroPanel(S.sel));
+  else {
+    body.append(h('div', { class: 'hint' }, S.selCard ? '點地圖上發亮的格子放下' + CLASSES[S.selCard].name : '點英雄再點格子，或直接拖到格子上。點場上的英雄可以放技能。'));
+    const items = h('div', { class: 'items' });
+    for (const k in POTS_TD) { const p = POTS_TD[k], n = Save.d.pots[k] || 0; items.append(h('div', { class: 'item' + (n ? '' : ' none'), role: 'button', on: { click: () => usePot(k) } }, h('img', { src: ART + 'items/' + p.img + '.webp', alt: '' }), h('div', null, p.n, h('br'), h('b', null, '×' + n)))); }
+    body.append(items);
   }
-  const grid = h('div', { class: 'bag' });
-  for (const it of bag.slice().sort((a, b) => b.rarity - a.rarity)) {
-    grid.append(h('div', { class: 'bagit' + (S.selItem === it ? ' sel' : ''), role: 'button', on: { click: () => { S.selItem = S.selItem === it ? null : it; renderBottom(); } } },
-      iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, itemName(it).replace(/^.*的/, '')), h('span', { class: 'muted' }, it.slot === 'weapon' ? CLASSES[it.cls].name : '通用')));
-  }
-  body.append(grid);
+  go.disabled = S.phase !== 'build';
+  go.textContent = S.phase === 'build' ? '開始第 ' + (S.wave + 1) + ' 波 ▶' : S.phase === 'wave' ? '第 ' + S.wave + ' 波進行中…' : '關卡結束';
 }
-function renderTowerPanel(head, body, tw) {
-  const st = tw.st, ch = heroCh(tw.cls), P = st.P;
-  head.append(h('b', { style: 'font-size:1.2em;color:#ffe9a8' }, CLASSES[tw.cls].name + ' Lv' + ch.lvl), h('div', { id: 'bHint' }, (tw.high ? '高地 ' : '') + (tw.haste ? '攻速格 ' : '')),
-    h('button', { type: 'button', on: { click: () => { S.sel = null; renderBottom(); } } }, '✕'));
-  const dps = Math.round(st.atk * P.mult * st.basicMul / P.cd * st.aspd * (1 + st.crit * 0.8));
-  body.append(h('div', { class: 'tp' }, h('img', { class: 'por', src: ART + 'portraits/' + tw.cls + '_n.webp', alt: '' }),
-    h('div', { class: 'st' },
-      h('span', null, '攻擊 ', h('b', null, st.atk)), h('span', null, '每秒約 ', h('b', null, dps)),
-      h('span', null, '射程 ', h('b', null, (tw.range / TS).toFixed(1) + ' 格')), h('span', null, '暴擊 ', h('b', null, Math.round(st.crit * 100) + '%')),
-      h('span', null, '類型 ', h('b', null, st.type === 'magic' ? '魔法' : '物理')), h('span', null, '攻速 ', h('b', null, Math.round(st.aspd * 100) + '%')),
-      h('span', { style: 'grid-column:1/3', class: 'muted' }, P.d + (st.td ? '・' : ''), st.td ? h('span', { class: 'tdaff' }, TDAFF[st.td].n + '：' + TDAFF[st.td].d) : null))));
-  // gear slots: tap to take off (between waves)
-  const slotEl = s => h('div', { class: 'slot', role: 'button', on: { click: () => { if (!ch.equip[s]) return toast('從下面的清單挑一件裝上'); unequip(tw.cls, s); renderBottom(); } } }, iconEl(ch.equip[s]),
-    h('span', null, ch.equip[s] ? h('span', { class: 'r' + ch.equip[s].rarity + 't' }, itemName(ch.equip[s])) : SLOTS[s] + '（空）', h('br'), h('span', { class: 'muted' }, S.phase === 'build' && ch.equip[s] ? '點一下卸下' : '')));
-  body.append(h('div', { class: 'slots' }, slotEl('weapon'), slotEl('acc')));
-  // tactics: what this hero actually did (this wave / whole stage)
-  const s = tw.stats, wv = S.phase === 'wave' || S.wave > 0;
-  body.append(h('div', { class: 'tact' },
+function heroPanel(tw) {
+  const st = tw.st, ch = heroCh(tw.cls), box = h('div', null);
+  box.append(h('div', { class: 'tp' }, h('img', { class: 'por', src: ART + 'portraits/' + tw.cls + '_n.webp', alt: '' }),
+    h('div', { class: 'info' }, h('b', null, CLASSES[tw.cls].name + ' Lv' + ch.lvl), ' ', h('span', { class: 'muted' }, (tw.high ? '高地 ' : '') + (tw.haste ? '攻速格' : '')),
+      h('div', { class: 'hpbar', style: 'margin:4px 0' }, h('i', { id: 'selHp', style: `width:${Math.round(clamp(tw.hp / tw.maxHp, 0, 1) * 100)}%` })),
+      h('span', { id: 'selHpT' }, Math.ceil(tw.hp) + ' / ' + tw.maxHp), h('span', { class: 'muted' }, '　攻擊 ' + st.atk + '・防禦 ' + st.def + '・' + (st.type === 'magic' ? '魔法' : '物理')))));
+  const sk = h('div', { class: 'skills2' });
+  for (let i = 0; i < 2; i++) {
+    const s = skillOf(tw, i), lv = tw.skLv[tw.load[i]];
+    sk.append(h('button', { type: 'button', class: 'skbtn', id: 'sk' + i, on: { click: () => { if (castSkill(tw, i, true)) updateLive(); } } },
+      h('img', { src: skillIcon(tw.cls, tw.load[i], lv), alt: '' }), h('span', null, h('b', null, s.name), h('br'), h('span', { class: 'muted', id: 'skc' + i }, 'Lv' + lv)), h('span', { class: 'cdm', id: 'skm' + i })));
+  }
+  box.append(sk);
+  const s = tw.stats;
+  box.append(h('div', { class: 'tact' },
     h('div', null, '總傷害', h('b', { id: 'tdmg' }, fmt(s.dmg)), h('span', { class: 'muted', id: 'tdmgw' }, '本波 ' + fmt(s.wDmg))),
-    h('div', null, '浪費的溢傷', h('b', { id: 'tover' }, fmt(s.over)), h('span', { class: 'muted', id: 'toverp' }, s.dmg ? Math.round(s.over / (s.dmg + s.over) * 100) + '%' : '0%')),
+    h('div', null, '浪費的溢傷', h('b', { id: 'tover' }, fmt(s.over)), h('span', { class: 'muted', id: 'toverp' }, '0%')),
     h('div', null, '控場時間', h('b', { id: 'tcc' }, s.cc.toFixed(1) + '秒'), h('span', { class: 'muted', id: 'tccw' }, '本波 ' + s.wCc.toFixed(1)))));
-  // big skill and recall
-  const row = h('div', { class: 'btnrow', style: 'margin-top:calc(var(--u)*8)' });
-  row.append(h('button', { type: 'button', id: 'ultBtn', class: 'primary', on: { click: () => castUlt(tw) } }, CLASSES[tw.cls].skills[3].name));
-  row.append(h('button', { type: 'button', disabled: S.phase !== 'build', on: { click: () => recallTower(tw) } }, '收回（退 ' + tw.paid + ' 金）'));
-  body.append(row, h('div', { class: 'muted', style: 'font-size:.75em;text-align:center' }, ULT[tw.cls] + '・冷卻 ' + Math.round(45 * (1 - st.cdr)) + ' 秒'));
-  // quick swap list
-  const fits = Save.d.bag.filter(it => canEquip(it, tw.cls)).sort((a, b) => b.rarity - a.rarity);
-  if (fits.length) {
-    body.append(h('div', { class: 'sub' }, S.phase === 'build' ? '換裝（點一下直接換上）' : '可換的裝備（打完這波才能換）'));
-    const grid = h('div', { class: 'bag' });
-    for (const it of fits) grid.append(h('div', { class: 'bagit', role: 'button', on: { click: () => { if (equipItem(it, tw.cls)) { SFX.place(); renderBottom(); } } } }, iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, itemName(it).replace(/^.*的/, ''))));
-    body.append(grid);
-  }
-  updateLive();
+  box.append(h('div', { class: 'btnrow', style: 'margin-top:0' },
+    h('button', { type: 'button', disabled: S.phase !== 'build', on: { click: () => recallTower(tw) } }, '收回（退 ' + tw.paid + ' 金）'),
+    h('button', { type: 'button', on: { click: () => { S.sel = null; renderBottom(); } } }, '關閉')));
+  setTimeout(updateLive, 0);
+  return box;
 }
 const fmt = n => n >= 10000 ? (n / 1000).toFixed(1) + 'k' : String(Math.round(n));
 function updateLive() {
-  const tw = S.sel; if (!tw || S.phase === 'off') return;
-  const s = tw.stats, set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
-  set('tdmg', fmt(s.dmg)); set('tdmgw', '本波 ' + fmt(s.wDmg)); set('tover', fmt(s.over)); set('toverp', s.dmg ? Math.round(s.over / (s.dmg + s.over) * 100) + '%' : '0%');
-  set('tcc', s.cc.toFixed(1) + '秒'); set('tccw', '本波 ' + s.wCc.toFixed(1));
-  const b = $('ultBtn'); if (b) { const r = ultReady(tw) && S.phase === 'wave'; b.disabled = !r; b.textContent = CLASSES[tw.cls].skills[3].name + (tw.ultCd > 0 ? '（' + Math.ceil(tw.ultCd) + '）' : ''); }
+  if (S.phase === 'off') return;
+  const set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
+  // card HP bars
+  for (const tw of S.towers) { const c = document.querySelector(`.card[data-cls="${tw.cls}"] .hpbar i`); if (c) c.style.width = Math.round(clamp(tw.hp / tw.maxHp, 0, 1) * 100) + '%'; const card = document.querySelector(`.card[data-cls="${tw.cls}"]`); if (card) card.classList.toggle('down', !up(tw)); }
+  const tw = S.sel;
+  if (tw) {
+    const s = tw.stats;
+    set('tdmg', fmt(s.dmg)); set('tdmgw', '本波 ' + fmt(s.wDmg)); set('tover', fmt(s.over)); set('toverp', s.dmg ? Math.round(s.over / (s.dmg + s.over) * 100) + '%' : '0%');
+    set('tcc', s.cc.toFixed(1) + '秒'); set('tccw', '本波 ' + s.wCc.toFixed(1));
+    const hb = $('selHp'); if (hb) hb.style.width = Math.round(clamp(tw.hp / tw.maxHp, 0, 1) * 100) + '%';
+    set('selHpT', up(tw) ? Math.ceil(tw.hp) + ' / ' + tw.maxHp : '倒地中… ' + Math.ceil(tw.down) + ' 秒後爬起來');
+    for (let i = 0; i < 2; i++) {
+      const m = $('skm' + i); if (!m) continue;
+      const full = skillCdFull(tw, i), left = Math.max(0, tw.scd[i]);
+      m.style.width = (left > 0 ? left / full * 100 : 0) + '%';
+      set('skc' + i, 'Lv' + tw.skLv[tw.load[i]] + (left > 0 ? '・' + Math.ceil(left) + '秒' : S.phase === 'wave' ? '・可以放' : ''));
+    }
+  }
   const go = $('go'); if (go && S.phase === 'wave') go.textContent = '第 ' + S.wave + ' 波進行中… 剩 ' + (S.queue.length + S.enemies.length) + ' 隻';
 }
-let bannerT = null, toastT = null;
-function banner(text, dur) { if (S.sim) return; const b = $('banner'); b.textContent = text; b.classList.add('show'); clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('show'), (dur || 1.5) * 1000); }
-function toast(text) { if (S.sim) return false; const b = $('toast'); b.textContent = text; b.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => b.classList.remove('show'), 1800); SFX.bad(); return false; }
 
 /* ---------------- input on the battlefield ---------------- */
 function fieldTile(clientX, clientY) {
   const r = cv.getBoundingClientRect();
   if (clientX < r.left || clientX > r.right || clientY < r.top || clientY > r.bottom) return null;
-  const x = (clientX - r.left) / r.width * L, y = (clientY - r.top) / r.height * L;
-  return [Math.floor(x / TS), Math.floor(y / TS)];
+  return [Math.floor((clientX - r.left) / r.width * L / TS), Math.floor((clientY - r.top) / r.height * L / TS)];
 }
 cv.addEventListener('pointerdown', e => {
   e.preventDefault(); SFX.resume();
@@ -1350,18 +1644,17 @@ cv.addEventListener('pointerdown', e => {
   const t = fieldTile(e.clientX, e.clientY); if (!t) return;
   const [c, r] = t, tw = towerAt(c, r);
   if (S.selCard) { if (tw) { S.selCard = null; S.sel = tw; renderBottom(); } else placeTower(S.selCard, c, r); return; }
-  if (S.selItem) { if (tw) { if (equipItem(S.selItem, tw.cls)) { SFX.place(); S.sel = tw; } renderBottom(); } else { S.selItem = null; renderBottom(); } return; }
   S.sel = tw || null; renderBottom();
 });
 cv.addEventListener('pointermove', e => { if (S.selCard && !DRAG) S.hover = fieldTile(e.clientX, e.clientY); });
 // drag a hero card onto the map (a tap without moving just selects it)
 let DRAG = null;
 const ghost = $('ghost');
-function startDrag(e, kind, id, el) {
+function startDrag(e, id, el) {
   e.preventDefault(); SFX.resume();
-  const placed = kind === 'hero' && S.towers.find(t => t.cls === id);
-  if (placed) { S.sel = placed; S.selCard = null; renderBottom(); return; }
-  DRAG = { kind, id, x0: e.clientX, y0: e.clientY, moved: false, pid: e.pointerId, el };
+  const placed = S.towers.find(t => t.cls === id);
+  if (placed) { S.sel = S.sel === placed ? null : placed; S.selCard = null; renderBottom(); return; }
+  DRAG = { id, x0: e.clientX, y0: e.clientY, moved: false, pid: e.pointerId, el };
   try { el.setPointerCapture(e.pointerId); } catch (er) {}
   el.addEventListener('pointermove', dragMove); el.addEventListener('pointerup', dragEnd); el.addEventListener('pointercancel', dragCancel);
 }
@@ -1381,94 +1674,259 @@ function dragEnd(e) {
 function dragCancel() {
   if (!DRAG) return;
   const el = DRAG.el; el.removeEventListener('pointermove', dragMove); el.removeEventListener('pointerup', dragEnd); el.removeEventListener('pointercancel', dragCancel);
-  DRAG = null; ghost.style.display = 'none'; S.hover = S.selCard ? S.hover : null;
+  DRAG = null; ghost.style.display = 'none'; if (!S.selCard) S.hover = null;
 }
 /* phones sometimes never deliver the "finger lifted" event (a window popped up under the finger, iOS cancelled the touch):
-   when the last finger leaves the screen, any half-finished drag is dropped, whatever the page saw */
-function releaseTouch() { if (DRAG) dragCancel(); }
+   when the last finger leaves the screen, a half-finished drag and a held walk button are dropped, whatever the page saw */
+function releaseTouch() { if (DRAG) dragCancel(); V.hold = 0; }
 ['touchend', 'touchcancel'].forEach(ev => window.addEventListener(ev, e => { if (!e.touches || e.touches.length === 0) setTimeout(releaseTouch, 0); }, { capture: true, passive: true }));
 window.addEventListener('blur', releaseTouch);
 
 $('go').addEventListener('click', () => { SFX.resume(); startWave(); });
 $('bSpeed').addEventListener('click', () => { S.speed = S.speed === 1 ? 2 : S.speed === 2 ? 4 : 1; updateTop(); });
-$('bFx').addEventListener('click', () => { Save.d.lowfx = !Save.d.lowfx; Save.write(); if (Save.d.lowfx) { S.fxs = []; S.floats = []; } updateTop(); toast(Save.d.lowfx ? '極簡效能模式：關掉跳字和粒子' : '特效全開'); });
+$('bAuto').addEventListener('click', () => { Save.d.autoSkill = !Save.d.autoSkill; Save.write(); updateTop(); toast(Save.d.autoSkill ? '技能自動施放：英雄看到怪就自己放' : '技能手動：點英雄再按技能', true); });
+$('bFx').addEventListener('click', () => { Save.d.lowfx = !Save.d.lowfx; Save.write(); if (Save.d.lowfx) { S.fxs = []; S.floats = []; } updateTop(); toast(Save.d.lowfx ? '極簡效能模式：關掉跳字和粒子' : '特效全開', true); });
 $('bMenu').addEventListener('click', () => openMenu());
 
-/* ---------------- windows ---------------- */
+/* ================= windows ================= */
 const Modal = {
   onClose: null,
-  open(title, render, onClose, noClose) {
+  open(title, render, onClose, noClose, full) {
     $('mTitle').textContent = title; this.onClose = onClose || null; $('mClose').hidden = !!noClose;
-    $('modal').hidden = false; this.render = render; this.refresh();
+    $('modal').classList.toggle('full', !!full);
+    $('modal').hidden = false; this.render = render; this.refresh(true);
   },
-  refresh() { const b = $('mBody'); b.innerHTML = ''; this.render(b); },
+  refresh(top) { const b = $('mBody'), y = b.scrollTop; b.innerHTML = ''; this.render(b); b.scrollTop = top ? 0 : y; },
   close() { if ($('modal').hidden) return; $('modal').hidden = true; const cb = this.onClose; this.onClose = null; if (cb) cb(); }
 };
 $('mClose').addEventListener('click', () => Modal.close());
 $('modal').addEventListener('pointerdown', e => { if (e.target.id === 'modal' && !$('mClose').hidden) Modal.close(); });
 function openMenu() {
-  Modal.open('暫停', b => {
+  const inBattle = S.phase === 'build' || S.phase === 'wave';
+  Modal.open(inBattle ? '暫停' : '選單', b => {
     b.append(h('div', { class: 'say2' }, pick(['技能導師：「主神，你按了暫停。我們全部定格的感覺很奇怪，請快點回來。」', '技能導師：「我發現你一按暫停，怪物就不動了。所以你其實是時間之神？」', '技能導師：「如果你現在重新整理網頁，我們就全部忘記這一關。拜託不要。」'])));
     b.append(h('div', { class: 'btnrow' },
       h('button', { type: 'button', class: 'primary', on: { click: () => Modal.close() } }, '繼續'),
-      h('button', { type: 'button', on: { click: () => { Save.d.music = !Save.d.music; Save.write(); if (Save.d.music) BGM.play(S.wave >= WAVES.length ? 'boss' : 'stage'); else BGM.stop(); Modal.refresh(); } } }, Save.d.music ? '音樂：開' : '音樂：關'),
-      h('button', { type: 'button', on: { click: () => { Modal.close(); startBattle(true); } } }, '重來這關'),
-      h('button', { type: 'button', on: { click: () => { Modal.close(); goHome(); } } }, '回主畫面')));
+      h('button', { type: 'button', on: { click: () => { Save.d.music = !Save.d.music; Save.write(); if (Save.d.music) BGM.play(BGM.cur || 'town'); else BGM.stop(); Modal.refresh(); } } }, Save.d.music ? '音樂：開' : '音樂：關'),
+      h('button', { type: 'button', on: { click: () => { Modal.close(); Dialog.play(INTRO); } } }, '玩法說明'),
+      inBattle ? h('button', { type: 'button', on: { click: () => { Modal.close(); startBattle(true); } } }, '重來這關') : null,
+      inBattle ? h('button', { type: 'button', on: { click: () => { Modal.close(); goVillage(); } } }, '撤退回村莊') : null));
   });
 }
-function showResults(rw) {
-  Modal.open(rw.won ? '勝利！迷霧森林守住了' : '城門被攻破了……', b => {
-    b.append(h('div', { class: 'say2' }, rw.won ? `守住 ${WAVES.length} 波！瘋狂度升到 ${Save.d.crazy}：下次怪物更硬，掉的裝備也更好。` : `撐到第 ${rw.cleared} 波。裝備都還在，換個擺法再來！`));
-    b.append(h('div', null, '獲得：', h('b', { class: 'tdaff' }, rw.gold + ' 金幣'), '、', h('b', { style: 'color:#9fd3ff' }, rw.crystals + ' 晶石'), rw.burned ? h('span', { class: 'muted' }, `（背包滿了，${rw.burned} 晶石是自動分解來的）`) : null));
-    if (rw.ups.length) b.append(h('div', { class: 'ok' }, '升級：' + rw.ups.join('、')));
-    if (rw.items.length) {
-      b.append(h('div', { class: 'sub' }, '掉落裝備'));
-      for (const it of rw.items) b.append(h('div', { class: 'hrow' }, iconEl(it), h('div', { class: 'nm' }, ...itemLines(it))));
-    } else b.append(h('div', { class: 'muted' }, rw.won ? '' : '撐過 3 波以上才會掉裝備。'));
-    b.append(h('div', { class: 'btnrow' },
-      h('button', { type: 'button', class: 'primary', on: { click: () => { Modal.close(); startBattle(true); } } }, rw.won ? '再打一次（瘋狂度 ' + Save.d.crazy + '）' : '再來一次'),
-      h('button', { type: 'button', on: { click: () => { Modal.close(); openGear(); } } }, '整理裝備'),
-      h('button', { type: 'button', on: { click: () => { Modal.close(); goHome(); } } }, '主畫面')));
-  }, null, true);
-}
-/* gear window (outside battle): equip, enhance at the smith, salvage into crystals */
-let gearSel = null, gearMsg = '';
-function openGear() {
-  gearSel = null; gearMsg = '';
-  Modal.open('英雄與裝備', renderGear, () => { if (S.phase !== 'build' && S.phase !== 'wave') goHome(); });
+
+/* ================= character window: four equipment slots, attributes, the two skills a hero brings ================= */
+let partyCls = 'warrior', partySel = null, partyMsg = '';
+function openParty(cls) {
+  partyCls = cls || Save.d.leader || 'warrior'; partySel = null; partyMsg = '';
+  Modal.open('隊伍', renderParty, null, false, true);
 }
 function where(it) { for (const c of HEROES) for (const s in SLOTS) if (heroCh(c).equip[s] === it) return [c, s]; return null; }
-function renderGear(b) {
-  const d = Save.d;
-  b.append(h('div', { style: 'display:flex;gap:1em;font-weight:900;margin-bottom:.5em' }, h('span', { class: 'tdaff' }, '金幣 ' + d.gold), h('span', { style: 'color:#9fd3ff' }, '晶石 ' + d.crystals), h('span', { class: 'muted' }, '背包 ' + d.bag.length + '/' + BAG_MAX)));
-  if (gearMsg) b.append(h('div', { class: 'say2' }, gearMsg));
-  if (gearSel) b.append(gearDetail(gearSel));
-  for (const c of HEROES) {
-    const ch = heroCh(c), cap = levelCap();
-    b.append(h('div', { class: 'hrow' }, h('img', { class: 'hp', src: ART + 'portraits/' + c + '_n.webp', alt: '' }),
-      h('div', { class: 'nm' }, h('b', null, CLASSES[c].name + ' Lv' + ch.lvl), h('span', { class: 'muted' }, ch.lvl >= cap ? '（上限 ' + cap + '）' : ''),
-        h('div', { class: 'xp' }, h('i', { style: `width:${Math.round(ch.exp / expNext(ch.lvl) * 100)}%` })), h('span', { class: 'muted', style: 'font-size:.8em' }, '攻擊 ' + tdStats(c, ch).atk)),
-      ...['weapon', 'acc'].map(s => { const it = ch.equip[s], el = iconEl(it); if (it) { el.setAttribute('role', 'button'); el.addEventListener('click', () => { gearSel = it; gearMsg = ''; Modal.refresh(); }); } return el; })));
-  }
-  b.append(h('div', { class: 'sub' }, '背包（點一下看說明）'));
+function renderParty(b) {
+  const d = Save.d, cls = partyCls, ch = heroCh(cls), st = tdStats(cls, ch), cap = levelCap();
+  b.append(h('div', { class: 'htabs' }, ...HEROES.map(c => h('button', { type: 'button', class: c === cls ? 'on' : '', on: { click: () => { partyCls = c; partySel = null; partyMsg = ''; Modal.refresh(true); } } }, h('img', { src: ART + 'portraits/' + c + '_n.webp', alt: '' }), CLASSES[c].name + (heroCh(c).pts || heroCh(c).sp ? '•' : '')))));
+  if (partyMsg) b.append(h('div', { class: 'say2' }, partyMsg));
+  b.append(h('div', null, h('b', { style: 'font-size:1.2em;color:#ffe9a8' }, CLASSES[cls].name + ' Lv' + ch.lvl), h('span', { class: 'muted' }, ch.lvl >= cap ? `（等級上限 ${cap}，通關越多上限越高）` : `　經驗 ${ch.exp}/${expNext(ch.lvl)}`),
+    d.leader === cls ? h('span', { class: 'tdaff' }, '　★帶隊中') : h('button', { type: 'button', style: 'margin-left:8px;font-size:.8em;padding:2px 10px', on: { click: () => { d.leader = cls; Save.write(); partyMsg = CLASSES[cls].name + '：「' + pick(BANTER_TD[cls].place) + '」'; Modal.refresh(); } } }, '讓他帶隊'),
+    h('div', { class: 'xp' }, h('i', { style: `width:${Math.round(ch.exp / expNext(ch.lvl) * 100)}%` }))));
+  // equipment around the figure, like the action game's character window
+  const slot = s => { const it = ch.equip[s], el = h('div', { class: 'eslot' + (partySel && partySel.slot === s && partySel.it === it && it ? ' sel' : ''), role: 'button', on: { click: () => { partySel = it ? { it, slot: s } : { slot: s }; Modal.refresh(); } } }, iconEl(it, SLOTS[s]), h('span', { class: it ? 'r' + it.rarity + 't' : 'muted' }, it ? shortName(it) : SLOTS[s])); return el; };
+  b.append(h('div', { class: 'eq' }, slot('weapon'), h('div', { class: 'fig' }, h('img', { src: ART + cls + '.webp', alt: '' })), slot('helm'), slot('acc'), slot('chest')));
+  if (partySel) b.append(partyDetail(cls));
+  const dr = Math.round((1 - 100 / (100 + st.def)) * 100);
+  b.append(h('div', { class: 'stats' },
+    h('span', null, '血量 ', h('b', null, st.maxHp)), h('span', null, '攻擊 ', h('b', null, st.atk)),
+    h('span', null, '防禦 ', h('b', null, st.def), h('span', { class: 'muted' }, `（減傷 ${dr}%）`)), h('span', null, '暴擊 ', h('b', null, Math.round(st.crit * 100) + '%')),
+    h('span', null, '攻速 ', h('b', null, Math.round(st.aspd * 100) + '%')), h('span', null, '射程 ', h('b', null, (st.P.rng * st.mspd).toFixed(1) + ' 格')),
+    h('span', null, '普攻倍率 ', h('b', null, Math.round(st.basicMul * 100) + '%')), h('span', null, '技能倍率 ', h('b', null, Math.round(st.skillMul * 100) + '%')),
+    h('span', null, '冷卻縮短 ', h('b', null, Math.round(st.cdr * 100) + '%')), h('span', null, '吸血 ', h('b', null, Math.round(st.steal * 100) + '%')),
+    h('span', { style: 'grid-column:1/3', class: 'muted' }, '攻擊方式：' + st.P.d + '（' + (st.type === 'magic' ? '魔法' : '物理') + '）', st.td ? h('span', { class: 'tdaff' }, '・' + TDAFF[st.td].n + '：' + TDAFF[st.td].d) : null)));
+  // attribute points: 5 per level
+  const A = [['str', '力量', '普攻 +2%'], ['agi', '敏捷', '技能冷卻縮短'], ['int', '智力', '技能 +2%'], ['vit', '體力', '血量 +15']];
+  b.append(h('div', { class: 'sub' }, '屬性點 ' + ch.pts + (ch.pts ? '（點 + 分配）' : '')));
+  b.append(h('div', { class: 'attr' }, ...A.map(([k, n, dsc]) => h('div', null, n, h('b', null, ch.attr[k]), h('span', { class: 'muted' }, dsc), ch.pts ? h('br') : null, ch.pts ? h('button', { type: 'button', on: { click: () => { ch.pts--; ch.attr[k]++; Save.write(); Modal.refresh(); } } }, '+') : null))));
+  // skill loadout: pick two of the four
+  b.append(h('div', { class: 'sub' }, '帶上場的技能（四選二）'));
+  b.append(skillCards(cls, false));
+  // bag: what this hero can wear
+  b.append(h('div', { class: 'sub' }, '背包（' + d.bag.length + '/' + BAG_MAX + '，灰色的是別人的武器）'));
   const grid = h('div', { class: 'bag' });
-  for (const it of d.bag.slice().sort((a, x) => x.rarity - a.rarity || x.plus - a.plus)) grid.append(h('div', { class: 'bagit' + (gearSel === it ? ' sel' : ''), role: 'button', on: { click: () => { gearSel = it; gearMsg = ''; Modal.refresh(); } } }, iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, itemName(it).replace(/^.*的/, '')), h('span', { class: 'muted' }, it.slot === 'weapon' ? CLASSES[it.cls].name : '通用')));
+  for (const it of d.bag.slice().sort((a, x) => x.rarity - a.rarity || x.plus - a.plus)) grid.append(h('div', { class: 'bagit' + (partySel && partySel.it === it ? ' sel' : '') + (canEquip(it, cls) ? '' : ' no'), role: 'button', on: { click: () => { partySel = { it, slot: it.slot }; Modal.refresh(); } } }, iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, shortName(it)), h('span', { class: 'muted' }, it.slot === 'weapon' ? CLASSES[it.cls].name : SLOTS[it.slot])));
   b.append(grid);
-  b.append(h('div', { class: 'btnrow' },
-    h('button', { type: 'button', on: { click: () => bulkSalvage(1) } }, '一鍵分解優良以下'),
-    h('button', { type: 'button', on: { click: () => bulkSalvage(2) } }, '一鍵分解稀有以下')));
 }
-function gearDetail(it) {
-  const w = where(it), cost = enhCost(it), d = Save.d;
+function partyDetail(cls) {
+  const d = Save.d, ch = heroCh(cls), sel = partySel, it = sel.it;
+  if (!it) { // empty slot: list what fits
+    const fits = d.bag.filter(x => x.slot === sel.slot && canEquip(x, cls));
+    return h('div', { class: 'detail' }, SLOTS[sel.slot] + '是空的。', fits.length ? '從背包挑一件：' : '背包裡沒有能穿的' + SLOTS[sel.slot] + '，出城打怪會掉。',
+      h('div', { class: 'bag', style: 'margin-top:6px' }, ...fits.map(x => h('div', { class: 'bagit', role: 'button', on: { click: () => { equipTo(x, cls); } } }, iconEl(x), h('span', { class: 'r' + x.rarity + 't' }, shortName(x))))));
+  }
+  const w = where(it), btns = h('div', { class: 'btns' });
+  const cur = ch.equip[it.slot];
+  if (w) btns.append(h('button', { type: 'button', on: { click: () => { if (d.bag.length >= BAG_MAX) { partyMsg = '背包滿了'; } else { heroCh(w[0]).equip[w[1]] = null; d.bag.push(it); Save.write(); partySel = null; } Modal.refresh(); } } }, '卸下'));
+  else if (canEquip(it, cls)) btns.append(h('button', { type: 'button', class: 'primary', on: { click: () => equipTo(it, cls) } }, cur ? '換上（替換' + shortName(cur) + '）' : '穿上'));
+  else btns.append(h('span', { class: 'bad' }, '這是' + CLASSES[it.cls].name + '的武器'));
+  btns.append(h('button', { type: 'button', on: { click: () => { partySel = null; Modal.refresh(); } } }, '關閉'));
+  const box = h('div', { class: 'detail' }, ...itemLines(it));
+  if (cur && cur !== it && !w && canEquip(it, cls)) box.append(h('div', { class: 'muted' }, '目前：' + itemName(cur) + '（' + BASE_LABEL[cur.slot] + ' +' + itemBase(cur) + '）'));
+  box.append(h('div', { class: 'muted' }, '強化和分解找鐵匠。'), btns);
+  return box;
+}
+function equipTo(it, cls) {
+  const d = Save.d, ch = heroCh(cls), i = d.bag.indexOf(it); if (i < 0) return;
+  d.bag.splice(i, 1); const old = ch.equip[it.slot]; if (old) d.bag.push(old);
+  ch.equip[it.slot] = it; Save.write(); SFX.place();
+  partySel = null; partyMsg = CLASSES[cls].name + '：「' + pick(BANTER_TD[cls].gear) + '」'; Modal.refresh();
+}
+// four skill cards; trainer mode adds upgrades
+function skillCards(cls, trainer) {
+  const d = Save.d, ch = heroCh(cls), box = h('div', { class: 'sk4' });
+  CLASSES[cls].skills.forEach((s, i) => {
+    const lv = ch.skills[i], on = ch.load.includes(i), info = SKILL_INFO[s.id], E = evo(lv), cost = skillCost(lv);
+    const t = h('div', { class: 't' }, h('b', null, s.name), ` Lv${lv}`, h('span', { class: 'muted' }, `　冷卻 ${SKILL_CD[i]} 秒` + (i === 3 ? '・大絕招' : '')),
+      h('div', null, info[0]), h('div', { class: 'ev' + (E >= 1 ? ' got' : '') }, info[1]), h('div', { class: 'ev' + (E >= 2 ? ' got' : '') }, info[2]));
+    const btns = h('div', { style: 'display:flex;flex-direction:column;gap:6px' });
+    if (trainer) btns.append(h('button', { type: 'button', class: 'primary', disabled: lv >= SKILL_MAX || ch.sp < 1 || d.gold < cost.gold || d.shards < cost.shards, on: { click: () => { ch.sp--; d.gold -= cost.gold; d.shards -= cost.shards; ch.skills[i]++; Save.write(); SFX.win(); trainerMsg = `${s.name}升到 Lv${ch.skills[i]}！` + (ch.skills[i] === 5 || ch.skills[i] === 10 ? '……它進化了。我在程式碼裡看到它變長了。' : '我感覺到你的手指變強了。'); Modal.refresh(); } } }, lv >= SKILL_MAX ? '滿級' : `升級\n${cost.gold}金 ${cost.shards}碎片`));
+    btns.append(h('button', { type: 'button', class: on ? 'on' : '', on: { click: () => { if (on) { if (ch.load.length <= 1) return; ch.load = ch.load.filter(x => x !== i); } else { ch.load.push(i); if (ch.load.length > 2) ch.load.shift(); } ch.load.sort((a, b2) => a - b2); if (ch.load.length < 2) { for (let k = 0; k < 4 && ch.load.length < 2; k++) if (!ch.load.includes(k)) ch.load.push(k); ch.load.sort((a, b2) => a - b2); } Save.write(); Modal.refresh(); } } }, on ? '✓ 帶上場' : '帶上場'));
+    box.append(h('div', { class: 'skc' + (on ? ' on' : '') }, h('img', { src: skillIcon(cls, i, lv), alt: '' }), t, btns));
+  });
+  return box;
+}
+
+/* ================= NPCs: talk, A/B questions, shops ================= */
+const NpcEv = {
+  POOL: ['potion', 'smith', 'tailor', 'store', 'trainer', 'pets', 'gate'], EVERY: 180,
+  st() { return Save.d.npcEv; },
+  tick(dt) { const s = this.st(); if (!s.seeded) { s.seeded = true; this.spawn(); } s.t += dt; if (s.t >= this.EVERY) { s.t = 0; if (s.list.length < 2) this.spawn(); } },
+  spawn() {
+    const s = this.st(), busy = new Set(s.list.map(e => e.npc)), free = this.POOL.filter(n => !busy.has(n) && NPC_EV[n]);
+    if (!free.length) return false;
+    const npc = pick(free), used = (s.seen[npc] = s.seen[npc] || []);
+    let left = NPC_EV[npc].map((_, i) => i).filter(i => !used.includes(i)); if (!left.length) { used.length = 0; left = NPC_EV[npc].map((_, i) => i); }
+    const i = pick(left); used.push(i); s.list.push({ npc, i }); Save.write(); return true;
+  },
+  at(npc) { return this.st().list.find(e => e.npc === npc); },
+  done(npc) { const s = this.st(); s.list = s.list.filter(e => e.npc !== npc); Save.write(); }
+};
+function npcReward(big) {
+  const d = Save.d, m = (1 + 0.5 * (d.clears || 0)) * (big ? 1.6 : 1), r = Math.random();
+  if (r < 0.35) { const g = Math.round(rand(150, 320) * m / 10) * 10; d.gold += g; return `金幣 +${g}`; }
+  if (r < 0.55) { const n = big ? 3 : randi(1, 2); d.crystals += n; return `礦物晶石 +${n}`; }
+  if (r < 0.75) { const n = Math.round(randi(2, 4) * (big ? 1.5 : 1)); d.shards += n; return `能量碎片 +${n}`; }
+  if (r < 0.88) { d.pots.red += big ? 2 : 1; return `紅藥水 +${big ? 2 : 1}`; }
+  d.bless = 'atk'; return '祝福：下一場戰鬥攻擊力 +10%';
+}
+function npcPenalty() {
+  const d = Save.d, r = Math.random();
+  if (r < 0.3) return '（他笑了你整整一分鐘。）';
+  if (r < 0.65) { const k = pick(Object.keys(CURSES)); d.curse = k; return '詛咒：下一場戰鬥' + CURSES[k]; }
+  if (r < 0.85 || !(d.crystals > 0)) { const g = Math.min(d.gold, Math.round(rand(80, 240) * (1 + 0.4 * (d.clears || 0)) / 10) * 10); d.gold -= g; return g > 0 ? `被偷走金幣 ${g}` : '他想偷你的錢，結果發現你比他還窮。'; }
+  d.crystals--; return '被偷走礦物晶石 1 顆';
+}
+const npcById = id => NPCS.find(n => n.id === id);
+const npcImg = n => ART + n.key + '.webp';
+const npcHead = (n, text) => h('div', { class: 'npc' }, h('img', { src: npcImg(n), alt: n.name }), h('div', { class: 'say2' }, text));
+let trainerMsg = '', smithSel = null, smithMsg = '', trainerCls = null;
+function talkTo(id) {
+  const n = npcById(id); SFX.resume();
+  const ev = NpcEv.at(id);
+  if (ev) return npcEvent(n, ev);
+  openShop(n, Math.random() < 0.4 ? pick(id === 'elder' ? ELDER_CHAT : NPC_CHAT[id] || ELDER_CHAT) : null);
+}
+// the "!" question: two answers, their reaction, what you got or lost
+function npcEvent(n, ev) {
+  const q = NPC_EV[n.id][ev.i], flip = Math.random() < 0.5;
+  let result = null;
+  Modal.open(n.name, b => {
+    if (!result) {
+      b.append(npcHead(n, q.q));
+      const ans = k => h('button', { type: 'button', on: { click: () => answer(k) } }, q[k]);
+      b.append(h('div', { class: 'choice' }, ...(flip ? [ans('b'), ans('a')] : [ans('a'), ans('b')])));
+    } else {
+      b.append(npcHead(n, result.text));
+      b.append(h('div', { class: result.good ? 'ok' : 'bad', style: 'font-weight:900;text-align:center;font-size:1.1em' }, result.gain));
+      b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', class: 'primary', on: { click: () => openShop(n, null) } }, '繼續'), h('button', { type: 'button', on: { click: () => Modal.close() } }, '離開')));
+    }
+  });
+  function answer(k) {
+    const good = q.ok === 'none' ? false : q.ok === 'rand' ? Math.random() < 0.5 : q.ok === k;
+    result = good ? { good, text: q.win, gain: npcReward(false) } : { good, text: q.lose, gain: npcPenalty() };
+    NpcEv.done(n.id); Save.write(); good ? SFX.win() : SFX.bad(); Modal.refresh(); updateWallet();
+  }
+}
+function openShop(n, chat) {
+  const id = n.id;
+  if (id === 'trainer') { trainerMsg = chat || ''; trainerCls = trainerCls || Save.d.leader; }
+  if (id === 'smith') { smithSel = null; smithMsg = chat || ''; }
+  Modal.open(n.name, b => {
+    const d = Save.d;
+    switch (id) {
+      case 'gate': {
+        b.append(npcHead(n, chat || pick(['站住！……喔，是你啊。這次你們只要站在路邊就好？太好了，我終於不用看你們亂跑了。', '城外是迷霧森林，怪物會排隊走過來。對，排隊。牠們比你還有禮貌。', '出城記得帶紅藥水。還有，記得帶腦子。', '主神，你的英雄裝備配好了嗎？技能帶了嗎？……算了，反正死的是他們。'])));
+        b.append(h('div', null, '目的地：', h('b', null, '迷霧森林'), '（10 波，最後一波魔王）', d.crazy ? h('span', { class: 'bad' }, '　瘋狂度 ' + d.crazy + '：怪物更硬') : null));
+        if (d.bless || d.curse) b.append(h('div', { class: d.curse ? 'bad' : 'ok' }, [d.bless ? '祝福：攻擊 +10%' : '', d.curse ? '詛咒：' + CURSES[d.curse] : ''].filter(Boolean).join('　') + '（只有下一場）'));
+        b.append(h('div', { class: 'muted' }, `帶著的藥水：紅藥水 ×${d.pots.red}、城門修補劑 ×${d.pots.gate}、斯斯藥水 ×${d.pots.sisi}`));
+        b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', class: 'primary', on: { click: () => { Modal.close(); startBattle(); } } }, '出城！'), h('button', { type: 'button', on: { click: () => { Modal.close(); openParty(); } } }, '先整理隊伍')));
+        break;
+      }
+      case 'trainer': {
+        b.append(npcHead(n, trainerMsg || '想升技能？每升一級要 1 點技能點、金幣和能量碎片。5 級和 10 級會進化。……我知道這些，因為我讀過說明。'));
+        b.append(h('div', { class: 'htabs' }, ...HEROES.map(c => h('button', { type: 'button', class: c === trainerCls ? 'on' : '', on: { click: () => { trainerCls = c; trainerMsg = ''; Modal.refresh(); } } }, h('img', { src: ART + 'portraits/' + c + '_n.webp', alt: '' }), CLASSES[c].name + (heroCh(c).sp ? '•' : '')))));
+        const ch = heroCh(trainerCls);
+        b.append(h('div', null, h('b', null, CLASSES[trainerCls].name), `　技能點 ${ch.sp}・金幣 ${d.gold}・碎片 ${d.shards}`, h('div', { class: 'muted', style: 'font-size:.85em' }, '技能點每升一級 +1；碎片過關和 NPC 會給。')));
+        b.append(skillCards(trainerCls, true));
+        break;
+      }
+      case 'smith': {
+        b.append(npcHead(n, smithMsg || '什麼！你要強化？大聲點！……選一件裝備，小美準備好了！'));
+        const all = [];
+        for (const c of HEROES) for (const s in SLOTS) { const it = heroCh(c).equip[s]; if (it) all.push(it); }
+        all.push(...d.bag);
+        b.append(h('div', null, `金幣 ${d.gold}・晶石 ${d.crystals}` + (d.luck ? `・幸運加成剩 ${d.luck} 次` : '')));
+        if (smithSel && !all.includes(smithSel)) smithSel = null;
+        if (smithSel) b.append(smithDetail(smithSel));
+        const grid = h('div', { class: 'bag' });
+        for (const it of all) { const w = where(it); grid.append(h('div', { class: 'bagit' + (smithSel === it ? ' sel' : ''), role: 'button', on: { click: () => { smithSel = it; smithMsg = ''; Modal.refresh(); } } }, iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, shortName(it)), h('span', { class: 'muted' }, w ? CLASSES[w[0]].name + '穿著' : '背包'))); }
+        b.append(grid);
+        b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', on: { click: () => bulkSalvage(1) } }, '一鍵分解優良以下'), h('button', { type: 'button', on: { click: () => bulkSalvage(2) } }, '一鍵分解稀有以下')));
+        break;
+      }
+      case 'potion': {
+        b.append(npcHead(n, chat || '歡迎光臨！這些藥水出城可以用，我都試喝過了，所以我現在看到三個你。'));
+        for (const k in POTS_TD) { const p = POTS_TD[k]; b.append(h('div', { class: 'shop' }, h('img', { src: ART + 'items/' + p.img + '.webp', alt: '' }), h('div', { class: 't' }, h('b', null, p.n), `（有 ${d.pots[k]} 瓶）`, h('div', { class: 'muted' }, p.d)), h('button', { type: 'button', disabled: d.gold < p.price, on: { click: () => { d.gold -= p.price; d.pots[k]++; Save.write(); SFX.coin(); updateWallet(); Modal.refresh(); } } }, p.price + ' 金'))); }
+        b.append(h('div', { class: 'shop' }, h('img', { src: ART + 'items/pot_luck.webp', alt: '' }), h('div', { class: 't' }, h('b', null, '幸運藥水'), d.luck ? `（還有 ${d.luck} 次）` : '', h('div', { class: 'muted' }, '喝下後，接下來 5 次強化成功率 +10%。')), h('button', { type: 'button', disabled: d.gold < 100000, on: { click: () => { d.gold -= 100000; d.luck = (d.luck || 0) + 5; Save.write(); SFX.win(); updateWallet(); Modal.refresh(); } } }, '100000 金')));
+        break;
+      }
+      case 'store': {
+        b.append(npcHead(n, chat || '歡迎！你寄放的東西都很好，只是有幾件昨晚哭了。點一下就能存進去或拿出來。'));
+        const list = (arr, other, max, label) => { const g = h('div', { class: 'bag' }); for (const it of arr.slice().sort((a, x) => x.rarity - a.rarity)) g.append(h('div', { class: 'bagit', role: 'button', on: { click: () => { if (other.length >= max) return toast((label === '背包' ? '倉庫' : '背包') + '滿了'); arr.splice(arr.indexOf(it), 1); other.push(it); Save.write(); Modal.refresh(); } } }, iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, shortName(it)))); return g; };
+        b.append(h('div', { class: 'sub' }, `背包 ${d.bag.length}/${BAG_MAX}（點一下存進倉庫）`), list(d.bag, d.store, STORE_MAX, '背包'));
+        b.append(h('div', { class: 'sub' }, `倉庫 ${d.store.length}/${STORE_MAX}（點一下拿回背包）`), list(d.store, d.bag, BAG_MAX, '倉庫'));
+        break;
+      }
+      case 'elder': {
+        b.append(npcHead(n, chat || pick(ELDER_CHAT)));
+        b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', on: { click: () => { Modal.close(); Dialog.play(INTRO); } } }, '聽他講故事'), h('button', { type: 'button', on: { click: () => Modal.refresh() } }, '再聊一句')));
+        break;
+      }
+      default: { // tailor, pets: talk (their shops come later)
+        const closed = { tailor: '時裝鋪今天整修中。原因：主神的審美讓我們很受傷。', pets: '寵物們正在學站崗。等牠們學會不發呆，就能跟你們出城了。' }[id];
+        b.append(npcHead(n, chat || pick(NPC_CHAT[id])));
+        b.append(h('div', { class: 'muted' }, closed));
+        b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', on: { click: () => { chatNow = pick(NPC_CHAT[id]); Modal.refresh(); } } }, '再聊一句')));
+        if (chatNow) { b.firstChild.querySelector('.say2').textContent = chatNow; chatNow = ''; }
+      }
+    }
+  }, () => updateWallet());
+}
+let chatNow = '';
+function smithDetail(it) {
+  const d = Save.d, cost = enhCost(it), w = where(it), rate = Math.min(1, ENH_RATE[it.plus] + (d.luck ? 0.1 : 0));
   const box = h('div', { class: 'detail' }, ...itemLines(it));
   if (w) box.append(h('div', { class: 'muted' }, '裝備在：' + CLASSES[w[0]].name));
-  if (it.plus < 10) box.append(h('div', { class: 'muted' }, `強化 +${it.plus + 1}：${cost.gold} 金、${cost.crystals} 晶石，成功率 ${Math.round(ENH_RATE[it.plus] * 100)}%` + (it.plus + 1 >= 9 ? '（失敗會爆掉！）' : it.plus + 1 >= 6 ? '（失敗會掉一級）' : '')));
+  if (it.plus < 10) box.append(h('div', { class: 'muted' }, `強化 +${it.plus + 1}：${cost.gold} 金、${cost.crystals} 晶石，成功率 ${Math.round(rate * 100)}%` + (it.plus + 1 >= 9 ? '（失敗會爆掉！）' : it.plus + 1 >= 6 ? '（失敗會掉一級）' : '')));
   const btns = h('div', { class: 'btns' });
-  if (w) btns.append(h('button', { type: 'button', on: { click: () => { if (d.bag.length >= BAG_MAX) { gearMsg = '背包滿了'; } else { heroCh(w[0]).equip[w[1]] = null; d.bag.push(it); Save.write(); } Modal.refresh(); } } }, '卸下'));
-  else for (const c of HEROES.filter(c => canEquip(it, c))) btns.append(h('button', { type: 'button', on: { click: () => { const ch = heroCh(c), old = ch.equip[it.slot]; d.bag.splice(d.bag.indexOf(it), 1); if (old) d.bag.push(old); ch.equip[it.slot] = it; Save.write(); gearMsg = CLASSES[c].name + '：' + pick(BANTER_TD[c].gear); Modal.refresh(); } } }, '給' + CLASSES[c].name));
-  if (it.plus < 10) btns.append(h('button', { type: 'button', class: 'primary', disabled: d.gold < cost.gold || d.crystals < cost.crystals, on: { click: () => { enhance(it); Modal.refresh(); } } }, '強化'));
-  if (!w) btns.append(h('button', { type: 'button', on: { click: () => { d.crystals += RAR[it.rarity].salvage; d.bag.splice(d.bag.indexOf(it), 1); gearSel = null; gearMsg = '分解成 ' + RAR[it.rarity].salvage + ' 顆晶石。鐵匠：「什麼？你說小美？她很好！」'; Save.write(); Modal.refresh(); } } }, '分解 +' + RAR[it.rarity].salvage + ' 晶石'));
-  btns.append(h('button', { type: 'button', on: { click: () => { gearSel = null; Modal.refresh(); } } }, '關閉'));
+  if (it.plus < 10) btns.append(h('button', { type: 'button', class: 'primary', disabled: d.gold < cost.gold || d.crystals < cost.crystals, on: { click: () => { enhance(it); updateWallet(); Modal.refresh(); } } }, '強化'));
+  if (!w) btns.append(h('button', { type: 'button', on: { click: () => { d.crystals += RAR[it.rarity].salvage; d.bag.splice(d.bag.indexOf(it), 1); smithSel = null; smithMsg = '分解成 ' + RAR[it.rarity].salvage + ' 顆晶石。小美吃得很開心！'; Save.write(); updateWallet(); Modal.refresh(); } } }, '分解 +' + RAR[it.rarity].salvage + ' 晶石'));
   box.append(btns);
   return box;
 }
@@ -1477,50 +1935,111 @@ function enhance(it) {
   const d = Save.d, cost = enhCost(it);
   if (d.gold < cost.gold || d.crystals < cost.crystals || it.plus >= 10) return;
   d.gold -= cost.gold; d.crystals -= cost.crystals; it.spent = (it.spent || 0) + cost.crystals;
-  const to = it.plus + 1;
-  if (Math.random() < ENH_RATE[it.plus]) { it.plus = to; gearMsg = `鐵匠：「成功啦！+${to}！小美也替你高興！」（大聲）`; SFX.win(); }
-  else if (to <= 5) { gearMsg = '鐵匠：「失敗了！材料沒了，裝備沒事！什麼？大聲點！」'; SFX.bad(); }
-  else if (to <= 8) { it.plus = Math.max(0, it.plus - 1); gearMsg = `鐵匠：「哎呀，掉回 +${it.plus} 了！不是小美的錯！」`; SFX.bad(); }
+  const to = it.plus + 1, rate = ENH_RATE[it.plus] + (d.luck ? 0.1 : 0);
+  if (d.luck) d.luck--;
+  if (Math.random() < rate) { it.plus = to; smithMsg = `成功啦！+${to}！小美也替你高興！（大聲）`; SFX.win(); }
+  else if (to <= 5) { smithMsg = '失敗了！材料沒了，裝備沒事！什麼？大聲點！'; SFX.bad(); }
+  else if (to <= 8) { it.plus = Math.max(0, it.plus - 1); smithMsg = `哎呀，掉回 +${it.plus} 了！不是小美的錯！`; SFX.bad(); }
   else {
     const back = Math.floor(it.spent / 2), w = where(it);
     if (w) heroCh(w[0]).equip[w[1]] = null; else d.bag.splice(d.bag.indexOf(it), 1);
-    d.crystals += back; gearSel = null; gearMsg = `鐵匠：「……爆了。小美說她不是故意的。退你 ${back} 顆晶石。」`; SFX.leak();
+    d.crystals += back; smithSel = null; smithMsg = `……爆了。小美說她不是故意的。退你 ${back} 顆晶石。`; SFX.leak();
   }
   Save.write();
 }
 function bulkSalvage(maxR) {
   const d = Save.d; let n = 0, got = 0;
   d.bag = d.bag.filter(it => { if (it.rarity <= maxR && it.plus === 0) { n++; got += RAR[it.rarity].salvage; return false; } return true; });
-  d.crystals += got; gearSel = null; gearMsg = n ? `分解了 ${n} 件，得到 ${got} 顆晶石。` : '沒有可以分解的（強化過的不會被分解）。'; Save.write(); Modal.refresh();
+  d.crystals += got; smithSel = null; smithMsg = n ? `分解了 ${n} 件，得到 ${got} 顆晶石。小美吃飽了！` : '沒有可以分解的（強化過的不會被分解）。'; Save.write(); updateWallet(); Modal.refresh();
 }
 
-/* ---------------- home screen ---------------- */
-function renderHome() {
-  const el = $('home'), d = Save.d; el.innerHTML = '';
-  el.append(
-    h('h1', null, '全員瘋子RPG'),
-    h('div', { class: 'heroes' }, ...HEROES.map(c => h('img', { src: ART + c + '.webp', alt: CLASSES[c].name }))),
-    h('div', { class: 'wallet' }, h('span', { class: 'tdaff' }, h('img', { src: ART + 'items/gold.webp', alt: '' }), ' ', d.gold), h('span', { style: 'color:#9fd3ff' }, h('img', { src: ART + 'items/crystal.webp', alt: '' }), ' ', d.crystals)),
-    h('button', { type: 'button', class: 'primary', on: { click: () => startBattle() } }, '出征：迷霧森林' + (d.crazy ? '（瘋狂度 ' + d.crazy + '）' : '')),
-    h('button', { type: 'button', on: { click: () => openGear() } }, '英雄與裝備'),
-    h('button', { type: 'button', on: { click: () => Dialog.play(INTRO) } }, '玩法說明'),
-    h('div', { class: 'say' }, pick(['技能導師：「主神，這一版畫面是直的。我量過了，比較瘦。」', '鐵匠：「強化？大聲點！什麼？小美說她準備好了！」', '藥水商人：「斯斯藥水喝下去，攻速會變快，頭也會變昏。兩個都是真的。」', '城門守衛：「這次你們只要站著就好？太好了，我終於不用看你們亂跑了。」'])));
+/* ================= the village: one street in perspective, walk forward toward the gate or back ================= */
+const vc = $('vc'), vctx = vc.getContext('2d');
+const V = { t: 0.02, hold: 0, near: null, walkT: 0, face: 1, bob: 0, LH: 900, active: false, ptr: null };
+const VIMG = img('village', TDART + 'village.webp');
+for (const n of NPCS) img(n.key, npcImg(n));
+// the street in the painting: near end at the bottom, the gate far up; things shrink with distance
+const vy = t => 0.955 - 0.5 * Math.pow(t, 0.85);   // image height fraction
+const vs = t => 1 - 0.66 * t;                        // scale
+function resizeVillage() {
+  const r = vc.getBoundingClientRect(); if (!r.width) return;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  vc.width = Math.round(r.width * dpr); vc.height = Math.round(r.height * dpr);
+  V.LH = L * r.height / r.width;
 }
-function goHome() {
-  S.phase = 'off'; S.sel = S.selCard = S.selItem = null;
-  $('home').hidden = false; renderHome(); BGM.play('select');
+function goVillage() {
+  S.phase = 'off'; S.sel = S.selCard = null;
+  $('village').hidden = false; V.active = true; resizeVillage(); updateWallet(); BGM.play('town');
+  if (!Save.d.seenIntro) { Save.d.seenIntro = true; Save.write(); Dialog.play(INTRO); }
 }
+function updateWallet() { const d = Save.d; $('vGold').textContent = d.gold; $('vCry').textContent = d.crystals; $('vShard').textContent = d.shards; }
+function villageStep(dt) {
+  const mv = V.hold;
+  if (mv) { V.t = clamp(V.t + mv * dt * 0.22, 0, 0.97); V.walkT += dt; V.face = mv > 0 ? 1 : -1; if (Math.floor(V.walkT * 3.5) !== Math.floor((V.walkT - dt) * 3.5)) SFX.step(); }
+  let near = null, bd = 0.055;
+  for (const n of NPCS) { const dd = Math.abs(n.t - V.t); if (dd < bd) { bd = dd; near = n; } }
+  if (near !== V.near) {
+    V.near = near; const b = $('vTalk');
+    b.disabled = !near; b.textContent = near ? (near.id === 'gate' ? '出城／守衛' : '和' + near.name + '說話') : '說話';
+    $('vHint').textContent = near ? (NpcEv.at(near.id) ? near.name + '有話要問你！' : '按「說話」') : '按住 ▲ 往前走、▼ 往後走，走到 NPC 旁邊';
+  }
+  NpcEv.tick(dt);
+}
+function drawVillage(now) {
+  const g = vctx, k = vc.width / L, LH = V.LH, t = now / 1000;
+  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#1a140c'; g.fillRect(0, 0, vc.width, vc.height);
+  g.setTransform(k, 0, 0, k, 0, 0);
+  const D = Math.max(LH, L), x0 = (L - D) / 2, y0 = LH - D;
+  if (ready(VIMG)) g.drawImage(VIMG, x0, y0, D, D);
+  const P = (tt, side) => ({ x: x0 + D * (0.5 + side * 0.17 * vs(tt)), y: y0 + D * vy(tt), s: vs(tt) * (D / 900) });
+  const ents = [];
+  for (const n of NPCS) { const p = P(n.t, n.side); ents.push({ t: n.t, f: () => drawPerson(g, IMG[n.key], p, 150, n.side > 0 ? -1 : 1, 0, n, t) }); }
+  const hp = P(V.t, 0), bob = V.hold ? Math.abs(Math.sin(V.walkT * 9)) * 6 : 0;
+  ents.push({ t: V.t - 0.001, f: () => drawPerson(g, IMG[Save.d.leader], hp, 165, V.face, bob, null, t) });
+  ents.sort((a, b) => b.t - a.t).forEach(o => o.f());
+  if (V.near) { const p = P(V.near.t, V.near.side); g.strokeStyle = 'rgba(255,224,102,.9)'; g.lineWidth = 3; g.beginPath(); g.ellipse(p.x, p.y + 4 * p.s, 46 * p.s, 14 * p.s, 0, 0, 7); g.stroke(); }
+  if (V.bubble && V.bubble.left > 0) { V.bubble.left -= 1 / 60; bubbleAt(g, V.bubble.text, hp.x, hp.y - 175 * hp.s, clamp(V.bubble.left / 0.4, 0, 1), L); }
+}
+function drawPerson(g, im, p, hh, face, bob, npc, t) {
+  const s = p.s, H = hh * s;
+  g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(p.x, p.y, 34 * s, 10 * s, 0, 0, 7); g.fill();
+  if (ready(im)) { const w = H * im.naturalWidth / im.naturalHeight; g.save(); g.translate(p.x, p.y - bob * s); g.scale(face, 1); g.drawImage(im, -w / 2, -H, w, H); g.restore(); }
+  if (!npc) return;
+  g.font = `900 ${Math.max(12, 17 * s)}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000';
+  g.strokeText(npc.name, p.x, p.y - H - 6 * s); g.fillStyle = '#ffe9a8'; g.fillText(npc.name, p.x, p.y - H - 6 * s);
+  if (NpcEv.at(npc.id)) { const yy = p.y - H - 26 * s - Math.abs(Math.sin(t * 4)) * 8 * s; g.fillStyle = '#ff3a2a'; g.beginPath(); g.arc(p.x, yy, 13 * s + 4, 0, 7); g.fill(); g.fillStyle = '#fff'; g.font = `900 ${18 * s + 6}px sans-serif`; g.fillText('!', p.x, yy + 7 * s + 2); }
+}
+// hold the arrows (or press on the street above / below the hero) to walk
+function holdBtn(el, dir) {
+  const on = e => { e.preventDefault(); SFX.resume(); BGM.kick(); V.hold = dir; try { el.setPointerCapture(e.pointerId); } catch (er) {} };
+  const off = () => { if (V.hold === dir) V.hold = 0; };
+  el.addEventListener('pointerdown', on); el.addEventListener('pointerup', off); el.addEventListener('pointercancel', off); el.addEventListener('lostpointercapture', off);
+}
+holdBtn($('vFwd'), 1); holdBtn($('vBack'), -1);
+vc.addEventListener('pointerdown', e => {
+  e.preventDefault(); SFX.resume(); BGM.kick();
+  const r = vc.getBoundingClientRect(), y = (e.clientY - r.top) / r.height * V.LH, x = (e.clientX - r.left) / r.width * L;
+  const D = Math.max(V.LH, L), x0 = (L - D) / 2, y0 = V.LH - D;
+  // tapped an NPC? talk if close, otherwise walk there
+  for (const n of NPCS) { const px = x0 + D * (0.5 + n.side * 0.17 * vs(n.t)), py = y0 + D * vy(n.t), s = vs(n.t) * (D / 900); if (Math.abs(x - px) < 45 * s && y < py + 8 && y > py - 160 * s) { if (V.near === n) return talkTo(n.id); V.goal = n.t; return; } }
+  const heroY = y0 + D * vy(V.t); V.hold = y < heroY ? 1 : -1; V.ptr = e.pointerId; try { vc.setPointerCapture(e.pointerId); } catch (er) {}
+});
+['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => vc.addEventListener(ev, e => { if (V.ptr === e.pointerId) { V.ptr = null; V.hold = 0; } }));
+$('vTalk').addEventListener('click', () => { if (V.near) talkTo(V.near.id); });
+$('vParty').addEventListener('click', () => openParty());
+$('vMenu').addEventListener('click', () => openMenu());
+
+/* ================= start a battle ================= */
 function startBattle(retry) {
-  $('home').hidden = true;
-  newRun(); tab = 'hero';
+  $('village').hidden = true; V.active = false; V.hold = 0;
+  newRun();
   renderBottom(); updateTop();
   BGM.play('stage');
-  if (!Save.d.seenIntro) { Save.d.seenIntro = true; Save.write(); Dialog.play(INTRO, () => banner('把英雄拖到路邊的格子上\n準備好就按「開始第 1 波」', 3)); }
-  else if (retry) { const c = pick(HEROES); Dialog.play([SL(c, 'n', pick(BANTER[c].revive))]); }
-  else banner('把英雄放到路邊的格子上', 2);
+  if (retry) { const c = pick(HEROES); Dialog.play([SL(c, 'n', pick(BANTER[c].revive))]); }
+  else banner('把英雄放到路邊的格子上\n準備好就按「開始第 1 波」', 2.4);
 }
 
-/* ---------------- story dialogue: portrait, typewriter text, tap to advance (same format as the action game) ---------------- */
+/* ================= story dialogue: portrait, typewriter text, tap to advance (same format as the action game) ================= */
 const Dialog = {
   open: false, lines: null, i: 0, timer: null, done: null, full: '', shown: 0, cache: {},
   play(lines, onDone) {
@@ -1554,29 +2073,60 @@ const Dialog = {
 };
 $('dlg').addEventListener('pointerdown', e => { if (e.target.id !== 'dlgSkip') { e.preventDefault(); Dialog.next(); } });
 $('dlgSkip').addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); Dialog.finish(); });
+const KEYS = {};
 window.addEventListener('keydown', e => {
   if (Dialog.open) { if (['Space', 'Enter', 'KeyA', 'NumpadEnter'].includes(e.code)) { e.preventDefault(); if (!e.repeat) Dialog.next(); } else if (e.code === 'Escape') { e.preventDefault(); Dialog.finish(); } return; }
   if (!$('modal').hidden) { if (e.code === 'Escape' && !$('mClose').hidden) Modal.close(); return; }
+  if (V.active) {
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') { e.preventDefault(); V.hold = 1; KEYS.v = 1; }
+    else if (e.code === 'ArrowDown' || e.code === 'KeyS') { e.preventDefault(); V.hold = -1; KEYS.v = -1; }
+    else if ((e.code === 'Space' || e.code === 'Enter' || e.code === 'KeyA') && V.near && !e.repeat) { e.preventDefault(); talkTo(V.near.id); }
+    else if (e.code === 'KeyI' || e.code === 'KeyC') openParty();
+    else if (e.code === 'Escape') openMenu();
+    return;
+  }
   if (S.phase === 'off') return;
   if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); startWave(); }
-  else if (e.code === 'Escape') { if (S.sel || S.selCard || S.selItem) { S.sel = S.selCard = S.selItem = null; renderBottom(); } else openMenu(); }
+  else if (e.code === 'Escape') { if (S.sel || S.selCard) { S.sel = S.selCard = null; renderBottom(); } else openMenu(); }
   else if (/^Digit[1-6]$/.test(e.code)) { const cls = HEROES[+e.code.slice(5) - 1]; const tw = S.towers.find(t => t.cls === cls); if (tw) { S.sel = tw; S.selCard = null; } else { S.selCard = cls; S.sel = null; } renderBottom(); }
-  else if (e.code === 'KeyQ' && S.sel) castUlt(S.sel);
+  else if ((e.code === 'KeyQ' || e.code === 'KeyE') && S.sel) castSkill(S.sel, e.code === 'KeyQ' ? 0 : 1, true);
 });
+window.addEventListener('keyup', e => { if (V.active && ['ArrowUp', 'KeyW', 'ArrowDown', 'KeyS'].includes(e.code)) V.hold = 0; });
+
+/* ================= main loop ================= */
+let lastT = performance.now(), uiT = 0;
+const battlePaused = () => S.phase === 'off' || S.phase === 'over' || !$('modal').hidden || Dialog.open || document.hidden;
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
+  if (V.active) {
+    if ($('modal').hidden && !Dialog.open) villageStep(dt); else V.hold = 0;
+    drawVillage(now); return;
+  }
+  if (S.phase === 'off') return;
+  if (!battlePaused()) {
+    let left = dt * S.speed;
+    while (left > 0) { const d = Math.min(left, 1 / 30); step(d); left -= d; }
+    if (flashGate > 0) flashGate -= dt;
+    NpcEv.tick(dt);
+  }
+  draw(now);
+  if ((uiT -= dt) <= 0) { uiT = 0.2; updateTop(); updateLive(); }
+}
+requestAnimationFrame(frame);
 
 /* ================= phone hardening (same fixes as the action game) ================= */
-// unlock audio on the first gesture anywhere
 ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, () => { SFX.resume(); BGM.kick(); }, { passive: true }));
 const ExitGuard = {
   leaving: false,
   init() {
     try { history.pushState({ guard: 1 }, ''); } catch (e) {}
-    window.addEventListener('popstate', () => { // the phone's back gesture opens the pause menu instead of leaving
+    window.addEventListener('popstate', () => { // the phone's back gesture closes the open window or opens the menu instead of leaving
       if (this.leaving) return;
       try { history.pushState({ guard: 1 }, ''); } catch (e) {}
       if (Dialog.open) return;
       if (!$('modal').hidden) { if (!$('mClose').hidden) Modal.close(); return; }
-      if (S.phase !== 'off') openMenu();
+      openMenu();
     });
     window.addEventListener('beforeunload', e => { if (!this.leaving && (S.phase === 'wave' || S.phase === 'build')) { e.preventDefault(); e.returnValue = ''; } });
     document.addEventListener('contextmenu', e => e.preventDefault());
@@ -1589,7 +2139,7 @@ const ExitGuard = {
       const now = Date.now(), t = e.target;
       if (now - lastEnd < 350 && e.cancelable && !(t && /INPUT|TEXTAREA|SELECT/.test(t.tagName))) {
         e.preventDefault();
-        const b = t && t.closest && t.closest('button, [role=button]'); if (b && t !== cv) b.click();
+        const b = t && t.closest && t.closest('button, [role=button]'); if (b && t !== cv && t !== vc && !b.closest('#vCtl')) b.click();
       }
       lastEnd = now;
     }, { passive: false });
@@ -1597,22 +2147,22 @@ const ExitGuard = {
   }
 };
 ExitGuard.init();
-/* layout: a 9:16 frame. The keyboard / voice input squeezes the height for a moment — a sudden big height drop at the same
-   width is ignored (never re-laid out for a squeezed screen). If the page got zoomed anyway (some in-app browsers), the
-   frame is laid over exactly the part you can see. */
+/* layout: a 9:16 frame. A sudden big height drop at the same width (keyboard / voice input) is ignored; if the page got
+   zoomed anyway (some in-app browsers), the frame is laid over exactly the part you can see. */
 let lastW = 0, lastH = 0;
 function layout() {
   const vv = window.visualViewport, zoomed = vv && vv.scale > 1.02;
-  let vw = zoomed ? vv.width : window.innerWidth, vh = zoomed ? vv.height : window.innerHeight;
-  if (!zoomed && IS_TOUCH && Math.abs(vw - lastW) < 2 && vh < lastH * 0.75) vh = lastH; // keyboard squeeze
+  const vw = zoomed ? vv.width : window.innerWidth; let vh = zoomed ? vv.height : window.innerHeight;
+  if (!zoomed && IS_TOUCH && Math.abs(vw - lastW) < 2 && vh < lastH * 0.75) vh = lastH;
   lastW = vw; lastH = vh;
-  const W = Math.min(vw, Math.round(vh * 9 / 16 > vw ? vw : vh * 9 / 16)), H = vh;
+  const W = Math.min(vw, Math.round(vh * 9 / 16)), H = vh;
   const app = $('app');
   Object.assign(app.style, { width: W + 'px', height: H + 'px', left: ((zoomed ? vv.offsetLeft : 0) + (vw - W) / 2) + 'px', top: (zoomed ? vv.offsetTop : 0) + 'px' });
   app.style.setProperty('--u', (W / 540) + 'px');
-  const topH = $('top').offsetHeight, size = Math.floor(Math.min(W, H - topH - W * 0.48));
+  const topH = $('top').offsetHeight, size = Math.floor(Math.min(W, H - topH - W * 0.5));
   const f = $('field'); f.style.width = size + 'px'; f.style.height = size + 'px';
   if (Math.abs(size - CSS_S) > 1 || cv.width !== Math.round(size * Math.min(2, window.devicePixelRatio || 1))) resizeCanvas(size);
+  if (V.active) resizeVillage();
 }
 const unzoom = () => {
   const vv = window.visualViewport; if (!vv || vv.scale < 1.02) return;
@@ -1623,27 +2173,26 @@ const snapBack = () => { unzoom(); layout(); const z = window.visualViewport && 
 window.addEventListener('resize', snapBack);
 window.addEventListener('orientationchange', () => [80, 350, 900].forEach(t => setTimeout(snapBack, t)));
 if (window.visualViewport) { window.visualViewport.addEventListener('resize', snapBack); window.visualViewport.addEventListener('scroll', snapBack); }
-// leaving the page for a moment: mute, and pick things back up on return
 const awayOn = () => { BGM.stop(); SFX.suspend(); releaseTouch(); };
 const awayOff = () => { if (document.hidden) return; SFX.resume(); BGM.kick(); snapBack(); lastT = performance.now(); };
 document.addEventListener('visibilitychange', () => document.hidden ? awayOn() : awayOff());
 window.addEventListener('pagehide', awayOn);
 window.addEventListener('pageshow', awayOff);
 
-/* ---------------- testing hook: play a whole run headless with fixed placements ---------------- */
+/* ---------------- testing hooks: a whole battle headless, or advancing time while the pane is hidden ---------------- */
 window.TD = {
-  S, Save, TUNE,
+  S, Save, TUNE, V,
+  walk(dir, sec) { V.hold = dir; for (let i = 0; i < sec * 30; i++) villageStep(1 / 30); V.hold = 0; villageStep(0); drawVillage(performance.now()); return V.t.toFixed(2) + ' ' + (V.near ? V.near.id : '-'); },
   advance(sec) { for (let i = 0; i < sec * 30 && S.phase !== 'over'; i++) step(1 / 30); draw(performance.now()); updateTop(); updateLive(); return S.phase + ' w' + S.wave + ' lives ' + S.lives + ' gold ' + S.gold; },
-  sim(placements, opts) { // placements: [[cls, c, r, beforeWave]]; returns the result of a full run
+  sim(placements, opts) { // placements: [[cls, c, r]]; heroes auto-cast their two skills
     const keepSpeed = S.speed; S.sim = true; newRun(); S.sim = true; S.leakLog = [];
-    if (opts && opts.gold) S.gold = opts.gold;
-    let guard = 0; const log = [];
+    let guard = 0; const log = [], downs = {};
     while (S.phase !== 'over' && guard++ < 200000) {
-      if (S.phase === 'build') { log.push(S.lives); for (const p of placements) if ((p[3] || 0) <= S.wave) placeTower(p[0], p[1], p[2], true); startWave(); }
-      if (opts && opts.ult && S.phase === 'wave') for (const tw of S.towers) if (ultReady(tw) && alive().filter(e => Math.hypot(e.x - tw.x, e.y - tw.y) <= tw.range).length >= 3) castUlt(tw);
+      if (S.phase === 'build') { log.push(S.lives); for (const p of placements) placeTower(p[0], p[1], p[2], true); startWave(); }
+      for (const tw of S.towers) if (tw.down > 0 && !tw.__d) { tw.__d = 1; downs[tw.cls] = (downs[tw.cls] || 0) + 1; } else if (tw.down <= 0) tw.__d = 0;
       step(1 / 30);
     }
-    const res = { won: S.lives > 0, wave: S.wave, lives: S.lives, leaks: S.leaks, towers: S.towers.map(t => t.cls + ':' + Math.round(t.stats.dmg)), log: log.join(','), leakLog: (S.leakLog || []).join(' ') };
+    const res = { won: S.lives > 0, wave: S.wave, lives: S.lives, log: log.join(','), downs: JSON.stringify(downs), towers: S.towers.map(t => t.cls + ':' + Math.round(t.stats.dmg) + '/' + Math.round(t.stats.taken)).join(' ') };
     S.sim = false; S.speed = keepSpeed; S.phase = 'off'; S.towers = []; S.enemies = [];
     return res;
   }
@@ -1651,5 +2200,5 @@ window.TD = {
 
 layout();
 const fontReady = (document.fonts && document.fonts.load) ? Promise.race([document.fonts.load('900 20px "Noto Serif TC"', '全員瘋子RPG'), new Promise(r => setTimeout(r, 2500))]) : Promise.resolve();
-fontReady.then(() => { layout(); goHome(); });
+fontReady.then(() => { layout(); goVillage(); });
 </script>
