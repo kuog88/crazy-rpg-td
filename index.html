@@ -1,0 +1,1655 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#0b0d0a">
+<title>全員瘋子RPG</title>
+<meta name="description" content="全員瘋子RPG：手機直著玩的爆笑塔防。六位英雄當塔，換裝備改變攻擊方式，英雄會一直吐槽你這個主神。">
+<meta property="og:title" content="全員瘋子RPG">
+<meta property="og:description" content="手機直著玩的爆笑塔防：六位英雄當塔、裝備決定流派，英雄會吐槽主神。免安裝，打開網頁就能玩。">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap">
+<script>
+/* opened inside LINE's own browser (it zooms and squeezes the game): LINE's official switch reopens the page in the
+   phone's real browser (Safari / Chrome) */
+(function () {
+  try {
+    if (/(^|\s)Line\//i.test(navigator.userAgent) && !/openExternalBrowser/.test(location.search)) {
+      const u = new URL(location.href); u.searchParams.set('openExternalBrowser', '1'); location.replace(u.toString());
+    }
+  } catch (e) {}
+})();
+</script>
+<style>
+  :root { --bg: #0b0d0a; --fg: #e8e0c8; --gold: #c9a45c; --gold2: #e9c46a; --panel: #16120d; --panel2: #221b13; --line: #5a4a32; --muted: #a99f86; --ok: #7ddc7a; --bad: #ff7a6a; --u: 1px; color-scheme: dark; }
+  html, body { height: 100%; margin: 0; background: #050604; color: var(--fg); overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; overscroll-behavior: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+  /* touch-action is not inherited: every element must opt out of double-tap zoom itself (manipulation keeps tap and scroll) */
+  *, *::before, *::after { touch-action: manipulation; box-sizing: border-box; }
+  #app { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; overflow: hidden; display: flex; flex-direction: column; background: var(--bg); font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif; font-size: calc(var(--u) * 20); }
+  button { font: inherit; color: var(--fg); background: #3a2e1d; border: 1px solid var(--gold); border-radius: calc(var(--u) * 10); padding: calc(var(--u) * 8) calc(var(--u) * 14); cursor: pointer; }
+  button:disabled { opacity: .45; cursor: default; }
+  button.primary { background: linear-gradient(#a07a2e, #6e521c); color: #fff4d4; font-weight: 900; }
+  button.on { background: #6e521c; color: #fff4d4; }
+  /* top bar */
+  #top { flex: none; display: flex; flex-direction: column; justify-content: center; gap: calc(var(--u) * 6); padding: calc(var(--u) * 8) calc(var(--u) * 12); background: linear-gradient(#1d170f, #110e09); border-bottom: 1px solid var(--line); }
+  #top .row { display: flex; align-items: center; gap: calc(var(--u) * 10); }
+  #top .stat { display: flex; align-items: center; gap: calc(var(--u) * 6); font-weight: 900; font-size: calc(var(--u) * 24); white-space: nowrap; }
+  #top .stat img { width: calc(var(--u) * 30); height: calc(var(--u) * 30); object-fit: contain; }
+  #tWave { color: #ffe9a8; }
+  #tLives { color: #ff9a8a; }
+  #top .sp { flex: 1; }
+  #top button { padding: calc(var(--u) * 5) calc(var(--u) * 12); font-size: calc(var(--u) * 18); min-width: calc(var(--u) * 58); }
+  #tAdapt { font-size: calc(var(--u) * 16); color: #ffb36b; min-height: 1.2em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* battlefield */
+  #field { position: relative; flex: none; align-self: center; }
+  #cv { display: block; width: 100%; height: 100%; touch-action: none; }
+  #banner { position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%); padding: calc(var(--u) * 10) calc(var(--u) * 26); background: rgba(10,8,5,.82); border: 2px solid var(--gold); border-radius: calc(var(--u) * 14); color: #ffe9a8; font-weight: 900; font-size: calc(var(--u) * 30); text-align: center; white-space: pre-line; pointer-events: none; opacity: 0; transition: opacity .25s; }
+  #banner.show { opacity: 1; }
+  #toast { position: absolute; left: 50%; bottom: calc(var(--u) * 10); transform: translateX(-50%); max-width: 94%; padding: calc(var(--u) * 6) calc(var(--u) * 14); background: rgba(60,20,14,.9); border: 1px solid #ff9a6a; border-radius: calc(var(--u) * 10); color: #ffe0d0; font-size: calc(var(--u) * 18); pointer-events: none; opacity: 0; transition: opacity .2s; text-align: center; }
+  #toast.show { opacity: 1; }
+  /* bottom thumb area */
+  #bottom { flex: 1; min-height: 0; display: flex; flex-direction: column; background: linear-gradient(#16120d, #0d0a07); border-top: 1px solid var(--line); padding: calc(var(--u) * 8) calc(var(--u) * 10) max(calc(var(--u) * 10), env(safe-area-inset-bottom, 0px)); gap: calc(var(--u) * 8); }
+  #bHead { flex: none; display: flex; align-items: center; gap: calc(var(--u) * 8); min-height: calc(var(--u) * 46); }
+  #bHead .tab { padding: calc(var(--u) * 6) calc(var(--u) * 16); }
+  #bHint { flex: 1; color: var(--muted); font-size: calc(var(--u) * 16); line-height: 1.3; }
+  #bBody { flex: 1; min-height: 0; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  #bAct { flex: none; display: flex; gap: calc(var(--u) * 8); }
+  #bAct #go { flex: 1; font-size: calc(var(--u) * 26); padding: calc(var(--u) * 12); }
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(var(--u) * 8); }
+  .card { position: relative; display: flex; flex-direction: column; align-items: center; padding: calc(var(--u) * 6) calc(var(--u) * 2); background: #221b13; border: 1px solid var(--line); border-radius: calc(var(--u) * 12); font-size: calc(var(--u) * 16); line-height: 1.2; text-align: center; touch-action: none; cursor: pointer; }
+  .card img { height: calc(var(--u) * 62); max-width: 100%; object-fit: contain; pointer-events: none; }
+  .card b { font-size: calc(var(--u) * 18); }
+  .card .cost { color: var(--gold2); font-weight: 900; }
+  .card.sel { border-color: #ffe066; box-shadow: 0 0 calc(var(--u) * 12) rgba(255,224,102,.6); }
+  .card.used { opacity: .5; }
+  .card.poor .cost { color: var(--bad); }
+  .card .tag { position: absolute; top: calc(var(--u) * 4); right: calc(var(--u) * 6); font-size: calc(var(--u) * 14); color: var(--ok); }
+  /* gear icons */
+  .ic { position: relative; display: inline-flex; align-items: center; justify-content: center; width: calc(var(--u) * 64); height: calc(var(--u) * 64); border-radius: calc(var(--u) * 10); background: #120e09; border: 2px solid #777; flex: none; }
+  .ic img { width: 88%; height: 88%; object-fit: contain; pointer-events: none; }
+  .ic .pl { position: absolute; right: calc(var(--u) * 2); bottom: 0; font-size: calc(var(--u) * 14); font-weight: 900; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+  .ic.r0 { border-color: #9a9a9a; } .ic.r1 { border-color: #6fe06a; } .ic.r2 { border-color: #4aa3ff; } .ic.r3 { border-color: #c07bff; } .ic.r4 { border-color: #ff9a2e; box-shadow: 0 0 calc(var(--u) * 10) rgba(255,154,46,.6); }
+  .ic.empty { border-style: dashed; color: var(--muted); font-size: calc(var(--u) * 14); }
+  .bag { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 8); }
+  .bagit { display: flex; flex-direction: column; align-items: center; width: calc(var(--u) * 92); font-size: calc(var(--u) * 13); line-height: 1.2; text-align: center; padding: calc(var(--u) * 4) 0; border-radius: calc(var(--u) * 10); border: 1px solid transparent; cursor: pointer; }
+  .bagit.sel { border-color: #ffe066; background: #2a2214; }
+  .r0t { color: #d8d8d8; } .r1t { color: #6fe06a; } .r2t { color: #4aa3ff; } .r3t { color: #c07bff; } .r4t { color: #ff9a2e; }
+  .tdaff { color: #ffd76b; }
+  .muted { color: var(--muted); }
+  .ok { color: var(--ok); } .bad { color: var(--bad); }
+  /* tower panel */
+  .tp { display: flex; gap: calc(var(--u) * 10); }
+  .tp .por { width: calc(var(--u) * 92); height: calc(var(--u) * 100); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 10); border: 1px solid var(--line); background: #2a2016; flex: none; }
+  .tp .st { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--u) * 2) calc(var(--u) * 10); font-size: calc(var(--u) * 16); align-content: start; }
+  .tp .st b { color: #ffe9a8; }
+  .slots { display: flex; gap: calc(var(--u) * 10); margin-top: calc(var(--u) * 8); align-items: center; }
+  .slot { display: flex; align-items: center; gap: calc(var(--u) * 6); flex: 1; min-width: 0; font-size: calc(var(--u) * 14); line-height: 1.25; cursor: pointer; background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 10); padding: calc(var(--u) * 4); }
+  .slot span { overflow: hidden; }
+  .tact { margin-top: calc(var(--u) * 8); display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(var(--u) * 6); text-align: center; font-size: calc(var(--u) * 14); }
+  .tact div { background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 8); padding: calc(var(--u) * 4); }
+  .tact b { display: block; font-size: calc(var(--u) * 20); color: #ffe9a8; }
+  .sub { margin: calc(var(--u) * 10) 0 calc(var(--u) * 4); color: var(--gold2); font-weight: 900; font-size: calc(var(--u) * 16); }
+  /* windows (home, gear, results, menu) */
+  .screen { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; background: radial-gradient(ellipse at 50% 20%, #2a2215, #0b0d0a 70%); }
+  .screen[hidden], #modal[hidden], #dlg[hidden] { display: none; }
+  #home { align-items: center; justify-content: center; gap: calc(var(--u) * 16); padding: calc(var(--u) * 24); text-align: center; }
+  #home h1 { margin: 0; font-size: calc(var(--u) * 64); font-weight: 900; color: #ffe9a8; text-shadow: 0 calc(var(--u) * 4) 0 #5a3a12, 0 0 calc(var(--u) * 24) rgba(233,196,106,.5); letter-spacing: calc(var(--u) * 2); }
+  #home .heroes { display: flex; justify-content: center; align-items: flex-end; height: calc(var(--u) * 170); }
+  #home .heroes img { height: calc(var(--u) * 150); margin: 0 calc(var(--u) * -14); filter: drop-shadow(0 6px 8px #000); }
+  #home .heroes img:nth-child(3n+2) { height: calc(var(--u) * 165); }
+  #home button { width: min(100%, calc(var(--u) * 380)); font-size: calc(var(--u) * 26); padding: calc(var(--u) * 14); }
+  #home .wallet { display: flex; gap: calc(var(--u) * 20); justify-content: center; font-weight: 900; font-size: calc(var(--u) * 22); }
+  #home .wallet img { width: calc(var(--u) * 28); vertical-align: middle; }
+  #home .say { max-width: calc(var(--u) * 460); font-size: calc(var(--u) * 17); color: var(--muted); line-height: 1.5; }
+  #modal { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.6); padding: calc(var(--u) * 12); }
+  #modal .box { width: 100%; max-height: 100%; display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--gold); border-radius: calc(var(--u) * 14); overflow: hidden; }
+  #modal header { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 10) calc(var(--u) * 14); background: var(--panel2); border-bottom: 1px solid var(--line); }
+  #modal h2 { flex: 1; margin: 0; font-size: calc(var(--u) * 26); color: var(--gold2); }
+  #mBody { overflow-y: auto; padding: calc(var(--u) * 12) calc(var(--u) * 14) calc(var(--u) * 16); font-size: calc(var(--u) * 18); line-height: 1.5; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .say2 { background: var(--panel2); border-left: 3px solid var(--gold); padding: calc(var(--u) * 8) calc(var(--u) * 12); border-radius: 4px; margin-bottom: calc(var(--u) * 10); }
+  .hrow { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 8); border: 1px solid var(--line); border-radius: calc(var(--u) * 10); margin-bottom: calc(var(--u) * 8); background: #1a140e; }
+  .hrow img.hp { width: calc(var(--u) * 56); height: calc(var(--u) * 64); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 8); }
+  .hrow .nm { flex: 1; min-width: 0; font-size: calc(var(--u) * 17); line-height: 1.3; }
+  .xp { height: calc(var(--u) * 6); background: #333; border-radius: 3px; overflow: hidden; margin-top: calc(var(--u) * 3); }
+  .xp i { display: block; height: 100%; background: #e9c46a; }
+  .detail { border: 1px solid var(--gold); border-radius: calc(var(--u) * 10); padding: calc(var(--u) * 10); margin: calc(var(--u) * 8) 0; background: #1d1710; font-size: calc(var(--u) * 16); line-height: 1.45; }
+  .detail .btns { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 8); margin-top: calc(var(--u) * 8); }
+  .detail .btns button { font-size: calc(var(--u) * 16); padding: calc(var(--u) * 6) calc(var(--u) * 10); }
+  .btnrow { display: flex; gap: calc(var(--u) * 10); justify-content: center; flex-wrap: wrap; margin-top: calc(var(--u) * 12); }
+  .btnrow button { font-size: calc(var(--u) * 20); }
+  /* story dialogue: portraits above the text box (portrait screen) */
+  #dlg { position: absolute; inset: 0; z-index: 6; background: rgba(0,0,0,.35); }
+  #dlg img { position: absolute; z-index: 2; bottom: calc(var(--u) * 190); height: 44%; max-width: 56%; object-fit: contain; object-position: bottom; filter: drop-shadow(0 6px 10px #000); transition: filter .15s; }
+  #dlgL { left: 0; } #dlgR { right: 0; transform: scaleX(-1); }
+  #dlg img.dim { filter: brightness(.4) drop-shadow(0 6px 10px #000); }
+  #dlg .dbox { position: absolute; z-index: 3; left: 3%; right: 3%; bottom: max(calc(var(--u) * 16), env(safe-area-inset-bottom, 0px)); min-height: calc(var(--u) * 170); padding: calc(var(--u) * 26) calc(var(--u) * 18) calc(var(--u) * 18); background: rgba(16,12,8,.95); border: 2px solid var(--gold); border-radius: calc(var(--u) * 14); color: #f2e6c4; box-shadow: 0 8px 30px rgba(0,0,0,.6); }
+  #dlgName { position: absolute; top: calc(var(--u) * -20); left: calc(var(--u) * 14); padding: calc(var(--u) * 3) calc(var(--u) * 14); background: #3a2e1d; border: 2px solid var(--gold); border-radius: calc(var(--u) * 8); font-weight: 900; color: #ffe9a8; font-size: calc(var(--u) * 20); }
+  #dlgText { font-size: calc(var(--u) * 23); line-height: 1.6; white-space: pre-wrap; }
+  #dlg .dhint { position: absolute; right: calc(var(--u) * 14); bottom: calc(var(--u) * 6); color: #e9c46a; }
+  #dlgSkip { position: absolute; right: calc(var(--u) * 10); top: calc(var(--u) * -22); font-size: calc(var(--u) * 16); padding: calc(var(--u) * 3) calc(var(--u) * 10); background: rgba(40,30,20,.95); }
+  #ghost { position: fixed; z-index: 9; pointer-events: none; display: none; opacity: .85; transform: translate(-50%, -85%); filter: drop-shadow(0 6px 8px #000); }
+</style>
+<div id="app">
+  <div id="top">
+    <div class="row">
+      <div class="stat" id="tWave">第 0/10 波</div>
+      <div class="stat"><img src="art/items/gold.webp" alt="金幣"><span id="tGold">0</span></div>
+      <div class="stat" id="tLives">❤ 20</div>
+      <div class="sp"></div>
+      <button id="bSpeed" type="button" aria-label="遊戲速度">1x</button>
+      <button id="bFx" type="button" aria-label="極簡效能模式">特效</button>
+      <button id="bMenu" type="button" aria-label="選單">☰</button>
+    </div>
+    <div id="tAdapt"></div>
+  </div>
+  <div id="field"><canvas id="cv"></canvas><div id="banner"></div><div id="toast"></div></div>
+  <div id="bottom">
+    <div id="bHead"></div>
+    <div id="bBody"></div>
+    <div id="bAct"><button id="go" class="primary" type="button">開始第 1 波 ▶</button></div>
+  </div>
+  <div id="home" class="screen" hidden></div>
+  <div id="modal" hidden><div class="box" role="dialog" aria-modal="true" aria-labelledby="mTitle"><header><h2 id="mTitle"></h2><button id="mClose" type="button">關閉</button></header><div id="mBody"></div></div></div>
+  <div id="dlg" hidden><img id="dlgL" alt=""><img id="dlgR" alt=""><div class="dbox"><div id="dlgName"></div><div id="dlgText"></div><div class="dhint">▼</div><button id="dlgSkip" type="button">跳過 ▶▶</button></div></div>
+</div>
+<img id="ghost" alt="">
+<script>
+"use strict";
+/* ================= 全員瘋子RPG — 直式塔防 =================
+   Single file, plain Canvas 2D for the battlefield (light on phone memory), DOM for every button and window.
+   Stats, damage, items, enhancement and the dialogue format are copied from the action game (game/index.html):
+   CLASSES, deriveStats, expNext, RAR, AFFIX, WTYPES, makeItem, itemBase, enhCost, ENH_RATE, SL, Dialog, BANTER. */
+const ART = 'art/';
+const L = 540, TS = 60, COLS = 9, ROWS = 9;           // logical battlefield: 9 x 9 tiles of 60
+const IS_TOUCH = window.matchMedia('(pointer:coarse)').matches || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
+const rand = (a, b) => a + Math.random() * (b - a);
+const randi = (a, b) => Math.floor(rand(a, b + 1));
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const $ = id => document.getElementById(id);
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) { if (k === 'on') for (const ev in attrs.on) e.addEventListener(ev, attrs.on[ev]); else if (k === 'html') e.innerHTML = attrs.html; else if (attrs[k] !== false && attrs[k] != null) e.setAttribute(k, attrs[k] === true ? '' : attrs[k]); }
+  for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return e;
+}
+
+/* ---------------- data copied from the action game ---------------- */
+const CLASSES = {
+  warrior: { key: 'warrior', name: '戰士', hp: 520, mp: 120, atk: 20, cmul: 1, skills: [{ name: '旋風斬' }, { name: '衝鋒' }, { name: '破甲重擊' }, { name: '大地裂斬', cd: 45 }] },
+  mage: { key: 'mage', name: '魔法師', hp: 360, mp: 220, atk: 18, skills: [{ name: '火球' }, { name: '冰霜新星' }, { name: '奧術光束' }, { name: '隕石術', cd: 45 }] },
+  shield: { key: 'shield', name: '盾戰士', hp: 680, mp: 120, atk: 12, cmul: 0.9, skills: [{ name: '盾擊' }, { name: '嘲諷怒吼' }, { name: '盾牆' }, { name: '堡壘衝撞', cd: 45 }] },
+  paladin: { key: 'paladin', name: '聖騎士', hp: 580, mp: 170, atk: 18, cmul: 1, skills: [{ name: '聖光斬' }, { name: '治療光環' }, { name: '神聖護盾' }, { name: '審判之錘', cd: 45 }] },
+  berserker: { key: 'berserker', name: '狂戰士', hp: 600, mp: 100, atk: 21, cmul: 1.15, skills: [{ name: '雙斧連斬' }, { name: '躍擊' }, { name: '嗜血' }, { name: '狂暴化', cd: 45 }] },
+  archer: { key: 'archer', name: '弓箭手', hp: 400, mp: 150, atk: 18, skills: [{ name: '三連射' }, { name: '後躍射擊' }, { name: '爆裂箭' }, { name: '箭雨', cd: 45 }] }
+};
+const HEROES = ['warrior', 'shield', 'paladin', 'berserker', 'archer', 'mage'];
+const ENEMY = {
+  wolf: { name: '骷髏狼', hp: 135, atk: 65, speed: 195 },
+  fish: { name: '沼澤魚人', hp: 210, atk: 80, speed: 120 },
+  boss: { name: '腐根樹妖', hp: 3900, atk: 120, speed: 70 },
+  hydra: { name: '三頭海蛇', hp: 60, atk: 45, speed: 150 },
+  mud: { name: '腐爛泥巴怪', hp: 240, atk: 80, speed: 110 },
+  gargoyle: { name: '石像鬼', hp: 260, atk: 85, speed: 130, armor: 0.6 } // takes 40% less damage unless armour-broken
+};
+const MOB_HP = 0.65; // fragile swarms: normal mobs have 65% HP
+const EAFFIX = { fire: { n: '燃燒' }, frost: { n: '冰霜' }, shield: { n: '護盾' }, blink: { n: '傳送' }, frenzy: { n: '狂暴' }, summon: { n: '召喚' }, split: { n: '分裂' }, vamp: { n: '吸血' }, deathbomb: { n: '死亡爆炸' } };
+const MAX_LV = 30, SLOTS = { weapon: '武器', acc: '飾品' };
+const RAR = [
+  { n: '普通', c: '#d8d8d8', aff: 0, salvage: 1 }, { n: '優良', c: '#6fe06a', aff: 1, salvage: 2 },
+  { n: '稀有', c: '#4aa3ff', aff: 2, salvage: 3 }, { n: '史詩', c: '#c07bff', aff: 3, salvage: 5 },
+  { n: '傳說', c: '#ff9a2e', aff: 3, leg: true, salvage: 8 }
+];
+const WTYPES = {
+  warrior: [{ id: 'sword', n: '長劍', d: '均衡' }, { id: 'great', n: '雙手巨劍', d: '慢、重、範圍大' }, { id: 'spear', n: '長槍', d: '攻擊距離長' }],
+  mage: [{ id: 'staff', n: '法杖', d: '追蹤魔彈' }, { id: 'tome', n: '魔導書', d: '連射小魔彈，傷害低' }, { id: 'orb', n: '法球', d: '慢，魔彈會爆炸' }],
+  shield: [{ id: 'shsword', n: '單手劍＋盾', d: '均衡，格擋完全擋下' }, { id: 'hammer', n: '重型戰錘＋塔盾', d: '慢、範圍大、有機率暈眩' }, { id: 'shspear', n: '短矛＋小圓盾', d: '攻擊快，格擋只擋 70%' }],
+  paladin: [{ id: 'holyhammer', n: '聖錘', d: '均衡' }, { id: 'holysword', n: '雙手聖劍', d: '前後大範圍' }, { id: 'scepter', n: '權杖', d: '傷害低，普攻回血' }],
+  berserker: [{ id: 'axe', n: '巨斧', d: '均衡' }, { id: 'twin', n: '雙劍', d: '攻速快、傷害低' }, { id: 'whirlsword', n: '旋風大劍', d: '360 度圓形範圍、較慢' }],
+  archer: [{ id: 'longbow', n: '長弓', d: '均衡' }, { id: 'crossbow', n: '十字弩', d: '射速慢、傷害高、會穿透' }, { id: 'shortbow', n: '短弓', d: '射速快、傷害低' }]
+};
+const AFFIX = {
+  str: { n: '力量', min: 2, max: 6 }, agi: { n: '敏捷', min: 2, max: 6 }, int: { n: '智力', min: 2, max: 6 }, vit: { n: '體力', min: 2, max: 6 },
+  crit: { n: '暴擊率', min: 2, max: 6, pct: true }, aspd: { n: '攻速', min: 3, max: 8, pct: true }, mspd: { n: '移速', min: 3, max: 8, pct: true },
+  steal: { n: '吸血', min: 1, max: 3, pct: true }, cdr: { n: '技能冷卻縮短', min: 2, max: 5, pct: true }
+};
+const SPECIALS = { dodgeCrit: '每第 5 次攻擊必定暴擊', cdReset: '命中時 2% 機率重置大絕招冷卻' }; // legendary specials, re-read for towers
+const ENH_RATE = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
+const expNext = lv => Math.round(40 * Math.pow(1.2, lv - 1));
+const LEVEL_CAPS = [12, 18, 22, 26, 30];
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+function rollRarity(boost) {
+  // epic and legendary are rare on purpose: normal item ~1.3% epic / 0.2% legendary; boss items ~5% / ~1%
+  const w = [62, 27, 9.5, 1.3, 0.2].map((v, i) => i ? v * (1 + boost * i * 0.6) : Math.max(5, v - boost * 20));
+  let r = Math.random() * w.reduce((a, b) => a + b);
+  for (let i = 0; i < 5; i++) if ((r -= w[i]) < 0) return i;
+  return 0;
+}
+function makeItem(cls, ilvl, boost, slot, wtype, rarity) {
+  slot = slot || (Math.random() < 0.6 ? 'weapon' : 'acc'); // towers wear a weapon and an accessory
+  rarity = rarity !== undefined ? rarity : rollRarity(boost || 0);
+  const rm = 1 + rarity * 0.15;
+  const it = { id: uid(), slot, rarity, ilvl, plus: 0, spent: 0, affixes: [], cls, v: randi(0, 1) };
+  if (slot === 'weapon') { it.wtype = wtype || WTYPES[cls][randi(0, 2)].id; it.base = Math.round((8 + ilvl * 2) * rm); }
+  else if (slot === 'helm') it.base = Math.round((4 + ilvl) * rm);
+  else if (slot === 'chest') it.base = Math.round((7 + ilvl * 1.5) * rm);
+  else it.base = Math.round((30 + ilvl * 8) * rm);
+  const pool = Object.keys(AFFIX).sort(() => Math.random() - 0.5);
+  for (let i = 0; i < RAR[rarity].aff; i++) { const a = AFFIX[pool[i]]; it.affixes.push({ k: pool[i], v: randi(a.min, a.max) + Math.floor(ilvl / 5) }); }
+  if (RAR[rarity].leg) it.special = Object.keys(SPECIALS)[randi(0, 1)];
+  // tower-defence affix: from uncommon up a weapon changes how the tower attacks
+  if (slot === 'weapon' && rarity >= 1) it.td = pick(Object.keys(TDAFF));
+  return it;
+}
+const itemBase = it => Math.round(it.base * (1 + 0.1 * it.plus));
+function deriveStats(clsKey, ch) {
+  const c = CLASSES[clsKey], s = { str: ch.attr.str, agi: ch.attr.agi, int: ch.attr.int, vit: ch.attr.vit, crit: 0, aspd: 0, mspd: 0, steal: 0, cdr: 0, def: 0, hp: 0, atk: 0 };
+  const specials = new Set();
+  for (const slot in ch.equip) {
+    const it = ch.equip[slot]; if (!it) continue;
+    const b = itemBase(it);
+    if (slot === 'weapon') s.atk += b; else if (slot === 'acc') s.hp += b; else s.def += b;
+    for (const a of it.affixes) s[a.k] += a.v;
+    if (it.special) specials.add(it.special);
+  }
+  const lv = ch.lvl;
+  return { maxHp: Math.round(c.hp * (1 + 0.06 * (lv - 1)) + s.vit * 15 + s.hp), maxMp: Math.round(c.mp * (1 + 0.03 * (lv - 1))),
+    atk: Math.round(c.atk + s.atk + (lv - 1) * 1.5), def: s.def, basicMul: 1 + 0.02 * s.str, skillMul: 1 + 0.02 * s.int,
+    cdr: Math.min(0.4, 0.4 * (1 - Math.exp(-s.agi / 40)) + s.cdr / 100), crit: 0.12 + s.crit / 100, aspd: 1 + s.aspd / 100, mspd: 1 + s.mspd / 100,
+    steal: s.steal / 100, specials, wtype: ch.equip.weapon ? ch.equip.weapon.wtype : WTYPES[clsKey][0].id, skills: ch.skills.slice(), totals: s };
+}
+// enhancement gold grows x1.6 per level: +1 120 ... +10 about 8,200
+function enhCost(it) { return { crystals: Math.ceil((it.plus + 1) / 2), gold: Math.round(120 * Math.pow(1.6, it.plus) / 10) * 10 }; }
+
+/* ---------------- tower defence rules on top of those stats ---------------- */
+// how each weapon type attacks as a tower (rng in tiles, cd in seconds between attacks)
+const PROFILE = {
+  sword: { rng: 1.6, cd: 0.85, mult: 1.0, aoe: 0.9, kind: 'melee', d: '近戰，小範圍橫掃' },
+  great: { rng: 1.6, cd: 1.35, mult: 1.6, aoe: 1.2, kind: 'melee', d: '近戰，慢但範圍大' },
+  spear: { rng: 2.2, cd: 1.1, mult: 1.0, line: true, kind: 'melee', d: '長距離突刺，貫穿一整排' },
+  staff: { rng: 3.0, cd: 1.1, mult: 1.25, kind: 'bolt', d: '遠程追蹤魔彈，單體' },
+  tome: { rng: 2.8, cd: 0.45, mult: 0.5, kind: 'bolt', d: '連射小魔彈' },
+  orb: { rng: 3.0, cd: 1.8, mult: 1.3, aoe: 1.0, kind: 'bolt', d: '慢，魔彈爆炸成範圍傷害' },
+  shsword: { rng: 1.6, cd: 1.0, mult: 1.0, stun: 0.1, kind: 'melee', d: '近戰單體，10% 暈眩' },
+  hammer: { rng: 1.6, cd: 1.6, mult: 1.4, aoe: 0.9, stun: 0.25, kind: 'melee', d: '慢、範圍砸地，25% 暈眩' },
+  shspear: { rng: 1.8, cd: 0.6, mult: 0.6, kind: 'melee', d: '快速戳刺，單體' },
+  holyhammer: { rng: 2.0, cd: 1.2, mult: 1.1, aoe: 0.7, kind: 'holy', d: '聖光彈，小範圍' },
+  holysword: { rng: 1.6, cd: 1.4, mult: 1.0, aoe: 1.4, kind: 'melee', d: '近戰，超大範圍聖光斬' },
+  scepter: { rng: 2.4, cd: 1.0, mult: 0.8, aura: 0.15, kind: 'holy', d: '傷害低，旁邊的英雄攻速 +15%' },
+  axe: { rng: 1.6, cd: 0.75, mult: 1.2, kind: 'melee', d: '近戰單體，重' },
+  twin: { rng: 1.5, cd: 0.42, mult: 0.62, kind: 'melee', d: '近戰單體，超快' },
+  whirlsword: { rng: 1.6, cd: 1.2, mult: 0.95, around: true, kind: 'melee', d: '360 度，打射程內全部' },
+  longbow: { rng: 3.8, cd: 1.0, mult: 1.0, kind: 'arrow', d: '超遠程單體' },
+  crossbow: { rng: 4.0, cd: 1.7, mult: 1.9, line: true, kind: 'arrow', d: '慢、高傷，箭會貫穿一整排' },
+  shortbow: { rng: 3.4, cd: 0.55, mult: 0.6, kind: 'arrow', d: '射速快' }
+};
+const WSHORT = { sword: '長劍', great: '巨劍', spear: '長槍', staff: '法杖', tome: '魔導書', orb: '法球', shsword: '劍盾', hammer: '戰錘', shspear: '短矛', holyhammer: '聖錘', holysword: '聖劍', scepter: '權杖', axe: '巨斧', twin: '雙劍', whirlsword: '旋風劍', longbow: '長弓', crossbow: '十字弩', shortbow: '短弓' };
+// tower-defence weapon affixes: they change the attack itself, not just numbers
+const TDAFF = {
+  frost: { n: '寒冰', magic: true, d: '攻擊緩速 35%，打在水面上會把水面結凍（怪物走上去再慢 50%）' },
+  fire: { n: '烈焰', magic: true, d: '命中處的路面燃燒 4 秒，持續扣血' },
+  split: { n: '分裂', d: '一次攻擊 3 個目標（每個 70%）' },
+  pierce: { n: '破甲', d: '無視護甲和物理護盾，對菁英、魔王傷害 +60%' },
+  chain: { n: '雷鳴', magic: true, d: '閃電再彈跳 2 個敵人（每個 60%）' },
+  stun: { n: '震暈', d: '20% 機率暈眩 0.8 秒' },
+  blast: { n: '爆裂', d: '命中時小範圍爆炸（50%）' }
+};
+const DMG_TYPE = { warrior: 'phys', shield: 'phys', berserker: 'phys', archer: 'phys', mage: 'magic', paladin: 'magic' };
+const COST = { warrior: 100, shield: 90, berserker: 120, archer: 120, paladin: 140, mage: 150 };
+const ULT = {
+  warrior: '大地裂斬：周圍 2 格全體 400% 傷害並暈眩',
+  mage: '隕石術：砸向怪最多的地方，600% 範圍傷害＋燃燒',
+  shield: '堡壘衝撞：周圍 2.5 格全體暈眩 2.5 秒',
+  paladin: '審判之錘：砸血最多的怪，500% 小範圍傷害',
+  berserker: '狂暴化：10 秒內攻擊 +50%、攻速 +40%',
+  archer: '箭雨：怪最多的地方下 3 秒箭雨'
+};
+function tdStats(cls, ch) {
+  const s = deriveStats(cls, ch), t = s.totals, w = ch.equip.weapon;
+  if (ch.equip.acc) s.atk += Math.round(itemBase(ch.equip.acc) / 8); // accessory "HP" is read as attack for a tower
+  s.P = PROFILE[s.wtype];
+  s.td = w && w.td || null;
+  s.type = s.td && TDAFF[s.td].magic ? 'magic' : DMG_TYPE[cls];
+  s.eliteMul = 1 + 0.02 * t.vit;       // 體力: damage against elites and bosses
+  s.goldMul = 1 + s.steal * 10;         // 吸血: extra gold per kill
+  s.special = [...s.specials][0] || null;
+  return s;
+}
+function affLine(a) {
+  const v = a.v;
+  switch (a.k) {
+    case 'str': return `力量 +${v}（普攻 +${2 * v}%）`;
+    case 'int': return `智力 +${v}（大絕招 +${2 * v}%）`;
+    case 'agi': return `敏捷 +${v}（大絕招冷卻縮短）`;
+    case 'vit': return `體力 +${v}（對菁英、魔王 +${2 * v}%）`;
+    case 'crit': return `暴擊率 +${v}%`;
+    case 'aspd': return `攻速 +${v}%`;
+    case 'mspd': return `射程 +${v}%`;
+    case 'steal': return `擊殺金幣 +${v * 10}%`;
+    case 'cdr': return `大絕招冷卻 -${v}%`;
+  }
+  return '';
+}
+function itemName(it) {
+  const t = it.slot === 'weapon' ? (it.td ? TDAFF[it.td].n : '') + WSHORT[it.wtype] : SLOTS[it.slot];
+  return (it.plus ? '+' + it.plus + ' ' : '') + RAR[it.rarity].n + '的' + t;
+}
+function itemIcon(it) {
+  const r = it.rarity;
+  return ART + 'gear/' + it.cls + '/' + (it.slot === 'weapon' ? `w_${it.wtype}_${r}` : `acc_${r * 2 + (it.v || 0)}`) + '.webp';
+}
+function iconEl(it) {
+  if (!it) return h('div', { class: 'ic empty' }, '空');
+  return h('div', { class: 'ic r' + it.rarity }, h('img', { src: itemIcon(it), alt: itemName(it), loading: 'lazy' }), it.plus ? h('span', { class: 'pl' }, '+' + it.plus) : null);
+}
+function itemLines(it) {
+  const out = [h('div', { class: 'r' + it.rarity + 't', style: 'font-weight:900' }, itemName(it))];
+  if (it.slot === 'weapon') {
+    out.push(h('div', null, `${CLASSES[it.cls].name}專用・攻擊 +${itemBase(it)}`));
+    out.push(h('div', { class: 'muted' }, '攻擊方式：' + PROFILE[it.wtype].d));
+    if (it.td) out.push(h('div', { class: 'tdaff' }, `【${TDAFF[it.td].n}】${TDAFF[it.td].d}`));
+  } else out.push(h('div', null, `飾品（誰都能戴）・攻擊 +${Math.round(itemBase(it) / 8)}`));
+  for (const a of it.affixes) out.push(h('div', { class: 'ok' }, affLine(a)));
+  if (it.special) out.push(h('div', { class: 'r4t' }, '傳說：' + SPECIALS[it.special]));
+  return out;
+}
+
+/* ---------------- map: monsters enter at the top and walk down to the city gate ---------------- */
+// . grass (build)  H high ground (range +1)  S rune tile (attack speed +25%)  P path  W water on the path  T blocked  B gate
+const MAP = [
+  'TP..H..TT',
+  '.P......T',
+  '.PPWWPPP.',
+  '...S..HP.',
+  'T......P.',
+  '.PPPWWPP.',
+  '.P..H...T',
+  '.PPPP.S..',
+  'TT..B..TT'];
+const PATH_CELLS = [[1, -1], [1, 0], [1, 1], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [7, 3], [7, 4], [7, 5], [6, 5], [5, 5], [4, 5], [3, 5], [2, 5], [1, 5], [1, 6], [1, 7], [2, 7], [3, 7], [4, 7], [4, 8]];
+const PATH = PATH_CELLS.map(([c, r]) => ({ x: c * TS + TS / 2, y: r * TS + TS / 2 }));
+const SEG = []; let PATH_LEN = 0;
+for (let i = 1; i < PATH.length; i++) { const l = Math.hypot(PATH[i].x - PATH[i - 1].x, PATH[i].y - PATH[i - 1].y); SEG.push({ a: PATH[i - 1], b: PATH[i], l, s: PATH_LEN }); PATH_LEN += l; }
+function posAt(d) {
+  d = clamp(d, 0, PATH_LEN);
+  for (const s of SEG) if (d <= s.s + s.l) { const t = (d - s.s) / s.l; return { x: s.a.x + (s.b.x - s.a.x) * t, y: s.a.y + (s.b.y - s.a.y) * t, dx: s.b.x - s.a.x }; }
+  const e = PATH[PATH.length - 1]; return { x: e.x, y: e.y, dx: 0 };
+}
+const tileAt = (c, r) => (r >= 0 && r < ROWS && c >= 0 && c < COLS) ? MAP[r][c] : 'T';
+const buildable = ch => ch === '.' || ch === 'H' || ch === 'S';
+const cellOf = (x, y) => [Math.floor(x / TS), Math.floor(y / TS)];
+
+/* ---------------- stage 1: 迷霧森林, 10 waves ---------------- */
+// [type, count, seconds between spawns, flag]  E = elite, B = boss
+const WAVES = [
+  [['hydra', 8, 0.9]],
+  [['hydra', 10, 0.75], ['fish', 3, 1.4]],
+  [['fish', 6, 1.1], ['wolf', 6, 0.8]],
+  [['hydra', 12, 0.6], ['mud', 1, 1, 'E']],
+  [['wolf', 10, 0.65], ['fish', 6, 1.0], ['mud', 2, 2, 'E']],
+  [['hydra', 14, 0.5], ['fish', 6, 0.9], ['gargoyle', 2, 2.2, 'E']],
+  [['wolf', 12, 0.55], ['mud', 3, 1.6, 'E'], ['gargoyle', 2, 2, 'E']],
+  [['hydra', 20, 0.4], ['fish', 8, 0.8], ['mud', 2, 1.5, 'E'], ['gargoyle', 1, 1, 'E']],
+  [['fish', 12, 0.7], ['wolf', 8, 0.6], ['gargoyle', 3, 1.8, 'E'], ['mud', 2, 1.8, 'E']],
+  [['hydra', 10, 0.6], ['boss', 1, 1, 'B'], ['wolf', 6, 0.7]]
+];
+const GOLD = { hydra: 5, fish: 9, wolf: 7, mud: 30, gargoyle: 30, boss: 0 };
+const SIZE = { hydra: 50, fish: 58, wolf: 46, mud: 62, gargoyle: 62, boss: 118 }; // sprite height on the field
+const ELITE_AFF = ['shield', 'frenzy', 'vamp', 'split', 'blink', 'deathbomb', 'frost', 'summon'];
+const TUNE = { hpGrow: 0.12, hpGrow2: 0.015, boss: 0.65, crazy: 1.3, elite: 1 }; // elite: elites are the wave's wall, base x 1.3 (action game) x this
+const waveMul = w => (1 + TUNE.hpGrow * (w - 1) + TUNE.hpGrow2 * (w - 1) * (w - 1)) * Math.pow(TUNE.crazy, Save.d.crazy || 0);
+const START_GOLD = 260, MAX_LIVES = 20;
+
+/* ---------------- what the heroes say (the action game's lines plus tower-defence ones) ---------------- */
+const SL = (who, e, t) => ({ who, e, t });
+// BANTER: copied verbatim from the action game
+const BANTER = {
+  warrior: {
+    random: ['我剛剛想到一件很重要的事……啊，忘了。', '主神，你有沒有覺得我今天特別帥？沒有？那你眼睛有問題。', '聽說平行時空的我是個廚師。他一定很弱。', '老教主上次叫我「媽媽」，我好感動。', '左手拿劍，右手……右手也拿劍好了。', '我數到三就衝！一、二……我先衝了！'],
+    elite: ['哇，好多閃亮亮的怪！是不是要發獎品給我？', '菁英怪耶！主神你千萬不要手抖！', '一次來這麼多？我還沒熱身耶！'],
+    lowhp: ['主神，我覺得我的血條在跟我說再見。', '我還能打！只是眼前有三個主神在晃……', '紅藥！紅藥！你是不是忘了有紅藥這種東西！'],
+    death: ['你這個主神操控得有夠爛，當你的勇者真是慘。', '我明明想往左閃，你給我往右撞？', '下次換我操控你，看你怕不怕。', '主神，你是用腳在玩嗎？'],
+    combo: ['這連擊！主神你今天有吃藥喔！', '停不下來！我的手已經不是我的手了！'],
+    revive: ['我回來了！剛剛在天堂看到老教主年輕的樣子……好帥。', '復活的感覺好像剛睡醒，再讓我睡五分鐘……不行喔？']
+  },
+  mage: {
+    random: ['這裡的骨頭……排列得好隨便，讓人很不舒服。', '哼，我才不是在等主神誇獎我。……你倒是誇啊。', '聽說另一個時空的我是聖女。噁心。', '老教主以前教我寫第一個咒語……他現在連自己的名字都寫不出來了。', '如果我把你的手指骨收藏起來，你應該不會介意吧，主神？', '我在想，惡魔的頭骨放在床頭會不會太大顆。'],
+    elite: ['一群閃閃發光的標本……我要全部帶回家。', '菁英？不過是比較貴的骨頭。', '主神別慌，我會保護你的。……我是說保護我自己。'],
+    lowhp: ['我……我才沒有快死，只是想躺一下。', '主神，你再讓我挨打，我就把你的名字寫進詛咒書。', '藍色的藥水……不是，紅色的！快！'],
+    death: ['……你是故意的吧？你是不是故意的？', '你這種操控水準，我養的骷髏都比你會玩。', '等我變成鬼，第一個去你夢裡站著。', '哼，下次再讓我死，我就不理你了。……真的喔。'],
+    combo: ['呵……呵呵……骨頭在歌唱……', '再多一點……再多一點碎片……'],
+    revive: ['我從冥界回來了，那邊的骨頭品質比較好。', '……謝謝。哼，聽到了嗎？我只說一次。']
+  },
+  shield: {
+    random: ['主神，您的操作很有特色。……我是說很爛，對不起。', '不好意思，請問惡魔可以排隊一個一個來嗎？', '聽說深淵的惡魔說我們這邊的冒險者肉質很好。我會注意飲食的。', '老教主叫我去拿聖藥，我拿回去的時候他已經在喝葡萄汁了。', '我的盾擋得住一切，除了主神的操作。', '對不起，我剛剛在心裡罵了您三分鐘。'],
+    elite: ['啊，好多菁英……請問可以先發號碼牌嗎？', '主神，請您專心。拜託。我是說真的。', '菁英怪您好，請您輕一點打，我上有老教主下有寵物。'],
+    lowhp: ['主神，不好意思，我好像快死了，方便按一下紅藥嗎？', '我的盾很好，壞掉的是我這個人。', '對不起，我要先暈倒一下。'],
+    death: ['主神，您操控得有夠爛。……對不起，我是說非常爛。', '當您的勇者真是辛苦，我會寫進遺書裡。', '請問我可以申請換一位主神嗎？', '沒關係，我習慣了。……真的，我習慣被您害死了。'],
+    combo: ['主神！您今天好厲害！是不是換人在玩？', '這是……這就是傳說中的好操作嗎！'],
+    revive: ['謝謝您，我又可以被您害死一次了。', '復活了。請問這次可以小心一點嗎？']
+  },
+  paladin: {
+    random: ['聖光告訴我，我今天也是最帥的。', '主神，能操控我，是你這輩子最大的福報。', '聽說平行時空裡有一個不帥的我。聖光不允許。', '老教主是個好人，以前常替窮人治病。……現在他只會跟鴿子吵架。', '我的鎧甲是開過光的，弄髒要罰錢。', '聖光說，怪物也有生存權。然後聖光又說：砍了。'],
+    elite: ['一群菁英？聖光說這叫「排隊受洗」。', '別怕，主神，聖光與我同在。……你就不一定了。', '菁英怪啊，跪下，我讓你們死得聖潔一點。'],
+    lowhp: ['聖光……聖光你在哪裡？是不是收訊不好？', '主神，再這樣下去，我要向聖光投訴你。', '我快不行了，但我還是很帥，這點請記住。'],
+    death: ['聖光說：這次是主神的錯。', '你這個主神操控得有夠爛，聖光都看不下去了。', '我竟然死了？這不科學，也不聖光。', '我會在天堂替你禱告，禱告你學會閃避。'],
+    combo: ['看到了嗎？這就是被聖光眷顧的手感！', '聖光在發光！不對，是我在發光！'],
+    revive: ['聖光讓我復活了，因為世界不能沒有我的臉。', '我回來了，再次照亮你這個爛主神。']
+  },
+  berserker: {
+    random: ['這隻怪聞起來像烤雞。我可以咬一口嗎？', '聽說深淵惡魔說人類肉質很好。那惡魔的肉質呢？我想知道。', '主神，你中午吃什麼？我吃了一顆石頭，有點硬。', '老教主說聖藥喝了會長命百歲。我覺得配烤肉應該更好喝。', '砍怪很餓，餓了就想砍怪，這是一個循環。', '我剛剛吞了一隻蟲，牠還在動。'],
+    elite: ['好多大塊的！今天加菜了！', '菁英怪是不是肉比較多？我要大份的！', '來啊！一起來啊！我還沒吃飽！'],
+    lowhp: ['我快死了……死前可以先吃一隻雞腿嗎？', '血好少……好餓……這兩件事有關係嗎？', '主神！紅藥是草莓口味的嗎？快給我喝！'],
+    death: ['主神你操控得好爛，害我連最後一口都沒吃到！', '當你的勇者有夠慘，連便當都沒得吃。', '我死了，但我的肚子還在叫。', '下次你再讓我死，我就把你的滑鼠吃掉。'],
+    combo: ['砍得好爽！砍完要吃宵夜！', '停不下來！跟吃洋芋片一樣！'],
+    revive: ['我復活了！先說，我是因為肚子餓才醒的。', '天堂的食物好難吃，我回來了。']
+  },
+  archer: {
+    random: ['主神，你有沒有覺得我的側臉特別完美？', '剛剛那陣風把我的瀏海吹亂了，請你負責。', '聽說平行時空的我長得普通。那一定是假的時空。', '老教主上次說我很漂亮，然後對著一根掃把也說了一次。', '射箭的姿勢要美，命中率其次。', '這裡光線不好，不適合我。'],
+    elite: ['一群菁英？好，正好當我美照的背景。', '別讓他們靠近我的臉！其他地方都可以！', '主神，我要閃亮登場，請把鏡頭對準我。'],
+    lowhp: ['我的臉！我的臉有沒有受傷？身體不重要！', '快死了……但死前要留下一張美照。', '主神，你讓我變醜了，我會恨你一輩子。'],
+    death: ['你這個主神操控得有夠爛，害我死得一點都不美。', '至少……至少我死的姿勢很好看吧？', '當你的勇者真慘，連遺照都沒時間拍。', '主神，下次請你用心一點，就像我對待自己的臉一樣。'],
+    combo: ['看看我，連擊的時候也這麼好看。', '這麼美的連擊，應該錄下來發給全世界。'],
+    revive: ['我復活了，而且還是一樣美。', '天使看到我都自卑了，所以把我送回來。']
+  }
+};
+const BANTER_TD = {
+  warrior: {
+    place: ['這格好！我最喜歡站在這種……呃，這是哪裡？', '放我下來就對了，我數到三就開打！一、二……開打了！'],
+    far: ['主神，這裡連一隻怪都碰不到。我要用意念砍嗎？', '我的劍只有這麼長，主神你是不是忘了？'],
+    leak: ['有一隻溜過去了！我剛剛在想晚餐吃什麼！', '主神，牠從我旁邊走過去，我還跟牠打招呼……'],
+    clear: ['這波打完了！下一波！……現在是第幾波？', '我剛剛砍了幾隻？算了，反正很多！'],
+    gear: ['新武器！我要給它取名叫……長劍。', '換裝了！我覺得我變聰明了！……沒有嗎？'],
+    adapt: ['主神，那些怪好像穿了防我的衣服，好賤！', '牠們學會擋我的招了！誰教的？是不是你？'],
+    win: ['贏了！主神，這次算你操控得還行。只是還行喔。', '我們贏了！聖藥呢？……喔，還沒找到。'],
+    recall: ['收回我？我還沒砍夠耶！', '好啦好啦，我換個位置，反正我也不記得原本站哪。'],
+    ult: ['大地裂斬！……我剛剛有喊對名字嗎？', '看我的！一、二……我先砍了！']
+  },
+  mage: {
+    place: ['這裡的視野……適合觀察骨頭碎掉的樣子。', '哼，放在這裡也可以啦。……不是因為你選的喔。'],
+    far: ['主神，你把我放在這裡，是要我收藏空氣嗎？', '射程外。你連這個都不會算，手指骨借我研究一下。'],
+    leak: ['跑掉一隻……那副骨架我本來要收藏的。', '主神，你讓標本跑了。我會記住的，一輩子。'],
+    clear: ['今天的收藏又多了好幾副。呵呵。', '打完了。……你可以誇我了。快點。'],
+    gear: ['這把武器……摸起來有骨頭的質感。我喜歡。', '新裝備？哼，勉強配得上我。'],
+    adapt: ['牠們戴了抗魔護盾……主神，你是不是只會叫我放魔法？', '學乖了啊？我喜歡會反抗的骨頭。'],
+    win: ['贏了。主神，今天的你……還算可以收藏。', '呵……整片森林的骨頭都是我的了。'],
+    recall: ['把我收回去？……你是不是不要我了？', '好啦。可是你等一下要再把我放出來喔。一定喔。'],
+    ult: ['隕石術。……骨頭碎掉的聲音，好好聽。', '全部，都給我碎成收藏品。']
+  },
+  shield: {
+    place: ['不好意思，這格我就先站了，打擾了。', '謝謝主神安排，雖然我覺得這位置怪怪的，對不起。'],
+    far: ['主神，不好意思，這裡打不到任何東西……我是說您放錯了，對不起。', '請問我是來這裡當路標的嗎？'],
+    leak: ['對不起！牠跑過去了！是我的錯！……其實是您的錯，對不起。', '不好意思，請問漏掉的那隻可以算我請假嗎？'],
+    clear: ['這波結束了，謝謝大家，辛苦了。', '主神，您這波的擺法……很有特色。對不起。'],
+    gear: ['謝謝您給我新裝備，我會好好愛護它的。', '這個好重……不是抱怨，對不起。'],
+    adapt: ['牠們好像針對我們……不好意思，請問可以抗議嗎？', '主神，敵人換裝了，請問我們也可以換嗎？拜託。'],
+    win: ['我們贏了！謝謝主神！……您今天是不是換人在玩？', '贏了……我可以先暈倒一下嗎？太激動了。'],
+    recall: ['好的，我收回了，不好意思佔了那格。', '謝謝，我正想離開那裡……我是說，好的。'],
+    ult: ['堡壘衝撞！不好意思借過一下！', '對不起，我要撞你們了！真的很對不起！']
+  },
+  paladin: {
+    place: ['聖光說，這一格因為我而發光了。', '主神，你終於做了一個正確的決定：放我。'],
+    far: ['聖光照不到任何敵人。主神，你是想讓我在這裡擺姿勢嗎？', '這位置好偏，觀眾都看不到我的臉。'],
+    leak: ['有一隻沒被聖光淨化！一定是主神擋住了光。', '聖光說：漏怪的不是我。是你。'],
+    clear: ['聖光告訴我，這一波的 MVP 是我。', '打完了。主神，記得幫我寫進史詩裡。'],
+    gear: ['新裝備？還好，再貴也比不上我的臉。', '這件裝備開光過了嗎？沒有的話我自己來。'],
+    adapt: ['連怪物都知道要防聖光了。可見聖光多有名。', '牠們擋得住聖光，擋不住我的帥。……應該啦。'],
+    win: ['勝利！這是聖光的勝利，也是我臉的勝利。', '主神，能操控我贏，是你的福報。'],
+    recall: ['收回我？聖光不允許……好吧，聖光允許。', '我要換位置，因為那裡的光線不好。'],
+    ult: ['審判之錘！跪下，接受我的帥！', '聖光說：這一錘，算你們的。']
+  },
+  berserker: {
+    place: ['這裡聞起來有烤肉的味道！好位置！', '放好了！怪什麼時候來？我是說，飯什麼時候來？'],
+    far: ['主神，這裡一隻怪都沒有，那我要吃什麼？', '我咬不到任何東西！你是在虐待我嗎？'],
+    leak: ['我的宵夜跑掉了！！', '主神！那隻是雞腿味的耶！你讓牠跑了！'],
+    clear: ['打完了！有沒有便當？', '砍完了，好餓。下一波快點來，我要加菜！'],
+    gear: ['新武器！可以拿來切肉嗎？', '這把好帥，咬起來應該也不錯。'],
+    adapt: ['牠們穿了盔甲……變成罐頭了，我需要開罐器！', '主神，菜變硬了！換一把好咬的武器給我！'],
+    win: ['贏了！慶功宴在哪？我要吃十份！', '主神，這次表現不錯，賞你一根雞骨頭。'],
+    recall: ['收回我？好吧，那順便帶我去吃飯。', '換位置？那邊有吃的嗎？'],
+    ult: ['狂暴化！我現在可以吃下一頭牛！', '肚子餓的時候，我最強！']
+  },
+  archer: {
+    place: ['這個角度拍我最好看，主神眼光不錯。', '放在這裡？風會吹亂我的瀏海嗎？會的話你要負責。'],
+    far: ['主神，這裡射不到任何東西，只照得到我的美貌。', '這位置很美，但只有我美，怪都在別的地方。'],
+    leak: ['有一隻跑了！剛剛我在整理瀏海，不算！', '主神，漏怪會影響我的完美紀錄，你懂嗎？'],
+    clear: ['這一波，我射得很美。結果也不錯啦。', '打完了，先讓我補個妝。'],
+    gear: ['這把武器的顏色跟我的眼睛很配。', '新裝備！快，幫我拍一張。'],
+    adapt: ['牠們針對我們換裝了……一定是嫉妒我的臉。', '主神，敵人有防備了，換一把更好看的武器給我。'],
+    win: ['贏了！我要的不多，一張全身照就好。', '主神，這次的勝利跟我的臉一樣完美。'],
+    recall: ['收回我？好吧，正好我要補妝。', '換位置可以，那裡的光線要好喔。'],
+    ult: ['箭雨！……順便下一場美貌的雨。', '看好了，這是全世界最美的箭雨。']
+  }
+};
+const INTRO = [
+  SL('npc_trainer', 'n', '主神！你有沒有發現……畫面變成直的了？'),
+  SL('warrior', 'shock', '真的耶！我的腳是不是變短了？'),
+  SL('npc_trainer', 'n', '聽說大家都用手機直著玩，所以我們這一版改當「塔」。我在程式碼裡看到的。'),
+  SL('archer', 'angry', '當塔？站著不動？那誰要看我的走位美姿？'),
+  SL('npc_trainer', 'n', '怪物會從上面走下來。主神把你們放在路邊的格子上就好，漏一隻，城門少一條命。'),
+  SL('mage', 'n', '換武器就能換攻擊方式……寒冰法杖還能把水面結凍。呵，冰凍的骨頭。'),
+  SL('paladin', 'n', '主神放心，有我在。你只要負責不要放錯位置。'),
+  SL('shield', 'sigh', '……不好意思，我覺得那才是最難的部分。')
+];
+const SPEAKER = { warrior: '戰士', mage: '魔法師', shield: '盾戰士', paladin: '聖騎士', berserker: '狂戰士', archer: '弓箭手', boss: '腐根樹妖', elder: '聖堂老教主', npc_trainer: '技能導師', npc_smith: '鐵匠', npc_guard: '城門守衛' };
+
+/* ---------------- save (new key, so the action game's save is never touched) ---------------- */
+function newHero(cls) { return { lvl: 1, exp: 0, attr: { str: 0, agi: 0, int: 0, vit: 0 }, skills: [1, 1, 1, 1], equip: { weapon: makeItem(cls, 1, 0, 'weapon', WTYPES[cls][0].id, 0), acc: null } }; }
+function starterBag() {
+  const mk = (cls, wt, td) => { const it = makeItem(cls, 1, 0, 'weapon', wt, 1); it.td = td; return it; };
+  return [mk('mage', 'staff', 'frost'), mk('archer', 'longbow', 'split'), mk('shield', 'hammer', 'pierce'), mk('warrior', 'sword', 'fire'), makeItem('paladin', 1, 0, 'acc', null, 1)];
+}
+const BAG_MAX = 40;
+const Save = {
+  key: 'crazyrpg_td_v1', d: null,
+  load() {
+    try { const s = localStorage.getItem(this.key); this.d = s ? JSON.parse(s) : null; } catch (e) { this.d = null; }
+    if (!this.d || !this.d.heroes) this.d = { gold: 5000, crystals: 3, crazy: 0, clears: 0, heroes: {}, bag: starterBag(), seenIntro: false, music: true, lowfx: false };
+    for (const c of HEROES) if (!this.d.heroes[c]) this.d.heroes[c] = newHero(c);
+    return this.d;
+  },
+  write() { try { localStorage.setItem(this.key, JSON.stringify(this.d)); } catch (e) {} }
+};
+Save.load();
+const levelCap = () => LEVEL_CAPS[Math.min(4, Save.d.clears || 0)];
+
+/* ---------------- sound: tiny synth + the action game's music ---------------- */
+const SFX = (() => {
+  let ctx = null, master = null, last = {};
+  function init() { if (ctx) return; try { ctx = new (window.AudioContext || window.webkitAudioContext)(); master = ctx.createGain(); master.gain.value = 0.5; master.connect(ctx.destination); } catch (e) { ctx = null; } }
+  function tone(f0, f1, dur, vol, type, key, gap) {
+    if (!ctx || S.sim) return; const now = ctx.currentTime;
+    if (key) { if (last[key] && now - last[key] < (gap || 0.05)) return; last[key] = now; }
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.type = type || 'square';
+    o.frequency.setValueAtTime(f0, now); o.frequency.exponentialRampToValueAtTime(Math.max(30, f1), now + dur);
+    g.gain.setValueAtTime(vol, now); g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+    o.connect(g); g.connect(master); o.start(now); o.stop(now + dur + 0.02);
+  }
+  return {
+    init, resume() { init(); if (ctx && ctx.state === 'suspended') ctx.resume(); }, suspend() { if (ctx && ctx.state === 'running') ctx.suspend(); },
+    shoot() { tone(900, 500, 0.06, 0.05, 'triangle', 'shoot', 0.06); },
+    hit() { tone(300, 90, 0.08, 0.08, 'square', 'hit', 0.05); },
+    kill() { tone(500, 1000, 0.08, 0.07, 'square', 'kill', 0.06); },
+    coin() { tone(1200, 1800, 0.08, 0.08, 'sine', 'coin', 0.08); },
+    leak() { tone(200, 60, 0.4, 0.25, 'sawtooth'); },
+    place() { tone(400, 800, 0.12, 0.15, 'triangle'); },
+    wave() { tone(520, 520, 0.1, 0.15, 'square'); setTimeout(() => tone(780, 780, 0.16, 0.15, 'square'), 120); },
+    ult() { tone(120, 900, 0.5, 0.2, 'sawtooth'); },
+    bad() { tone(220, 160, 0.15, 0.12, 'square'); },
+    win() { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => tone(f, f, 0.2, 0.15, 'square'), i * 140)); },
+    tick() { tone(1500, 1500, 0.015, 0.03, 'square', 'tick', 0.03); }
+  };
+})();
+const BGM = {
+  a: null, cur: '',
+  play(name) {
+    this.cur = name; if (!Save.d.music) { this.stop(); return; }
+    const src = ART + 'bgm/' + name + '.mp3';
+    if (!this.a) { this.a = new Audio(); this.a.loop = true; this.a.volume = 0.35; }
+    if (!this.a.src.endsWith(src.replace('../', ''))) this.a.src = src;
+    const p = this.a.play(); if (p && p.catch) p.catch(() => {});
+  },
+  stop() { if (this.a) this.a.pause(); },
+  kick() { if (this.cur && Save.d.music && this.a && this.a.paused) { const p = this.a.play(); if (p && p.catch) p.catch(() => {}); } }
+};
+
+/* ---------------- images (single static sprites: light on phone memory, no big animation sheets) ---------------- */
+const IMG = {};
+function img(key, src) { if (!IMG[key]) { const i = new Image(); i.decoding = 'async'; i.src = src; IMG[key] = i; } return IMG[key]; }
+const ready = i => i && i.complete && i.naturalWidth > 0;
+for (const c of HEROES) img(c, ART + c + '.webp');
+for (const k in ENEMY) img(k, ART + k + '.webp');
+for (let i = 0; i < 4; i++) img('prop' + i, ART + 'props/forest_' + i + '.webp');
+
+/* ================= battle state ================= */
+const S = { phase: 'off' };
+function newRun() {
+  Object.assign(S, {
+    phase: 'build', wave: 0, gold: START_GOLD, lives: MAX_LIVES, maxLives: MAX_LIVES, towers: [], enemies: [], projs: [], fxs: [], floats: [], zones: [], tiles: {},
+    queue: [], qT: 0, ws: { phys: 0, magic: 0, cc: 0, spawned: 0 }, adapt: { phys: false, magic: false, cc: false }, t: 0, speed: S.speed || 1,
+    lowWarned: false, sel: null, selCard: null, selItem: null, hover: null, idleT: 8, lastSay: -99, ended: false, leaks: 0, buffT: 0, sim: !!S.sim
+  });
+}
+const heroCh = cls => Save.d.heroes[cls];
+function towerAt(c, r) { return S.towers.find(t => t.c === c && t.r === r); }
+function refreshTower(tw) {
+  tw.st = tdStats(tw.cls, heroCh(tw.cls));
+  const tile = tileAt(tw.c, tw.r);
+  tw.high = tile === 'H'; tw.haste = tile === 'S';
+  tw.range = tw.st.P.rng * TS * tw.st.mspd + (tw.high ? TS : 0);
+}
+function canReach(tw) { return PATH.some(p => Math.hypot(p.x - tw.x, p.y - tw.y) <= tw.range); }
+function placeTower(cls, c, r, quiet) {
+  if (S.phase === 'off' || S.phase === 'over') return false;
+  if (!buildable(tileAt(c, r))) return quiet ? false : toast('這格不能放英雄（路上、樹、石頭都不行）');
+  if (towerAt(c, r)) return quiet ? false : toast('這格已經有人了');
+  if (S.towers.some(t => t.cls === cls)) return quiet ? false : toast(CLASSES[cls].name + '已經上場了');
+  if (S.gold < COST[cls]) return quiet ? false : toast('金幣不夠：' + CLASSES[cls].name + '要 ' + COST[cls]);
+  S.gold -= COST[cls];
+  const tw = { cls, c, r, x: c * TS + TS / 2, y: r * TS + TS / 2, cd: 0.3, ultCd: 0, stunT: 0, frenzyT: 0, anim: 0, face: 1, bubble: null, kills: [], comboT: -99, paid: COST[cls],
+    stats: { dmg: 0, over: 0, cc: 0, wDmg: 0, wOver: 0, wCc: 0 } };
+  refreshTower(tw);
+  S.towers.push(tw);
+  if (!S.sim) {
+    SFX.place(); S.selCard = null;
+    if (!canReach(tw)) say(tw, pick(BANTER_TD[cls].far), true);
+    else say(tw, pick(BANTER_TD[cls].place), true);
+    renderBottom();
+  }
+  return true;
+}
+function recallTower(tw) {
+  if (S.phase !== 'build') return toast('波次進行中不能收回（波次之間收回 100% 退款）');
+  S.gold += tw.paid; S.towers.splice(S.towers.indexOf(tw), 1);
+  if (S.sel === tw) S.sel = null;
+  const other = S.towers.length ? pick(S.towers) : null;
+  if (other) say(other, pick(BANTER_TD[tw.cls].recall).replace(/^/, ''), true);
+  floatText(tw.x, tw.y - 30, '+' + tw.paid + ' 金', '#ffd76b', 22);
+  toast(CLASSES[tw.cls].name + '收回了，退還 ' + tw.paid + ' 金幣');
+  renderBottom();
+}
+/* equipment: a weapon only fits its own class, an accessory fits anyone; swapping only between waves */
+function canEquip(it, cls) { return it.slot === 'acc' || it.cls === cls; }
+function equipItem(it, cls) {
+  if (S.phase === 'wave') return toast('波次進行中不能換裝，打完這波再換');
+  if (!canEquip(it, cls)) return toast('這是' + CLASSES[it.cls].name + '的武器');
+  const ch = heroCh(cls), bag = Save.d.bag, i = bag.indexOf(it);
+  if (i < 0) return;
+  bag.splice(i, 1);
+  const old = ch.equip[it.slot]; if (old) bag.push(old);
+  ch.equip[it.slot] = it; Save.write();
+  const tw = S.towers.find(t => t.cls === cls);
+  if (tw) { refreshTower(tw); say(tw, pick(BANTER_TD[cls].gear), true); }
+  S.selItem = null;
+  return true;
+}
+function unequip(cls, slot) {
+  if (S.phase === 'wave') return toast('波次進行中不能換裝');
+  const ch = heroCh(cls), it = ch.equip[slot]; if (!it) return;
+  if (Save.d.bag.length >= BAG_MAX) return toast('背包滿了');
+  ch.equip[slot] = null; Save.d.bag.push(it); Save.write();
+  const tw = S.towers.find(t => t.cls === cls); if (tw) refreshTower(tw);
+}
+
+/* ---------------- waves ---------------- */
+function startWave() {
+  if (S.phase !== 'build' || S.wave >= WAVES.length) return;
+  S.wave++; S.phase = 'wave'; S.qT = 0; S.queue = []; S.sel = S.sel; S.selItem = null;
+  for (const tw of S.towers) { tw.stats.wDmg = tw.stats.wOver = tw.stats.wCc = 0; }
+  S.ws = { phys: 0, magic: 0, cc: 0, spawned: 0 };
+  let t = 0, elite = false, boss = false;
+  for (const [type, n, gap, flag] of WAVES[S.wave - 1]) {
+    for (let i = 0; i < n; i++) { S.queue.push({ at: t, type, elite: flag === 'E', boss: flag === 'B' }); t += gap; }
+    t += 1.5; if (flag === 'E') elite = true; if (flag === 'B') boss = true;
+  }
+  if (S.sim) return;
+  SFX.wave();
+  banner(boss ? '最終波：魔王來了！' : '第 ' + S.wave + ' 波' + (elite ? '\n菁英來襲' : ''), 1.6);
+  if (boss) { BGM.play('boss'); Dialog.play([SL('boss', 'n', '老頭子的命，撐不過這個冬天。'), SL(S.towers.length ? S.towers[0].cls : 'warrior', 'angry', '主神！樹在講話！樹在講話！')]); }
+  else if (elite && S.towers.length) { const tw = pick(S.towers); say(tw, pick(BANTER[tw.cls].elite), true); }
+  renderBottom();
+}
+function spawn(type, elite, boss, at) {
+  const b = ENEMY[type], m = waveMul(S.wave);
+  const hp = Math.round(b.hp * (boss ? TUNE.boss : elite ? 1.3 * TUNE.elite : MOB_HP) * m);
+  const e = { type, elite, boss, hp, maxHp: hp, d: at || 0, spd: b.speed / 150 * 0.9 * TS, armor: b.armor || 0, shield: 0, aff: [], slowT: 0, slowF: 0, stunT: 0,
+    x: PATH[0].x, y: PATH[0].y, dx: 0, gold: GOLD[type] * (elite ? 1 : 1), timers: { blink: 4, summon: 6 }, flash: 0, id: Math.random() };
+  if (elite) {
+    const pool = ELITE_AFF.slice().sort(() => Math.random() - 0.5);
+    e.aff = pool.slice(0, (Save.d.crazy || 0) >= 2 ? randi(1, 2) : 1); // one affix on the first clear, up to two later
+    if (e.aff.includes('shield')) e.shield = Math.round(hp * 0.4);
+  }
+  // the enemy adapts: whatever the god leaned on last wave, part of this wave is shielded against it
+  const ad = S.adapt, roll = boss ? 0 : Math.random();
+  if (ad.phys && roll < 0.45) e.physShield = true;
+  if (ad.magic && roll < 0.45) e.magShield = true;
+  if (ad.cc && (boss || Math.random() < 0.4)) e.ccImmune = true;
+  const p = posAt(e.d); e.x = p.x; e.y = p.y;
+  S.enemies.push(e); S.ws.spawned++;
+  return e;
+}
+function waveCleared() {
+  const bonus = 40 + 10 * S.wave;
+  S.gold += bonus; S.phase = 'build';
+  for (const k in S.tiles) { S.tiles[k].burn = 0; S.tiles[k].freeze = 0; }
+  // read what the god relied on this wave → next wave adapts
+  const tot = S.ws.phys + S.ws.magic, share = tot ? S.ws.phys / tot : 0.5;
+  // the first two waves are a warm-up: the enemy only starts adapting from wave 3
+  S.adapt = S.wave < 2 ? { phys: false, magic: false, cc: false } : { phys: share >= 0.7, magic: share <= 0.3, cc: S.ws.spawned > 0 && S.ws.cc / S.ws.spawned >= 1.6 };
+  if (S.wave >= WAVES.length) { endRun(true); return; }
+  if (S.sim) return;
+  const msgs = adaptText();
+  banner('第 ' + S.wave + ' 波完成！ +' + bonus + ' 金' + (msgs ? '\n敵人學乖了：' + msgs : ''), msgs ? 2.6 : 1.6);
+  SFX.coin();
+  if (S.towers.length) {
+    const tw = pick(S.towers);
+    if (msgs) {
+      const hit = S.towers.find(t => (S.adapt.phys && t.st.type === 'phys') || (S.adapt.magic && t.st.type === 'magic')) || tw;
+      say(hit, pick(BANTER_TD[hit.cls].adapt), true);
+    } else say(tw, pick(BANTER_TD[tw.cls].clear), true);
+  }
+  S.idleT = 10;
+  renderBottom();
+}
+function adaptText() {
+  const a = [];
+  if (S.adapt.phys) a.push('物理護盾');
+  if (S.adapt.magic) a.push('魔法護盾');
+  if (S.adapt.cc) a.push('免控');
+  return a.join('、');
+}
+
+/* ---------------- combat ---------------- */
+function inRange(tw, e) { return Math.hypot(e.x - tw.x, e.y - tw.y) <= tw.range + 14; }
+function alive() { return S.enemies.filter(e => !e.dead); }
+function hit(tw, e, mult, o) {
+  if (e.dead) return 0;
+  o = o || {};
+  const st = tw.st;
+  let d = st.atk * mult * rand(0.9, 1.1) * (o.skill ? st.skillMul * (1 + 0.12 * (st.skills[3] - 1)) : st.basicMul) * (CLASSES[tw.cls].cmul || 1);
+  let crit = Math.random() < st.crit;
+  if (st.special === 'dodgeCrit' && !o.secondary && !o.skill) { tw.n5 = (tw.n5 || 0) + 1; if (tw.n5 >= 5) { tw.n5 = 0; crit = true; } }
+  if (crit) d *= 1.8;
+  const pierce = st.td === 'pierce';
+  if (e.elite || e.boss) { d *= st.eliteMul; if (pierce) d *= 1.6; }
+  if (tw.cls === 'berserker') d *= 1 + 0.6 * (1 - S.lives / S.maxLives); // 血怒: the lower the gate's lives, the harder he hits
+  if (tw.frenzyT > 0) d *= 1.5;
+  if (e.armor && !pierce) d *= e.armor;
+  const type = o.type || st.type;
+  if (type === 'phys' && e.physShield && !pierce) d *= 0.35;
+  if (type === 'magic' && e.magShield) d *= 0.35;
+  return applyDmg(tw, e, d, type, crit);
+}
+function applyDmg(tw, e, d, type, crit) {
+  if (e.dead) return 0;
+  d = Math.max(1, Math.round(d));
+  let rem = d;
+  if (e.shield > 0) { const a = Math.min(e.shield, rem); e.shield -= a; rem -= a; }
+  const real = Math.min(rem, e.hp), over = rem - real;
+  e.hp -= real; e.flash = 0.08;
+  const dealt = d - over;
+  if (tw) { tw.stats.dmg += dealt; tw.stats.wDmg += dealt; tw.stats.over += over; tw.stats.wOver += over; }
+  S.ws[type] += dealt;
+  if (!S.sim && !Save.d.lowfx && (crit || d >= 8)) floatText(e.x + rand(-8, 8), e.y - SIZE[e.type] * 0.6, String(d), crit ? '#ffd23a' : type === 'magic' ? '#c9b6ff' : '#ffffff', crit ? 22 : 16);
+  if (e.hp <= 0) kill(e, tw);
+  return dealt;
+}
+function slow(tw, e, f, dur) {
+  if (e.ccImmune || e.dead) return;
+  const was = e.slowT > 0, gain = Math.max(0, dur - e.slowT); e.slowT = Math.max(e.slowT, dur); e.slowF = was ? Math.max(e.slowF, f) : f;
+  if (tw) { tw.stats.cc += gain; tw.stats.wCc += gain; } S.ws.cc += gain;
+}
+function stun(tw, e, dur) {
+  if (e.ccImmune || e.dead) return;
+  const gain = Math.max(0, dur - e.stunT); e.stunT = Math.max(e.stunT, dur);
+  if (tw) { tw.stats.cc += gain; tw.stats.wCc += gain; } S.ws.cc += gain;
+}
+function tileState(c, r) { const k = c + ',' + r; return S.tiles[k] || (S.tiles[k] = { burn: 0, freeze: 0, burnDps: 0, by: null }); }
+function onHitFx(tw, e, primary) {
+  const st = tw.st, P = st.P;
+  if (P.stun && Math.random() < P.stun) stun(tw, e, 0.8);
+  if (st.td === 'frost') {
+    slow(tw, e, 0.35, 1.5);
+    if (primary) { const [c, r] = cellOf(e.x, e.y); if (tileAt(c, r) === 'W') { const ts = tileState(c, r); ts.freeze = 8; ts.by = tw; } }
+  }
+  if (st.td === 'stun' && Math.random() < 0.2) stun(tw, e, 0.8);
+  if (!primary) return;
+  if (st.td === 'fire') { const [c, r] = cellOf(e.x, e.y); const ch = tileAt(c, r); if (ch === 'P' || ch === 'W' || ch === 'B') { const ts = tileState(c, r); ts.burn = 4; ts.burnDps = st.atk * 0.35; ts.by = tw; } }
+  if (st.td === 'chain') {
+    let from = e; const done = new Set([e]);
+    for (let i = 0; i < 2; i++) {
+      const nx = alive().filter(o => !done.has(o) && Math.hypot(o.x - from.x, o.y - from.y) < TS * 1.6).sort((a, b) => Math.hypot(a.x - from.x, a.y - from.y) - Math.hypot(b.x - from.x, b.y - from.y))[0];
+      if (!nx) break;
+      fx({ kind: 'zap', x: from.x, y: from.y - 20, x2: nx.x, y2: nx.y - 20, t: 0.2 });
+      hit(tw, nx, 0.6, { secondary: true }); done.add(nx); from = nx;
+    }
+  }
+  if (st.td === 'blast') { fx({ kind: 'boom', x: e.x, y: e.y, r: TS * 0.8, t: 0.3, c: '#ffb24a' }); for (const o of alive()) if (o !== e && Math.hypot(o.x - e.x, o.y - e.y) < TS * 0.8) hit(tw, o, 0.5, { secondary: true }); }
+  if (st.special === 'cdReset' && Math.random() < 0.02) tw.ultCd = 0;
+}
+// one attack landing on its target (melee immediately, ranged when the projectile arrives)
+function land(tw, e, mult, at) {
+  const P = tw.st.P;
+  const near = P.aoe ? alive().filter(o => o !== e && Math.hypot(o.x - (at ? at.x : e.x), o.y - (at ? at.y : e.y)) < P.aoe * TS) : [];
+  if (e && !e.dead) { hit(tw, e, mult); onHitFx(tw, e, true); }
+  for (const o of near) { hit(tw, o, mult, { secondary: true }); onHitFx(tw, o, false); }
+  if (P.aoe && !S.sim && !Save.d.lowfx) fx({ kind: 'boom', x: at ? at.x : e.x, y: at ? at.y : e.y, r: P.aoe * TS, t: 0.25, c: tw.st.type === 'magic' ? '#b48cff' : '#ffe2a0' });
+}
+function fire(tw, tgt) {
+  const st = tw.st, P = st.P;
+  tw.anim = 0.22; tw.face = tgt.x < tw.x ? -1 : 1;
+  if (P.line) { // spear / crossbow: everything on the line to the edge of range
+    const dx = tgt.x - tw.x, dy = tgt.y - tw.y, l = Math.hypot(dx, dy) || 1, ux = dx / l, uy = dy / l;
+    const hits = alive().filter(o => { const px = o.x - tw.x, py = o.y - tw.y, along = px * ux + py * uy; return along > -10 && along < tw.range + 20 && Math.abs(px * uy - py * ux) < TS * 0.45; });
+    fx({ kind: 'line', x: tw.x, y: tw.y - 20, x2: tw.x + ux * tw.range, y2: tw.y - 20 + uy * tw.range, t: 0.18, c: P.kind === 'arrow' ? '#f5f0d0' : '#ffe2a0' });
+    hits.forEach((o, i) => { hit(tw, o, P.mult, { secondary: i > 0 }); onHitFx(tw, o, o === tgt); });
+    SFX.shoot(); return;
+  }
+  let targets = [tgt];
+  if (P.around) targets = alive().filter(o => inRange(tw, o));
+  else if (st.td === 'split') targets = [tgt, ...alive().filter(o => o !== tgt && inRange(tw, o)).sort((a, b) => b.d - a.d).slice(0, 2)];
+  const m = st.td === 'split' && !P.around ? P.mult * 0.7 : P.mult;
+  if (P.around) fx({ kind: 'ring', x: tw.x, y: tw.y, r: tw.range, t: 0.25, c: '#ffcf80' });
+  for (const e of targets) {
+    if (P.kind === 'melee') {
+      if (!P.around) fx({ kind: 'slash', x: e.x, y: e.y - 18, t: 0.18, c: st.td === 'frost' ? '#9fe8ff' : st.td === 'fire' ? '#ff9a4a' : '#ffffff', a: Math.random() * 6 });
+      if (P.around) { hit(tw, e, m); onHitFx(tw, e, true); } else land(tw, e, m);
+      SFX.hit();
+    } else {
+      const col = st.td === 'frost' ? '#8fe6ff' : st.td === 'fire' ? '#ff8a3a' : st.td === 'chain' ? '#fff27a' : P.kind === 'holy' ? '#ffe9a0' : P.kind === 'bolt' ? '#c79bff' : '#f5f0d0';
+      S.projs.push({ tw, e, m, x: tw.x + tw.face * 10, y: tw.y - 34, tx: e.x, ty: e.y - 20, kind: P.kind, col });
+      SFX.shoot();
+    }
+  }
+}
+function kill(e, tw) {
+  if (e.dead) return; e.dead = true;
+  const g = Math.round(e.gold * (tw ? tw.st.goldMul : 1));
+  S.gold += g;
+  if (!S.sim) {
+    SFX.kill();
+    if (g > 0 && !Save.d.lowfx) floatText(e.x, e.y - 10, '+' + g, '#ffd76b', 15);
+    if (!Save.d.lowfx) for (let i = 0; i < (e.boss ? 30 : 7); i++) S.fxs.push({ kind: 'spark', x: e.x, y: e.y - 20, vx: rand(-90, 90), vy: rand(-140, 10), t: rand(0.3, 0.6), c: e.elite || e.boss ? '#ffcf5a' : '#cfe8b0' });
+  }
+  if (tw) { // combo banter: four kills inside ~1.2 s
+    tw.kills.push(S.t); while (tw.kills.length && S.t - tw.kills[0] > 1.2) tw.kills.shift();
+    if (tw.kills.length >= 4 && S.t - tw.comboT > 20) { tw.comboT = S.t; say(tw, pick(BANTER[tw.cls].combo)); }
+  }
+  if (e.aff.includes('split')) for (let i = 0; i < 2; i++) { const c = spawn('hydra', false, false, Math.max(0, e.d - 10 - i * 14)); c.hp = c.maxHp = Math.round(e.maxHp * 0.15); c.gold = 2; }
+  if (e.aff.includes('deathbomb')) {
+    fx({ kind: 'boom', x: e.x, y: e.y, r: TS * 1.5, t: 0.4, c: '#ff5a3a' });
+    for (const t of S.towers) if (Math.hypot(t.x - e.x, t.y - e.y) < TS * 1.5) { t.stunT = Math.max(t.stunT, 1.5); say(t, '……我被炸暈了。主神，你是不是沒看到牠身上寫著「死亡爆炸」？'); }
+  }
+  if (e.boss && !S.sim) banner('腐根樹妖倒下了！', 1.6);
+}
+function leak(e) {
+  e.dead = true; e.leaked = true;
+  const loss = e.boss ? 5 : e.elite ? 2 : 1;
+  S.lives = Math.max(0, S.lives - loss); S.leaks++;
+  (S.leakLog || (S.leakLog = [])).push(S.wave + ':' + e.type + (e.elite ? 'E' : '') + (e.physShield ? 'p' : '') + (e.magShield ? 'm' : ''));
+  if (S.sim) return;
+  SFX.leak(); flashGate = 0.5;
+  floatText(PATH[PATH.length - 1].x, PATH[PATH.length - 1].y - 40, '-' + loss + ' ❤', '#ff6a5a', 24);
+  if (S.towers.length) { const tw = pick(S.towers); say(tw, pick(BANTER_TD[tw.cls].leak)); }
+  if (!S.lowWarned && S.lives <= 6 && S.lives > 0 && S.towers.length) { S.lowWarned = true; const tw = pick(S.towers); say(tw, pick(BANTER[tw.cls].lowhp), true); }
+}
+function ultReady(tw) { return tw.ultCd <= 0 && tw.stunT <= 0; }
+function densest(list, r) { let best = null, bn = 0; for (const e of list) { const n = list.filter(o => Math.hypot(o.x - e.x, o.y - e.y) < r).length; if (n > bn) { bn = n; best = e; } } return best; }
+function castUlt(tw) {
+  if (S.phase !== 'wave') return toast('大絕招要在波次中放');
+  if (!ultReady(tw)) return toast('大絕招還在冷卻');
+  const st = tw.st, list = alive().filter(e => Math.hypot(e.x - tw.x, e.y - tw.y) <= tw.range + TS);
+  if (tw.cls !== 'berserker' && !list.length) return toast('射程附近沒有怪');
+  tw.ultCd = 45 * (1 - st.cdr); tw.anim = 0.4;
+  SFX.ult(); say(tw, pick(BANTER_TD[tw.cls].ult), true);
+  const area = (x, y, r, mult, extra) => { for (const e of alive()) if (Math.hypot(e.x - x, e.y - y) < r) { hit(tw, e, mult, { skill: true }); if (extra) extra(e); } };
+  switch (tw.cls) {
+    case 'warrior': fx({ kind: 'boom', x: tw.x, y: tw.y, r: TS * 2.2, t: 0.5, c: '#ffb070' }); area(tw.x, tw.y, TS * 2.2, 4, e => stun(tw, e, 0.6)); break;
+    case 'shield': fx({ kind: 'boom', x: tw.x, y: tw.y, r: TS * 2.5, t: 0.5, c: '#a8c8ff' }); area(tw.x, tw.y, TS * 2.5, 2, e => stun(tw, e, 2.5)); break;
+    case 'mage': { const t = densest(list, TS * 1.3); S.zones.push({ kind: 'meteor', tw, x: t.x, y: t.y, delay: 0.6 }); break; }
+    case 'paladin': { const t = list.slice().sort((a, b) => b.hp - a.hp)[0]; fx({ kind: 'pillar', x: t.x, y: t.y, t: 0.6, c: '#ffe9a0' }); area(t.x, t.y, TS * 1.0, 5); break; }
+    case 'berserker': tw.frenzyT = 10; break;
+    case 'archer': { const t = densest(list, TS * 1.2); S.zones.push({ kind: 'rain', tw, x: t.x, y: t.y, left: 3, tick: 0 }); break; }
+  }
+  renderBottom();
+}
+
+/* ---------------- simulation step ---------------- */
+function step(dt) {
+  if (S.phase !== 'wave' && S.phase !== 'build') return;
+  S.t += dt;
+  if (S.buffT > 0) S.buffT -= dt;
+  // spawning
+  if (S.phase === 'wave') {
+    S.qT += dt;
+    while (S.queue.length && S.queue[0].at <= S.qT) { const q = S.queue.shift(); spawn(q.type, q.elite, q.boss); }
+  }
+  // tiles
+  for (const k in S.tiles) { const ts = S.tiles[k]; if (ts.burn > 0) ts.burn -= dt; if (ts.freeze > 0) ts.freeze -= dt; }
+  // enemies
+  for (const e of S.enemies) {
+    if (e.dead) continue;
+    if (e.flash > 0) e.flash -= dt;
+    const [c, r] = cellOf(e.x, e.y), ts = S.tiles[c + ',' + r];
+    if (ts && ts.burn > 0) applyDmg(ts.by, e, ts.burnDps * dt * (e.magShield ? 0.35 : 1) + 0.0001, 'magic', false);
+    if (e.dead) continue;
+    if (e.aff.includes('vamp')) e.hp = Math.min(e.maxHp, e.hp + e.maxHp * 0.02 * dt);
+    if (e.slowT > 0) e.slowT -= dt;
+    if (e.stunT > 0) { e.stunT -= dt; continue; }
+    let sp = e.spd;
+    if (e.slowT > 0 && !e.ccImmune) sp *= 1 - e.slowF;
+    if (ts && ts.freeze > 0 && !e.ccImmune) { sp *= 0.5; if (ts.by) { ts.by.stats.cc += dt; ts.by.stats.wCc += dt; } S.ws.cc += dt; }
+    if (e.aff.includes('frenzy') && e.hp < e.maxHp * 0.5) sp *= 1.4;
+    if (e.aff.includes('blink') && (e.timers.blink -= dt) <= 0) { e.timers.blink = 4; e.d += TS * 1.2; if (!S.sim) fx({ kind: 'ring', x: e.x, y: e.y, r: 20, t: 0.3, c: '#c08cff' }); }
+    if (e.aff.includes('summon') && (e.timers.summon -= dt) <= 0) { e.timers.summon = 6; spawn('hydra', false, false, Math.max(0, e.d - 20)); }
+    e.d += sp * dt;
+    if (e.d >= PATH_LEN) { leak(e); continue; }
+    const p = posAt(e.d); e.x = p.x; e.y = p.y; if (p.dx) e.dx = p.dx;
+  }
+  // towers
+  for (const tw of S.towers) {
+    if (tw.anim > 0) tw.anim -= dt;
+    if (tw.bubble && (tw.bubble.t -= dt / Math.max(1, S.speed)) <= 0) tw.bubble = null;
+    if (tw.ultCd > 0) tw.ultCd -= dt;
+    if (tw.frenzyT > 0) tw.frenzyT -= dt;
+    if (tw.stunT > 0) { tw.stunT -= dt; continue; }
+    if (S.phase !== 'wave') continue;
+    tw.cd -= dt;
+    if (tw.cd > 0) continue;
+    let best = null;
+    for (const e of S.enemies) if (!e.dead && inRange(tw, e) && (!best || e.d > best.d)) best = e;
+    if (!best) { tw.cd = 0; continue; }
+    fire(tw, best);
+    let as = tw.st.aspd * (tw.haste ? 1.25 : 1) * (tw.frenzyT > 0 ? 1.4 : 1) * (S.buffT > 0 ? 1.3 : 1);
+    for (const o of S.towers) if (o !== tw && o.st.P.aura && Math.hypot(o.x - tw.x, o.y - tw.y) < TS * 1.6) as *= 1 + o.st.P.aura;
+    for (const e of S.enemies) if (!e.dead && e.aff.includes('frost') && Math.hypot(e.x - tw.x, e.y - tw.y) < TS * 1.5) { as *= 0.7; break; }
+    tw.cd = tw.st.P.cd / as;
+  }
+  // projectiles
+  for (const p of S.projs) {
+    if (p.e && !p.e.dead) { p.tx = p.e.x; p.ty = p.e.y - 20; }
+    const dx = p.tx - p.x, dy = p.ty - p.y, l = Math.hypot(dx, dy), mv = 720 * dt;
+    if (l <= mv + 4) { p.done = true; if (p.e && !p.e.dead) land(p.tw, p.e, p.m); else if (p.tw.st.P.aoe) land(p.tw, null, p.m, { x: p.tx, y: p.ty + 20 }); }
+    else { p.x += dx / l * mv; p.y += dy / l * mv; p.ang = Math.atan2(dy, dx); }
+  }
+  S.projs = S.projs.filter(p => !p.done);
+  // delayed skills
+  for (const z of S.zones) {
+    if (z.kind === 'meteor') {
+      if ((z.delay -= dt) <= 0) {
+        z.done = true; fx({ kind: 'boom', x: z.x, y: z.y, r: TS * 1.3, t: 0.6, c: '#ff7a3a' });
+        for (const e of alive()) if (Math.hypot(e.x - z.x, e.y - z.y) < TS * 1.3) hit(z.tw, e, 6, { skill: true });
+        for (let c = -1; c <= 1; c++) for (let r = -1; r <= 1; r++) { const [cc, rr] = cellOf(z.x, z.y); const ch = tileAt(cc + c, rr + r); if (ch === 'P' || ch === 'W') { const ts = tileState(cc + c, rr + r); ts.burn = 5; ts.burnDps = z.tw.st.atk * 0.5; ts.by = z.tw; } }
+      }
+    } else if (z.kind === 'rain') {
+      z.left -= dt; z.tick -= dt;
+      if (z.tick <= 0) { z.tick = 0.3; for (const e of alive()) if (Math.hypot(e.x - z.x, e.y - z.y) < TS * 1.2) hit(z.tw, e, 0.8, { skill: true }); }
+      if (z.left <= 0) z.done = true;
+    }
+  }
+  S.zones = S.zones.filter(z => !z.done);
+  S.enemies = S.enemies.filter(e => !e.dead);
+  // effects
+  for (const f of S.fxs) { f.t -= dt; if (f.kind === 'spark') { f.x += f.vx * dt; f.y += f.vy * dt; f.vy += 300 * dt; } }
+  S.fxs = S.fxs.filter(f => f.t > 0);
+  for (const f of S.floats) { f.t -= dt; f.y -= 40 * dt; }
+  S.floats = S.floats.filter(f => f.t > 0);
+  // end of wave / run
+  if (S.lives <= 0) { endRun(false); return; }
+  if (S.phase === 'wave' && !S.queue.length && !S.enemies.length) waveCleared();
+  // idle chatter between waves
+  if (S.phase === 'build' && S.towers.length && !S.sim && (S.idleT -= dt) <= 0) { S.idleT = rand(14, 22); const tw = pick(S.towers); say(tw, pick(BANTER[tw.cls].random)); }
+}
+function fx(f) { if (S.sim) return; if (Save.d.lowfx && (f.kind === 'slash' || f.kind === 'spark')) return; f.t0 = f.t; S.fxs.push(f); }
+function floatText(x, y, s, c, size) { if (S.sim) return; S.floats.push({ x, y, s, c, size: size || 16, t: 0.9, t0: 0.9 }); }
+function say(tw, text, force) {
+  if (S.sim || !tw) return;
+  const now = performance.now() / 1000;
+  if (!force && now - S.lastSay < 4) return;
+  S.lastSay = now; tw.bubble = { text, t: 4.2 };
+}
+
+/* ---------------- end of a run: rewards ---------------- */
+function endRun(won) {
+  if (S.ended) return; S.ended = true; S.phase = 'over';
+  if (S.sim) return;
+  S.sel = S.selCard = S.selItem = null; renderBottom();
+  const cleared = won ? WAVES.length : S.wave - 1;
+  const d = Save.d, deployed = S.towers.map(t => t.cls);
+  const avgLv = HEROES.reduce((a, c) => a + heroCh(c).lvl, 0) / HEROES.length;
+  const ilvl = 1 + Math.floor(avgLv / 3) + (d.crazy || 0) * 2;
+  const rw = { won, cleared, gold: won ? 1500 + 300 * (d.crazy || 0) : 100 * cleared, crystals: won ? 6 + (d.crazy || 0) : Math.floor(cleared / 3), items: [], ups: [], burned: 0 };
+  const n = won ? 3 + (d.crazy ? 1 : 0) : Math.floor(cleared / 3);
+  for (let i = 0; i < n; i++) {
+    const it = makeItem(pick(HEROES), ilvl, won && i === 0 ? 1 : 0.3);
+    if (won && i === 0 && it.rarity < 1) { it.rarity = 1; const fresh = makeItem(it.cls, ilvl, 1, it.slot, it.wtype, 1); Object.assign(it, fresh); }
+    if (d.bag.length < BAG_MAX) { d.bag.push(it); rw.items.push(it); } else { rw.burned += RAR[it.rarity].salvage; }
+  }
+  rw.crystals += rw.burned;
+  d.gold += rw.gold; d.crystals += rw.crystals;
+  const exp = won ? 150 : 15 * cleared;
+  for (const c of HEROES) {
+    const ch = heroCh(c); let gain = deployed.includes(c) ? exp : Math.round(exp / 3); const was = ch.lvl;
+    ch.exp += gain;
+    while (ch.lvl < levelCap() && ch.exp >= expNext(ch.lvl)) { ch.exp -= expNext(ch.lvl); ch.lvl++; ch.attr.str += 3; ch.attr.int += 1; ch.attr.agi += 1; }
+    if (ch.lvl >= levelCap()) ch.exp = Math.min(ch.exp, expNext(ch.lvl) - 1);
+    if (ch.lvl > was) rw.ups.push(CLASSES[c].name + ' Lv' + was + ' → Lv' + ch.lvl);
+  }
+  if (won) { d.clears = (d.clears || 0) + 1; d.crazy = (d.crazy || 0) + 1; }
+  Save.write();
+  BGM.play('select');
+  const who = deployed.length ? pick(deployed) : pick(HEROES);
+  const lines = won ? [SL('boss', 'sigh', '藥劑……在……天空聖壇……'), SL(who, 'n', pick(BANTER_TD[who].win))] : [SL(who, 'angry', pick(BANTER[who].death))];
+  if (won) SFX.win(); else SFX.bad();
+  setTimeout(() => Dialog.play(lines, () => showResults(rw)), 700);
+}
+
+/* ================= drawing ================= */
+const cv = $('cv'), ctx = cv.getContext('2d');
+let CSS_S = 540, DPR = 1, mapLayer = null, flashGate = 0;
+function resizeCanvas(size) {
+  CSS_S = size; DPR = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.round(size * DPR); cv.height = Math.round(size * DPR);
+  buildMapLayer();
+}
+function hash(c, r) { const x = Math.sin(c * 127.1 + r * 311.7) * 43758.5453; return x - Math.floor(x); }
+// the static map is painted once into an offscreen canvas (grass, path, props), the frame only adds what moves
+function buildMapLayer() {
+  const k = cv.width / L;
+  mapLayer = document.createElement('canvas'); mapLayer.width = cv.width; mapLayer.height = cv.height;
+  const g = mapLayer.getContext('2d'); g.setTransform(k, 0, 0, k, 0, 0);
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const ch = MAP[r][c], x = c * TS, y = r * TS, n = hash(c, r);
+    g.fillStyle = `hsl(${100 + n * 14}, ${30 + n * 10}%, ${19 + n * 5}%)`; g.fillRect(x, y, TS, TS);
+    g.fillStyle = 'rgba(160,210,110,.18)';
+    for (let i = 0; i < 6; i++) { const bx = x + hash(c + i, r * 3) * TS, by = y + hash(c * 5, r + i) * TS; g.fillRect(bx, by, 2, 5); }
+  }
+  // path: a soft dirt road drawn as a thick polyline
+  const road = (w, col) => { g.strokeStyle = col; g.lineWidth = w; g.lineJoin = 'round'; g.lineCap = 'round'; g.beginPath(); PATH.forEach((p, i) => i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)); g.stroke(); };
+  road(TS * 0.98, '#3b2d1c'); road(TS * 0.86, '#7a6040'); road(TS * 0.6, '#8a6e4a');
+  for (let i = 0; i < 160; i++) { const p = posAt(hash(i, 7) * PATH_LEN); g.fillStyle = hash(i, 3) > 0.5 ? 'rgba(60,40,20,.35)' : 'rgba(200,170,120,.25)'; g.fillRect(p.x + (hash(i, 9) - 0.5) * TS * 0.7, p.y + (hash(i, 11) - 0.5) * TS * 0.7, 3, 3); }
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const ch = MAP[r][c], x = c * TS, y = r * TS;
+    if (ch === 'H') { // high ground: a raised stone plateau
+      g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(x + 5, y + 9, TS - 8, TS - 8);
+      g.fillStyle = '#8d8a72'; g.fillRect(x + 3, y + 3, TS - 8, TS - 10);
+      g.fillStyle = '#a8a58a'; g.fillRect(x + 3, y + 3, TS - 8, 6);
+      g.fillStyle = '#5d5b48'; g.font = 'bold 11px sans-serif'; g.textAlign = 'center'; g.fillText('▲射程+1', x + TS / 2 - 1, y + TS - 12);
+    } else if (ch === 'S') { // rune tile: attack speed
+      g.fillStyle = '#26301f'; g.fillRect(x + 2, y + 2, TS - 4, TS - 4);
+      g.strokeStyle = '#d9b45a'; g.lineWidth = 2; g.beginPath(); g.arc(x + TS / 2, y + TS / 2, TS * 0.36, 0, Math.PI * 2); g.stroke();
+      g.beginPath(); for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; g.lineTo(x + TS / 2 + Math.cos(a) * TS * 0.28, y + TS / 2 + Math.sin(a) * TS * 0.28); } g.closePath(); g.stroke();
+      g.fillStyle = '#e9c46a'; g.font = 'bold 11px sans-serif'; g.textAlign = 'center'; g.fillText('攻速+25%', x + TS / 2, y + TS - 6);
+    } else if (ch === 'T') {
+      const im = IMG['prop' + Math.floor(hash(c, r) * 4)];
+      if (ready(im)) { const w = TS * 1.05, hh = w * im.naturalHeight / im.naturalWidth; g.drawImage(im, x + TS / 2 - w / 2, y + TS - hh + 4, w, hh); }
+      else { g.fillStyle = '#2a3a22'; g.beginPath(); g.arc(x + TS / 2, y + TS / 2, TS * 0.4, 0, 7); g.fill(); }
+    } else if (ch === 'B') { // the city gate
+      g.fillStyle = '#4a4438'; g.fillRect(x + 4, y + 8, TS - 8, TS - 8);
+      g.fillStyle = '#6d6556'; g.fillRect(x + 4, y + 8, TS - 8, 8);
+      g.fillStyle = '#1a120a'; g.beginPath(); g.moveTo(x + 16, y + TS); g.lineTo(x + 16, y + 30); g.arc(x + TS / 2, y + 30, 14, Math.PI, 0); g.lineTo(x + TS - 16, y + TS); g.fill();
+      g.fillStyle = '#b8362a'; g.fillRect(x + 8, y - 6, 8, 18); g.fillRect(x + TS - 16, y - 6, 8, 18);
+    }
+  }
+  // the monsters' entrance at the top
+  const ex = PATH[1].x, gr = g.createRadialGradient(ex, 0, 2, ex, 0, TS * 0.8);
+  gr.addColorStop(0, 'rgba(150,70,220,.9)'); gr.addColorStop(1, 'rgba(60,0,90,0)'); g.fillStyle = gr; g.fillRect(ex - TS, 0, TS * 2, TS * 0.9);
+  // faint grid so the build tiles read on a phone
+  g.strokeStyle = 'rgba(0,0,0,.18)'; g.lineWidth = 1;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (buildable(MAP[r][c])) g.strokeRect(c * TS + 0.5, r * TS + 0.5, TS - 1, TS - 1);
+}
+let propsRebuilt = false;
+function draw(now) {
+  const k = cv.width / L, t = now / 1000;
+  if (!propsRebuilt && [0, 1, 2, 3].every(i => ready(IMG['prop' + i]))) { propsRebuilt = true; buildMapLayer(); }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  if (mapLayer) ctx.drawImage(mapLayer, 0, 0); else { ctx.fillStyle = '#20301c'; ctx.fillRect(0, 0, cv.width, cv.height); }
+  ctx.setTransform(k, 0, 0, k, 0, 0);
+  // water and live tile states
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const ch = MAP[r][c], x = c * TS, y = r * TS, ts = S.tiles && S.tiles[c + ',' + r];
+    if (ch === 'W') {
+      const frozen = ts && ts.freeze > 0;
+      ctx.fillStyle = frozen ? '#bfe9ff' : '#2d6f8f'; ctx.fillRect(x + 2, y + 6, TS - 4, TS - 12);
+      ctx.strokeStyle = frozen ? 'rgba(255,255,255,.8)' : 'rgba(170,220,255,.5)'; ctx.lineWidth = 2;
+      for (let i = 0; i < 3; i++) { const yy = y + 16 + i * 13, off = frozen ? 0 : Math.sin(t * 2 + i + c) * 5; ctx.beginPath(); ctx.moveTo(x + 8 + off, yy); ctx.lineTo(x + 24 + off, yy - (frozen ? 6 : 0)); ctx.stroke(); }
+      if (frozen) { ctx.fillStyle = '#2a6a8a'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('結凍', x + TS / 2, y + TS - 10); }
+    }
+    if (ts && ts.burn > 0) {
+      for (let i = 0; i < 4; i++) { const fx_ = x + 10 + i * 12, fh = 12 + Math.sin(t * 12 + i * 2) * 5; ctx.fillStyle = i % 2 ? 'rgba(255,170,40,.75)' : 'rgba(255,80,20,.7)'; ctx.beginPath(); ctx.moveTo(fx_ - 6, y + TS - 10); ctx.quadraticCurveTo(fx_, y + TS - 10 - fh * 2, fx_ + 6, y + TS - 10); ctx.fill(); }
+    }
+  }
+  if (flashGate > 0) { const b = PATH[PATH.length - 1]; ctx.fillStyle = `rgba(255,40,30,${flashGate})`; ctx.fillRect(b.x - TS / 2, b.y - TS / 2, TS, TS); }
+  // placement helpers: free tiles and range preview
+  const placing = S.selCard || (DRAG && DRAG.kind === 'hero' && DRAG.moved);
+  if (placing && S.phase !== 'over') {
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (buildable(MAP[r][c]) && !towerAt(c, r)) { ctx.strokeStyle = 'rgba(255,240,180,.45)'; ctx.lineWidth = 2; ctx.strokeRect(c * TS + 4, r * TS + 4, TS - 8, TS - 8); }
+    if (S.hover) {
+      const cls = S.selCard || DRAG.id, [c, r] = S.hover, ok = buildable(tileAt(c, r)) && !towerAt(c, r);
+      const st = tdStats(cls, heroCh(cls)), rg = st.P.rng * TS * st.mspd + (tileAt(c, r) === 'H' ? TS : 0);
+      ctx.fillStyle = ok ? 'rgba(120,255,140,.25)' : 'rgba(255,80,60,.3)'; ctx.fillRect(c * TS, r * TS, TS, TS);
+      if (ok) { ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.setLineDash([6, 5]); ctx.beginPath(); ctx.arc(c * TS + TS / 2, r * TS + TS / 2, rg, 0, 7); ctx.stroke(); ctx.setLineDash([]); }
+    }
+  }
+  if (S.sel && S.towers.includes(S.sel)) { const s = S.sel; ctx.fillStyle = 'rgba(255,230,140,.10)'; ctx.strokeStyle = 'rgba(255,230,140,.8)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(s.x, s.y, s.range, 0, 7); ctx.fill(); ctx.stroke(); }
+  // entities sorted by height on screen
+  const ents = [];
+  for (const tw of S.towers || []) ents.push({ y: tw.y + 20, f: () => drawTower(tw, t) });
+  for (const e of S.enemies || []) ents.push({ y: e.y + 18, f: () => drawEnemy(e, t) });
+  ents.sort((a, b) => a.y - b.y).forEach(o => o.f());
+  for (const p of S.projs || []) drawProj(p);
+  for (const z of S.zones || []) {
+    if (z.kind === 'meteor') { const k2 = 1 - z.delay / 0.6; ctx.fillStyle = '#ff7a3a'; ctx.beginPath(); ctx.arc(z.x + (1 - k2) * 80, z.y - (1 - k2) * 240, 14, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(255,120,60,.5)'; ctx.beginPath(); ctx.arc(z.x, z.y, TS * 1.3, 0, 7); ctx.stroke(); }
+    else if (z.kind === 'rain') { ctx.strokeStyle = 'rgba(240,240,220,.8)'; ctx.lineWidth = 2; for (let i = 0; i < 14; i++) { const a = Math.random() * 6.28, rr = Math.random() * TS * 1.2, x = z.x + Math.cos(a) * rr, y = z.y + Math.sin(a) * rr; ctx.beginPath(); ctx.moveTo(x - 4, y - 16); ctx.lineTo(x, y); ctx.stroke(); } }
+  }
+  for (const f of S.fxs || []) drawFx(f);
+  ctx.textAlign = 'center';
+  for (const f of S.floats || []) { ctx.globalAlpha = clamp(f.t / f.t0 * 1.6, 0, 1); ctx.font = `900 ${f.size}px "Noto Serif TC", serif`; ctx.lineWidth = 3; ctx.strokeStyle = '#000'; ctx.strokeText(f.s, f.x, f.y); ctx.fillStyle = f.c; ctx.fillText(f.s, f.x, f.y); }
+  ctx.globalAlpha = 1;
+  for (const tw of S.towers || []) if (tw.bubble) drawBubble(tw);
+}
+function drawTower(tw, t) {
+  const im = IMG[tw.cls], st = tw.st;
+  const aura = ['', '#6fe06a', '#4aa3ff', '#c07bff', '#ff9a2e'][Math.max(...['weapon', 'acc'].map(s => heroCh(tw.cls).equip[s] ? heroCh(tw.cls).equip[s].rarity : 0))];
+  ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(tw.x, tw.y + 20, 22, 8, 0, 0, 7); ctx.fill();
+  if (aura) { ctx.strokeStyle = aura; ctx.globalAlpha = 0.6 + 0.3 * Math.sin(t * 4); ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(tw.x, tw.y + 20, 25, 9, 0, 0, 7); ctx.stroke(); ctx.globalAlpha = 1; }
+  if (tw.frenzyT > 0) { ctx.fillStyle = 'rgba(255,50,30,.3)'; ctx.beginPath(); ctx.arc(tw.x, tw.y, 30, 0, 7); ctx.fill(); }
+  const hh = 76, lunge = tw.anim > 0 ? Math.sin(tw.anim / 0.22 * Math.PI) * 6 : 0;
+  if (ready(im)) {
+    const w = hh * im.naturalWidth / im.naturalHeight;
+    ctx.save(); ctx.translate(tw.x + lunge * tw.face, tw.y + 22); ctx.scale(tw.face, 1);
+    if (tw.stunT > 0) ctx.globalAlpha = 0.6;
+    ctx.drawImage(im, -w / 2, -hh, w, hh); ctx.restore(); ctx.globalAlpha = 1;
+  }
+  if (tw.stunT > 0) { ctx.fillStyle = '#ffe066'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('★暈★', tw.x, tw.y - 56); }
+  // big-skill ready dot
+  if (S.phase === 'wave' && ultReady(tw)) { ctx.fillStyle = `rgba(255,220,90,${0.6 + 0.4 * Math.sin(t * 6)})`; ctx.beginPath(); ctx.arc(tw.x + 20, tw.y - 50, 7, 0, 7); ctx.fill(); ctx.strokeStyle = '#000'; ctx.lineWidth = 1.5; ctx.stroke(); }
+  if (st.td && !Save.d.lowfx) { const col = { frost: '#8fe6ff', fire: '#ff8a3a', chain: '#fff27a', split: '#b8ff8a', pierce: '#ffffff', stun: '#ffe066', blast: '#ffb24a' }[st.td]; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(tw.x - 20, tw.y - 50, 5, 0, 7); ctx.fill(); }
+}
+function drawEnemy(e, t) {
+  const im = IMG[e.type], hh = SIZE[e.type], bob = Math.sin(t * 8 + e.id * 10) * 2;
+  ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(e.x, e.y + 16, hh * 0.32, 6, 0, 0, 7); ctx.fill();
+  if (e.elite || e.boss) { ctx.strokeStyle = e.boss ? '#ff5a3a' : '#ffcf5a'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.ellipse(e.x, e.y + 16, hh * 0.38, 8, 0, 0, 7); ctx.stroke(); }
+  if (ready(im)) {
+    const w = hh * im.naturalWidth / im.naturalHeight;
+    ctx.save(); ctx.translate(e.x, e.y + 18 + bob * 0.5); if (e.dx < 0) ctx.scale(-1, 1);
+    ctx.drawImage(im, -w / 2, -hh, w, hh); ctx.restore();
+    if (e.flash > 0 && !Save.d.lowfx) { ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.beginPath(); ctx.arc(e.x, e.y - hh / 2 + 18, hh * 0.35, 0, 7); ctx.fill(); }
+  } else { ctx.fillStyle = '#7a3'; ctx.beginPath(); ctx.arc(e.x, e.y, 14, 0, 7); ctx.fill(); }
+  if (e.slowT > 0 && !e.ccImmune) { ctx.fillStyle = 'rgba(140,220,255,.35)'; ctx.beginPath(); ctx.arc(e.x, e.y - hh / 2 + 18, hh * 0.4, 0, 7); ctx.fill(); }
+  if (e.stunT > 0) { ctx.fillStyle = '#ffe066'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('★', e.x, e.y - hh + 10); }
+  // HP bar, shield bar and tags
+  const bw = e.boss ? 70 : 34, by = e.y - hh + 10;
+  ctx.fillStyle = '#000'; ctx.fillRect(e.x - bw / 2 - 1, by - 1, bw + 2, 6);
+  ctx.fillStyle = e.boss ? '#ff4a3a' : e.elite ? '#ffb83a' : '#6fdc5a'; ctx.fillRect(e.x - bw / 2, by, bw * clamp(e.hp / e.maxHp, 0, 1), 4);
+  if (e.shield > 0) { ctx.fillStyle = '#9fd3ff'; ctx.fillRect(e.x - bw / 2, by - 4, bw * clamp(e.shield / (e.maxHp * 0.4), 0, 1), 3); }
+  const tags = [];
+  if (e.physShield) tags.push(['物盾', '#ffd27a']);
+  if (e.magShield) tags.push(['魔盾', '#c9a0ff']);
+  if (e.ccImmune) tags.push(['免控', '#9fe8ff']);
+  if (e.elite) for (const a of e.aff) tags.push([EAFFIX[a].n, '#ffcf5a']);
+  if (tags.length) { ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; const s = tags.map(t2 => t2[0]).join('・'); ctx.lineWidth = 3; ctx.strokeStyle = '#000'; ctx.strokeText(s, e.x, by - 6); ctx.fillStyle = tags[0][1]; ctx.fillText(s, e.x, by - 6); }
+}
+function drawProj(p) {
+  ctx.save(); ctx.translate(p.x, p.y);
+  if (p.kind === 'arrow') { ctx.rotate(p.ang || 0); ctx.strokeStyle = p.col; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(-12, 0); ctx.lineTo(6, 0); ctx.stroke(); ctx.fillStyle = p.col; ctx.beginPath(); ctx.moveTo(9, 0); ctx.lineTo(3, -3); ctx.lineTo(3, 3); ctx.fill(); }
+  else { const g = ctx.createRadialGradient(0, 0, 1, 0, 0, 10); g.addColorStop(0, '#fff'); g.addColorStop(0.4, p.col); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 10, 0, 7); ctx.fill(); }
+  ctx.restore();
+}
+function drawFx(f) {
+  const a = clamp(f.t / f.t0, 0, 1);
+  ctx.globalAlpha = a;
+  if (f.kind === 'boom') { ctx.strokeStyle = f.c; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (1.15 - a * 0.5), 0, 7); ctx.stroke(); ctx.fillStyle = f.c; ctx.globalAlpha = a * 0.25; ctx.fill(); }
+  else if (f.kind === 'ring') { ctx.strokeStyle = f.c; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (1.1 - a * 0.3), 0, 7); ctx.stroke(); }
+  else if (f.kind === 'slash') { ctx.strokeStyle = f.c; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(f.x, f.y, 18, f.a, f.a + 2.2); ctx.stroke(); }
+  else if (f.kind === 'line') { ctx.strokeStyle = f.c; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.lineTo(f.x2, f.y2); ctx.stroke(); }
+  else if (f.kind === 'zap') { ctx.strokeStyle = '#fff27a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(f.x, f.y); const mx = (f.x + f.x2) / 2 + rand(-10, 10), my = (f.y + f.y2) / 2 + rand(-10, 10); ctx.lineTo(mx, my); ctx.lineTo(f.x2, f.y2); ctx.stroke(); }
+  else if (f.kind === 'pillar') { const g = ctx.createLinearGradient(f.x, f.y - 300, f.x, f.y); g.addColorStop(0, 'rgba(255,240,180,0)'); g.addColorStop(1, f.c); ctx.fillStyle = g; ctx.fillRect(f.x - 26, f.y - 300, 52, 300); }
+  else if (f.kind === 'spark') { ctx.fillStyle = f.c; ctx.fillRect(f.x - 2, f.y - 2, 4, 4); }
+  ctx.globalAlpha = 1;
+}
+function drawBubble(tw) {
+  const b = tw.bubble, a = clamp(b.t / 0.4, 0, 1);
+  ctx.font = '600 15px "Noto Serif TC", serif';
+  const maxW = 230, lines = []; let cur = '';
+  for (const chr of b.text) { if (ctx.measureText(cur + chr).width > maxW) { lines.push(cur); cur = chr; } else cur += chr; }
+  if (cur) lines.push(cur);
+  const w = Math.min(maxW, Math.max(...lines.map(l => ctx.measureText(l).width))) + 20, hh = lines.length * 20 + 12;
+  let x = clamp(tw.x - w / 2, 4, L - w - 4), y = tw.y - 70 - hh;
+  if (y < 4) y = tw.y + 30;
+  ctx.globalAlpha = a;
+  ctx.fillStyle = 'rgba(255,250,235,.96)'; ctx.strokeStyle = '#5a4a32'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, hh, 10) : ctx.rect(x, y, w, hh); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#2a1e10'; ctx.textAlign = 'left';
+  lines.forEach((l, i) => ctx.fillText(l, x + 10, y + 22 + i * 20));
+  ctx.globalAlpha = 1;
+}
+
+/* ================= main loop ================= */
+let lastT = performance.now(), uiT = 0;
+const paused = () => S.phase === 'off' || S.phase === 'over' || !$('modal').hidden || Dialog.open || document.hidden;
+function frame(now) {
+  requestAnimationFrame(frame);
+  let dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
+  if (S.phase === 'off') return;
+  if (!paused()) {
+    let left = dt * S.speed;
+    while (left > 0) { const d = Math.min(left, 1 / 30); step(d); left -= d; }
+    if (flashGate > 0) flashGate -= dt;
+  }
+  draw(now);
+  if ((uiT -= dt) <= 0) { uiT = 0.2; updateTop(); updateLive(); }
+}
+requestAnimationFrame(frame);
+
+/* ================= UI ================= */
+function updateTop() {
+  $('tWave').textContent = '第 ' + S.wave + '/' + WAVES.length + ' 波';
+  $('tGold').textContent = S.gold;
+  $('tLives').textContent = '❤ ' + S.lives;
+  $('bSpeed').textContent = S.speed + 'x';
+  $('bFx').classList.toggle('on', !!Save.d.lowfx); $('bFx').textContent = Save.d.lowfx ? '極簡' : '特效';
+  const ad = S.phase === 'build' && S.wave > 0 ? adaptText() : (S.phase === 'wave' ? adaptText() : '');
+  $('tAdapt').textContent = ad ? (S.phase === 'build' ? '⚠ 下一波敵人學乖了：' : '⚠ 這波敵人帶著：') + ad + (S.adapt.phys ? '（換魔法或破甲）' : S.adapt.magic ? '（換物理武器）' : '') : (Save.d.crazy ? '迷霧森林・瘋狂度 ' + Save.d.crazy : '迷霧森林');
+}
+let tab = 'hero';
+function renderBottom() {
+  if (S.sim || S.phase === 'off') return;
+  const head = $('bHead'), body = $('bBody'), go = $('go');
+  head.innerHTML = ''; body.innerHTML = '';
+  if (S.sel && !S.towers.includes(S.sel)) S.sel = null;
+  if (S.sel) renderTowerPanel(head, body, S.sel);
+  else {
+    head.append(
+      h('button', { type: 'button', class: 'tab' + (tab === 'hero' ? ' on' : ''), on: { click: () => { tab = 'hero'; S.selItem = null; renderBottom(); } } }, '英雄'),
+      h('button', { type: 'button', class: 'tab' + (tab === 'gear' ? ' on' : ''), on: { click: () => { tab = 'gear'; S.selCard = null; renderBottom(); } } }, '裝備 ' + Save.d.bag.length),
+      h('div', { id: 'bHint' }, tab === 'hero' ? (S.selCard ? '點地圖上發亮的格子放下' + CLASSES[S.selCard].name : '點英雄再點格子，或直接拖到格子上') : (S.selItem ? '點場上的英雄裝備它（波次之間才能換）' : '點裝備看說明，再點場上的英雄換上')));
+    if (tab === 'hero') renderHeroCards(body); else renderBag(body);
+  }
+  go.disabled = S.phase !== 'build';
+  go.textContent = S.phase === 'build' ? (S.wave === 0 ? '開始第 1 波 ▶' : '開始第 ' + (S.wave + 1) + ' 波 ▶') : S.phase === 'wave' ? '第 ' + S.wave + ' 波進行中…' : '關卡結束';
+}
+function renderHeroCards(body) {
+  const grid = h('div', { class: 'cards' });
+  for (const cls of HEROES) {
+    const placed = S.towers.find(t => t.cls === cls), ch = heroCh(cls), w = ch.equip.weapon;
+    const card = h('div', { class: 'card' + (S.selCard === cls ? ' sel' : '') + (placed ? ' used' : '') + (S.gold < COST[cls] ? ' poor' : ''), role: 'button', 'aria-label': CLASSES[cls].name },
+      placed ? h('span', { class: 'tag' }, '上場') : null,
+      h('img', { src: ART + cls + '.webp', alt: '' }),
+      h('b', null, CLASSES[cls].name), h('span', { class: 'muted' }, 'Lv' + ch.lvl + ' ' + (w ? (w.td ? TDAFF[w.td].n : '') + WSHORT[w.wtype] : '空手')),
+      placed ? h('span', { class: 'muted' }, '點我看') : h('span', { class: 'cost' }, COST[cls] + ' 金'));
+    card.addEventListener('pointerdown', e => startDrag(e, 'hero', cls, card));
+    grid.append(card);
+  }
+  // potion-shop items, usable any time
+  const fix = h('div', { class: 'card' + (S.gold < 150 ? ' poor' : ''), role: 'button' }, h('img', { src: ART + 'items/pot_red.webp', alt: '' }), h('b', null, '修城門'), h('span', { class: 'muted' }, '命 +2'), h('span', { class: 'cost' }, '150 金'));
+  fix.addEventListener('click', () => { if (S.gold < 150) return toast('金幣不夠'); if (S.lives >= S.maxLives) return toast('城門好好的，不用修'); S.gold -= 150; S.lives = Math.min(S.maxLives, S.lives + 2); SFX.coin(); renderBottom(); });
+  const sisi = h('div', { class: 'card' + (S.gold < 120 ? ' poor' : ''), role: 'button' }, h('img', { src: ART + 'items/pot_cold.webp', alt: '' }), h('b', null, '斯斯藥水'), h('span', { class: 'muted' }, '全員攻速+30% 15秒'), h('span', { class: 'cost' }, '120 金'));
+  sisi.addEventListener('click', () => { if (S.phase !== 'wave') return toast('波次中再喝，不然浪費'); if (S.gold < 120) return toast('金幣不夠'); S.gold -= 120; S.buffT = 15; SFX.coin(); if (S.towers.length) { const tw = pick(S.towers); say(tw, '這藥水……喝了頭昏昏的，可是手變好快！', true); } renderBottom(); });
+  grid.append(fix, sisi);
+  body.append(grid);
+}
+function renderBag(body) {
+  const bag = Save.d.bag;
+  if (!bag.length) { body.append(h('div', { class: 'muted' }, '背包是空的。過關會掉裝備！')); return; }
+  if (S.selItem && bag.includes(S.selItem)) {
+    const it = S.selItem, fits = HEROES.filter(c => canEquip(it, c));
+    body.append(h('div', { class: 'detail' }, ...itemLines(it),
+      h('div', { class: 'btns' }, ...fits.map(c => h('button', { type: 'button', disabled: S.phase === 'wave', on: { click: () => { if (equipItem(it, c)) { SFX.place(); renderBottom(); } } } }, '給' + CLASSES[c].name)),
+        h('button', { type: 'button', on: { click: () => { S.selItem = null; renderBottom(); } } }, '取消'))));
+  }
+  const grid = h('div', { class: 'bag' });
+  for (const it of bag.slice().sort((a, b) => b.rarity - a.rarity)) {
+    grid.append(h('div', { class: 'bagit' + (S.selItem === it ? ' sel' : ''), role: 'button', on: { click: () => { S.selItem = S.selItem === it ? null : it; renderBottom(); } } },
+      iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, itemName(it).replace(/^.*的/, '')), h('span', { class: 'muted' }, it.slot === 'weapon' ? CLASSES[it.cls].name : '通用')));
+  }
+  body.append(grid);
+}
+function renderTowerPanel(head, body, tw) {
+  const st = tw.st, ch = heroCh(tw.cls), P = st.P;
+  head.append(h('b', { style: 'font-size:1.2em;color:#ffe9a8' }, CLASSES[tw.cls].name + ' Lv' + ch.lvl), h('div', { id: 'bHint' }, (tw.high ? '高地 ' : '') + (tw.haste ? '攻速格 ' : '')),
+    h('button', { type: 'button', on: { click: () => { S.sel = null; renderBottom(); } } }, '✕'));
+  const dps = Math.round(st.atk * P.mult * st.basicMul / P.cd * st.aspd * (1 + st.crit * 0.8));
+  body.append(h('div', { class: 'tp' }, h('img', { class: 'por', src: ART + 'portraits/' + tw.cls + '_n.webp', alt: '' }),
+    h('div', { class: 'st' },
+      h('span', null, '攻擊 ', h('b', null, st.atk)), h('span', null, '每秒約 ', h('b', null, dps)),
+      h('span', null, '射程 ', h('b', null, (tw.range / TS).toFixed(1) + ' 格')), h('span', null, '暴擊 ', h('b', null, Math.round(st.crit * 100) + '%')),
+      h('span', null, '類型 ', h('b', null, st.type === 'magic' ? '魔法' : '物理')), h('span', null, '攻速 ', h('b', null, Math.round(st.aspd * 100) + '%')),
+      h('span', { style: 'grid-column:1/3', class: 'muted' }, P.d + (st.td ? '・' : ''), st.td ? h('span', { class: 'tdaff' }, TDAFF[st.td].n + '：' + TDAFF[st.td].d) : null))));
+  // gear slots: tap to take off (between waves)
+  const slotEl = s => h('div', { class: 'slot', role: 'button', on: { click: () => { if (!ch.equip[s]) return toast('從下面的清單挑一件裝上'); unequip(tw.cls, s); renderBottom(); } } }, iconEl(ch.equip[s]),
+    h('span', null, ch.equip[s] ? h('span', { class: 'r' + ch.equip[s].rarity + 't' }, itemName(ch.equip[s])) : SLOTS[s] + '（空）', h('br'), h('span', { class: 'muted' }, S.phase === 'build' && ch.equip[s] ? '點一下卸下' : '')));
+  body.append(h('div', { class: 'slots' }, slotEl('weapon'), slotEl('acc')));
+  // tactics: what this hero actually did (this wave / whole stage)
+  const s = tw.stats, wv = S.phase === 'wave' || S.wave > 0;
+  body.append(h('div', { class: 'tact' },
+    h('div', null, '總傷害', h('b', { id: 'tdmg' }, fmt(s.dmg)), h('span', { class: 'muted', id: 'tdmgw' }, '本波 ' + fmt(s.wDmg))),
+    h('div', null, '浪費的溢傷', h('b', { id: 'tover' }, fmt(s.over)), h('span', { class: 'muted', id: 'toverp' }, s.dmg ? Math.round(s.over / (s.dmg + s.over) * 100) + '%' : '0%')),
+    h('div', null, '控場時間', h('b', { id: 'tcc' }, s.cc.toFixed(1) + '秒'), h('span', { class: 'muted', id: 'tccw' }, '本波 ' + s.wCc.toFixed(1)))));
+  // big skill and recall
+  const row = h('div', { class: 'btnrow', style: 'margin-top:calc(var(--u)*8)' });
+  row.append(h('button', { type: 'button', id: 'ultBtn', class: 'primary', on: { click: () => castUlt(tw) } }, CLASSES[tw.cls].skills[3].name));
+  row.append(h('button', { type: 'button', disabled: S.phase !== 'build', on: { click: () => recallTower(tw) } }, '收回（退 ' + tw.paid + ' 金）'));
+  body.append(row, h('div', { class: 'muted', style: 'font-size:.75em;text-align:center' }, ULT[tw.cls] + '・冷卻 ' + Math.round(45 * (1 - st.cdr)) + ' 秒'));
+  // quick swap list
+  const fits = Save.d.bag.filter(it => canEquip(it, tw.cls)).sort((a, b) => b.rarity - a.rarity);
+  if (fits.length) {
+    body.append(h('div', { class: 'sub' }, S.phase === 'build' ? '換裝（點一下直接換上）' : '可換的裝備（打完這波才能換）'));
+    const grid = h('div', { class: 'bag' });
+    for (const it of fits) grid.append(h('div', { class: 'bagit', role: 'button', on: { click: () => { if (equipItem(it, tw.cls)) { SFX.place(); renderBottom(); } } } }, iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, itemName(it).replace(/^.*的/, ''))));
+    body.append(grid);
+  }
+  updateLive();
+}
+const fmt = n => n >= 10000 ? (n / 1000).toFixed(1) + 'k' : String(Math.round(n));
+function updateLive() {
+  const tw = S.sel; if (!tw || S.phase === 'off') return;
+  const s = tw.stats, set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
+  set('tdmg', fmt(s.dmg)); set('tdmgw', '本波 ' + fmt(s.wDmg)); set('tover', fmt(s.over)); set('toverp', s.dmg ? Math.round(s.over / (s.dmg + s.over) * 100) + '%' : '0%');
+  set('tcc', s.cc.toFixed(1) + '秒'); set('tccw', '本波 ' + s.wCc.toFixed(1));
+  const b = $('ultBtn'); if (b) { const r = ultReady(tw) && S.phase === 'wave'; b.disabled = !r; b.textContent = CLASSES[tw.cls].skills[3].name + (tw.ultCd > 0 ? '（' + Math.ceil(tw.ultCd) + '）' : ''); }
+  const go = $('go'); if (go && S.phase === 'wave') go.textContent = '第 ' + S.wave + ' 波進行中… 剩 ' + (S.queue.length + S.enemies.length) + ' 隻';
+}
+let bannerT = null, toastT = null;
+function banner(text, dur) { if (S.sim) return; const b = $('banner'); b.textContent = text; b.classList.add('show'); clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('show'), (dur || 1.5) * 1000); }
+function toast(text) { if (S.sim) return false; const b = $('toast'); b.textContent = text; b.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => b.classList.remove('show'), 1800); SFX.bad(); return false; }
+
+/* ---------------- input on the battlefield ---------------- */
+function fieldTile(clientX, clientY) {
+  const r = cv.getBoundingClientRect();
+  if (clientX < r.left || clientX > r.right || clientY < r.top || clientY > r.bottom) return null;
+  const x = (clientX - r.left) / r.width * L, y = (clientY - r.top) / r.height * L;
+  return [Math.floor(x / TS), Math.floor(y / TS)];
+}
+cv.addEventListener('pointerdown', e => {
+  e.preventDefault(); SFX.resume();
+  if (S.phase === 'off' || DRAG) return;
+  const t = fieldTile(e.clientX, e.clientY); if (!t) return;
+  const [c, r] = t, tw = towerAt(c, r);
+  if (S.selCard) { if (tw) { S.selCard = null; S.sel = tw; renderBottom(); } else placeTower(S.selCard, c, r); return; }
+  if (S.selItem) { if (tw) { if (equipItem(S.selItem, tw.cls)) { SFX.place(); S.sel = tw; } renderBottom(); } else { S.selItem = null; renderBottom(); } return; }
+  S.sel = tw || null; renderBottom();
+});
+cv.addEventListener('pointermove', e => { if (S.selCard && !DRAG) S.hover = fieldTile(e.clientX, e.clientY); });
+// drag a hero card onto the map (a tap without moving just selects it)
+let DRAG = null;
+const ghost = $('ghost');
+function startDrag(e, kind, id, el) {
+  e.preventDefault(); SFX.resume();
+  const placed = kind === 'hero' && S.towers.find(t => t.cls === id);
+  if (placed) { S.sel = placed; S.selCard = null; renderBottom(); return; }
+  DRAG = { kind, id, x0: e.clientX, y0: e.clientY, moved: false, pid: e.pointerId, el };
+  try { el.setPointerCapture(e.pointerId); } catch (er) {}
+  el.addEventListener('pointermove', dragMove); el.addEventListener('pointerup', dragEnd); el.addEventListener('pointercancel', dragCancel);
+}
+function dragMove(e) {
+  if (!DRAG || e.pointerId !== DRAG.pid) return;
+  if (!DRAG.moved && Math.hypot(e.clientX - DRAG.x0, e.clientY - DRAG.y0) > 12) {
+    DRAG.moved = true; ghost.src = ART + DRAG.id + '.webp'; ghost.style.height = (CSS_S / 9 * 1.3) + 'px'; ghost.style.display = 'block'; S.selCard = null;
+  }
+  if (DRAG.moved) { ghost.style.left = e.clientX + 'px'; ghost.style.top = e.clientY + 'px'; S.hover = fieldTile(e.clientX, e.clientY); }
+}
+function dragEnd(e) {
+  if (!DRAG || e.pointerId !== DRAG.pid) return;
+  const d = DRAG; dragCancel();
+  if (d.moved) { const t = fieldTile(e.clientX, e.clientY); if (t) placeTower(d.id, t[0], t[1]); else renderBottom(); }
+  else { S.selCard = S.selCard === d.id ? null : d.id; S.sel = null; renderBottom(); }
+}
+function dragCancel() {
+  if (!DRAG) return;
+  const el = DRAG.el; el.removeEventListener('pointermove', dragMove); el.removeEventListener('pointerup', dragEnd); el.removeEventListener('pointercancel', dragCancel);
+  DRAG = null; ghost.style.display = 'none'; S.hover = S.selCard ? S.hover : null;
+}
+/* phones sometimes never deliver the "finger lifted" event (a window popped up under the finger, iOS cancelled the touch):
+   when the last finger leaves the screen, any half-finished drag is dropped, whatever the page saw */
+function releaseTouch() { if (DRAG) dragCancel(); }
+['touchend', 'touchcancel'].forEach(ev => window.addEventListener(ev, e => { if (!e.touches || e.touches.length === 0) setTimeout(releaseTouch, 0); }, { capture: true, passive: true }));
+window.addEventListener('blur', releaseTouch);
+
+$('go').addEventListener('click', () => { SFX.resume(); startWave(); });
+$('bSpeed').addEventListener('click', () => { S.speed = S.speed === 1 ? 2 : S.speed === 2 ? 4 : 1; updateTop(); });
+$('bFx').addEventListener('click', () => { Save.d.lowfx = !Save.d.lowfx; Save.write(); if (Save.d.lowfx) { S.fxs = []; S.floats = []; } updateTop(); toast(Save.d.lowfx ? '極簡效能模式：關掉跳字和粒子' : '特效全開'); });
+$('bMenu').addEventListener('click', () => openMenu());
+
+/* ---------------- windows ---------------- */
+const Modal = {
+  onClose: null,
+  open(title, render, onClose, noClose) {
+    $('mTitle').textContent = title; this.onClose = onClose || null; $('mClose').hidden = !!noClose;
+    $('modal').hidden = false; this.render = render; this.refresh();
+  },
+  refresh() { const b = $('mBody'); b.innerHTML = ''; this.render(b); },
+  close() { if ($('modal').hidden) return; $('modal').hidden = true; const cb = this.onClose; this.onClose = null; if (cb) cb(); }
+};
+$('mClose').addEventListener('click', () => Modal.close());
+$('modal').addEventListener('pointerdown', e => { if (e.target.id === 'modal' && !$('mClose').hidden) Modal.close(); });
+function openMenu() {
+  Modal.open('暫停', b => {
+    b.append(h('div', { class: 'say2' }, pick(['技能導師：「主神，你按了暫停。我們全部定格的感覺很奇怪，請快點回來。」', '技能導師：「我發現你一按暫停，怪物就不動了。所以你其實是時間之神？」', '技能導師：「如果你現在重新整理網頁，我們就全部忘記這一關。拜託不要。」'])));
+    b.append(h('div', { class: 'btnrow' },
+      h('button', { type: 'button', class: 'primary', on: { click: () => Modal.close() } }, '繼續'),
+      h('button', { type: 'button', on: { click: () => { Save.d.music = !Save.d.music; Save.write(); if (Save.d.music) BGM.play(S.wave >= WAVES.length ? 'boss' : 'stage'); else BGM.stop(); Modal.refresh(); } } }, Save.d.music ? '音樂：開' : '音樂：關'),
+      h('button', { type: 'button', on: { click: () => { Modal.close(); startBattle(true); } } }, '重來這關'),
+      h('button', { type: 'button', on: { click: () => { Modal.close(); goHome(); } } }, '回主畫面')));
+  });
+}
+function showResults(rw) {
+  Modal.open(rw.won ? '勝利！迷霧森林守住了' : '城門被攻破了……', b => {
+    b.append(h('div', { class: 'say2' }, rw.won ? `守住 ${WAVES.length} 波！瘋狂度升到 ${Save.d.crazy}：下次怪物更硬，掉的裝備也更好。` : `撐到第 ${rw.cleared} 波。裝備都還在，換個擺法再來！`));
+    b.append(h('div', null, '獲得：', h('b', { class: 'tdaff' }, rw.gold + ' 金幣'), '、', h('b', { style: 'color:#9fd3ff' }, rw.crystals + ' 晶石'), rw.burned ? h('span', { class: 'muted' }, `（背包滿了，${rw.burned} 晶石是自動分解來的）`) : null));
+    if (rw.ups.length) b.append(h('div', { class: 'ok' }, '升級：' + rw.ups.join('、')));
+    if (rw.items.length) {
+      b.append(h('div', { class: 'sub' }, '掉落裝備'));
+      for (const it of rw.items) b.append(h('div', { class: 'hrow' }, iconEl(it), h('div', { class: 'nm' }, ...itemLines(it))));
+    } else b.append(h('div', { class: 'muted' }, rw.won ? '' : '撐過 3 波以上才會掉裝備。'));
+    b.append(h('div', { class: 'btnrow' },
+      h('button', { type: 'button', class: 'primary', on: { click: () => { Modal.close(); startBattle(true); } } }, rw.won ? '再打一次（瘋狂度 ' + Save.d.crazy + '）' : '再來一次'),
+      h('button', { type: 'button', on: { click: () => { Modal.close(); openGear(); } } }, '整理裝備'),
+      h('button', { type: 'button', on: { click: () => { Modal.close(); goHome(); } } }, '主畫面')));
+  }, null, true);
+}
+/* gear window (outside battle): equip, enhance at the smith, salvage into crystals */
+let gearSel = null, gearMsg = '';
+function openGear() {
+  gearSel = null; gearMsg = '';
+  Modal.open('英雄與裝備', renderGear, () => { if (S.phase !== 'build' && S.phase !== 'wave') goHome(); });
+}
+function where(it) { for (const c of HEROES) for (const s in SLOTS) if (heroCh(c).equip[s] === it) return [c, s]; return null; }
+function renderGear(b) {
+  const d = Save.d;
+  b.append(h('div', { style: 'display:flex;gap:1em;font-weight:900;margin-bottom:.5em' }, h('span', { class: 'tdaff' }, '金幣 ' + d.gold), h('span', { style: 'color:#9fd3ff' }, '晶石 ' + d.crystals), h('span', { class: 'muted' }, '背包 ' + d.bag.length + '/' + BAG_MAX)));
+  if (gearMsg) b.append(h('div', { class: 'say2' }, gearMsg));
+  if (gearSel) b.append(gearDetail(gearSel));
+  for (const c of HEROES) {
+    const ch = heroCh(c), cap = levelCap();
+    b.append(h('div', { class: 'hrow' }, h('img', { class: 'hp', src: ART + 'portraits/' + c + '_n.webp', alt: '' }),
+      h('div', { class: 'nm' }, h('b', null, CLASSES[c].name + ' Lv' + ch.lvl), h('span', { class: 'muted' }, ch.lvl >= cap ? '（上限 ' + cap + '）' : ''),
+        h('div', { class: 'xp' }, h('i', { style: `width:${Math.round(ch.exp / expNext(ch.lvl) * 100)}%` })), h('span', { class: 'muted', style: 'font-size:.8em' }, '攻擊 ' + tdStats(c, ch).atk)),
+      ...['weapon', 'acc'].map(s => { const it = ch.equip[s], el = iconEl(it); if (it) { el.setAttribute('role', 'button'); el.addEventListener('click', () => { gearSel = it; gearMsg = ''; Modal.refresh(); }); } return el; })));
+  }
+  b.append(h('div', { class: 'sub' }, '背包（點一下看說明）'));
+  const grid = h('div', { class: 'bag' });
+  for (const it of d.bag.slice().sort((a, x) => x.rarity - a.rarity || x.plus - a.plus)) grid.append(h('div', { class: 'bagit' + (gearSel === it ? ' sel' : ''), role: 'button', on: { click: () => { gearSel = it; gearMsg = ''; Modal.refresh(); } } }, iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, itemName(it).replace(/^.*的/, '')), h('span', { class: 'muted' }, it.slot === 'weapon' ? CLASSES[it.cls].name : '通用')));
+  b.append(grid);
+  b.append(h('div', { class: 'btnrow' },
+    h('button', { type: 'button', on: { click: () => bulkSalvage(1) } }, '一鍵分解優良以下'),
+    h('button', { type: 'button', on: { click: () => bulkSalvage(2) } }, '一鍵分解稀有以下')));
+}
+function gearDetail(it) {
+  const w = where(it), cost = enhCost(it), d = Save.d;
+  const box = h('div', { class: 'detail' }, ...itemLines(it));
+  if (w) box.append(h('div', { class: 'muted' }, '裝備在：' + CLASSES[w[0]].name));
+  if (it.plus < 10) box.append(h('div', { class: 'muted' }, `強化 +${it.plus + 1}：${cost.gold} 金、${cost.crystals} 晶石，成功率 ${Math.round(ENH_RATE[it.plus] * 100)}%` + (it.plus + 1 >= 9 ? '（失敗會爆掉！）' : it.plus + 1 >= 6 ? '（失敗會掉一級）' : '')));
+  const btns = h('div', { class: 'btns' });
+  if (w) btns.append(h('button', { type: 'button', on: { click: () => { if (d.bag.length >= BAG_MAX) { gearMsg = '背包滿了'; } else { heroCh(w[0]).equip[w[1]] = null; d.bag.push(it); Save.write(); } Modal.refresh(); } } }, '卸下'));
+  else for (const c of HEROES.filter(c => canEquip(it, c))) btns.append(h('button', { type: 'button', on: { click: () => { const ch = heroCh(c), old = ch.equip[it.slot]; d.bag.splice(d.bag.indexOf(it), 1); if (old) d.bag.push(old); ch.equip[it.slot] = it; Save.write(); gearMsg = CLASSES[c].name + '：' + pick(BANTER_TD[c].gear); Modal.refresh(); } } }, '給' + CLASSES[c].name));
+  if (it.plus < 10) btns.append(h('button', { type: 'button', class: 'primary', disabled: d.gold < cost.gold || d.crystals < cost.crystals, on: { click: () => { enhance(it); Modal.refresh(); } } }, '強化'));
+  if (!w) btns.append(h('button', { type: 'button', on: { click: () => { d.crystals += RAR[it.rarity].salvage; d.bag.splice(d.bag.indexOf(it), 1); gearSel = null; gearMsg = '分解成 ' + RAR[it.rarity].salvage + ' 顆晶石。鐵匠：「什麼？你說小美？她很好！」'; Save.write(); Modal.refresh(); } } }, '分解 +' + RAR[it.rarity].salvage + ' 晶石'));
+  btns.append(h('button', { type: 'button', on: { click: () => { gearSel = null; Modal.refresh(); } } }, '關閉'));
+  box.append(btns);
+  return box;
+}
+// enhancement rules from the action game: up to +5 a failure only costs materials, +6~+8 drops a level, +9/+10 can break it
+function enhance(it) {
+  const d = Save.d, cost = enhCost(it);
+  if (d.gold < cost.gold || d.crystals < cost.crystals || it.plus >= 10) return;
+  d.gold -= cost.gold; d.crystals -= cost.crystals; it.spent = (it.spent || 0) + cost.crystals;
+  const to = it.plus + 1;
+  if (Math.random() < ENH_RATE[it.plus]) { it.plus = to; gearMsg = `鐵匠：「成功啦！+${to}！小美也替你高興！」（大聲）`; SFX.win(); }
+  else if (to <= 5) { gearMsg = '鐵匠：「失敗了！材料沒了，裝備沒事！什麼？大聲點！」'; SFX.bad(); }
+  else if (to <= 8) { it.plus = Math.max(0, it.plus - 1); gearMsg = `鐵匠：「哎呀，掉回 +${it.plus} 了！不是小美的錯！」`; SFX.bad(); }
+  else {
+    const back = Math.floor(it.spent / 2), w = where(it);
+    if (w) heroCh(w[0]).equip[w[1]] = null; else d.bag.splice(d.bag.indexOf(it), 1);
+    d.crystals += back; gearSel = null; gearMsg = `鐵匠：「……爆了。小美說她不是故意的。退你 ${back} 顆晶石。」`; SFX.leak();
+  }
+  Save.write();
+}
+function bulkSalvage(maxR) {
+  const d = Save.d; let n = 0, got = 0;
+  d.bag = d.bag.filter(it => { if (it.rarity <= maxR && it.plus === 0) { n++; got += RAR[it.rarity].salvage; return false; } return true; });
+  d.crystals += got; gearSel = null; gearMsg = n ? `分解了 ${n} 件，得到 ${got} 顆晶石。` : '沒有可以分解的（強化過的不會被分解）。'; Save.write(); Modal.refresh();
+}
+
+/* ---------------- home screen ---------------- */
+function renderHome() {
+  const el = $('home'), d = Save.d; el.innerHTML = '';
+  el.append(
+    h('h1', null, '全員瘋子RPG'),
+    h('div', { class: 'heroes' }, ...HEROES.map(c => h('img', { src: ART + c + '.webp', alt: CLASSES[c].name }))),
+    h('div', { class: 'wallet' }, h('span', { class: 'tdaff' }, h('img', { src: ART + 'items/gold.webp', alt: '' }), ' ', d.gold), h('span', { style: 'color:#9fd3ff' }, h('img', { src: ART + 'items/crystal.webp', alt: '' }), ' ', d.crystals)),
+    h('button', { type: 'button', class: 'primary', on: { click: () => startBattle() } }, '出征：迷霧森林' + (d.crazy ? '（瘋狂度 ' + d.crazy + '）' : '')),
+    h('button', { type: 'button', on: { click: () => openGear() } }, '英雄與裝備'),
+    h('button', { type: 'button', on: { click: () => Dialog.play(INTRO) } }, '玩法說明'),
+    h('div', { class: 'say' }, pick(['技能導師：「主神，這一版畫面是直的。我量過了，比較瘦。」', '鐵匠：「強化？大聲點！什麼？小美說她準備好了！」', '藥水商人：「斯斯藥水喝下去，攻速會變快，頭也會變昏。兩個都是真的。」', '城門守衛：「這次你們只要站著就好？太好了，我終於不用看你們亂跑了。」'])));
+}
+function goHome() {
+  S.phase = 'off'; S.sel = S.selCard = S.selItem = null;
+  $('home').hidden = false; renderHome(); BGM.play('select');
+}
+function startBattle(retry) {
+  $('home').hidden = true;
+  newRun(); tab = 'hero';
+  renderBottom(); updateTop();
+  BGM.play('stage');
+  if (!Save.d.seenIntro) { Save.d.seenIntro = true; Save.write(); Dialog.play(INTRO, () => banner('把英雄拖到路邊的格子上\n準備好就按「開始第 1 波」', 3)); }
+  else if (retry) { const c = pick(HEROES); Dialog.play([SL(c, 'n', pick(BANTER[c].revive))]); }
+  else banner('把英雄放到路邊的格子上', 2);
+}
+
+/* ---------------- story dialogue: portrait, typewriter text, tap to advance (same format as the action game) ---------------- */
+const Dialog = {
+  open: false, lines: null, i: 0, timer: null, done: null, full: '', shown: 0, cache: {},
+  play(lines, onDone) {
+    lines = (lines || []).filter(Boolean);
+    if (!lines.length || S.sim) { if (onDone) onDone(); return; }
+    this.el = $('dlg'); this.L = $('dlgL'); this.R = $('dlgR');
+    this.L.style.visibility = 'hidden'; this.R.style.visibility = 'hidden';
+    this.lines = lines; this.i = 0; this.done = onDone; this.open = true; this.el.hidden = false;
+    for (const ln of lines) { const s = this.srcOf(ln); if (!this.cache[s]) { const im = new Image(); im.src = s; this.cache[s] = im; } }
+    this.show();
+  },
+  srcOf(ln) { return ln.who.startsWith('npc_') ? ART + ln.who + '.webp' : ART + 'portraits/' + ln.who + '_' + (ln.e || 'n') + '.webp'; },
+  show() {
+    const ln = this.lines[this.i], side = HEROES.includes(ln.who) ? 'L' : 'R';
+    const im = side === 'L' ? this.L : this.R, other = side === 'L' ? this.R : this.L, src = this.srcOf(ln);
+    if (im.getAttribute('src') !== src) { im.style.visibility = 'hidden'; im.onload = () => { im.style.visibility = 'visible'; }; im.onerror = () => { im.onerror = null; im.src = ART + ln.who + '.webp'; }; im.src = src; if (im.complete && im.naturalWidth) im.style.visibility = 'visible'; }
+    else im.style.visibility = 'visible';
+    im.classList.remove('dim'); other.classList.add('dim');
+    $('dlgName').textContent = SPEAKER[ln.who] || ln.who;
+    this.full = ln.t; this.shown = 0;
+    clearInterval(this.timer);
+    const out = $('dlgText'); out.textContent = '';
+    this.timer = setInterval(() => { this.shown++; out.textContent = this.full.slice(0, this.shown); if (this.shown % 2 === 0) SFX.tick(); if (this.shown >= this.full.length) { clearInterval(this.timer); this.timer = null; } }, 28);
+  },
+  next() {
+    if (!this.open) return;
+    if (this.timer) { clearInterval(this.timer); this.timer = null; $('dlgText').textContent = this.full; return; }
+    this.i++; if (this.i >= this.lines.length) this.finish(); else this.show();
+  },
+  finish() { if (!this.open) return; clearInterval(this.timer); this.timer = null; this.open = false; this.el.hidden = true; const cb = this.done; this.done = null; if (cb) cb(); }
+};
+$('dlg').addEventListener('pointerdown', e => { if (e.target.id !== 'dlgSkip') { e.preventDefault(); Dialog.next(); } });
+$('dlgSkip').addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); Dialog.finish(); });
+window.addEventListener('keydown', e => {
+  if (Dialog.open) { if (['Space', 'Enter', 'KeyA', 'NumpadEnter'].includes(e.code)) { e.preventDefault(); if (!e.repeat) Dialog.next(); } else if (e.code === 'Escape') { e.preventDefault(); Dialog.finish(); } return; }
+  if (!$('modal').hidden) { if (e.code === 'Escape' && !$('mClose').hidden) Modal.close(); return; }
+  if (S.phase === 'off') return;
+  if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); startWave(); }
+  else if (e.code === 'Escape') { if (S.sel || S.selCard || S.selItem) { S.sel = S.selCard = S.selItem = null; renderBottom(); } else openMenu(); }
+  else if (/^Digit[1-6]$/.test(e.code)) { const cls = HEROES[+e.code.slice(5) - 1]; const tw = S.towers.find(t => t.cls === cls); if (tw) { S.sel = tw; S.selCard = null; } else { S.selCard = cls; S.sel = null; } renderBottom(); }
+  else if (e.code === 'KeyQ' && S.sel) castUlt(S.sel);
+});
+
+/* ================= phone hardening (same fixes as the action game) ================= */
+// unlock audio on the first gesture anywhere
+['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, () => { SFX.resume(); BGM.kick(); }, { passive: true }));
+const ExitGuard = {
+  leaving: false,
+  init() {
+    try { history.pushState({ guard: 1 }, ''); } catch (e) {}
+    window.addEventListener('popstate', () => { // the phone's back gesture opens the pause menu instead of leaving
+      if (this.leaving) return;
+      try { history.pushState({ guard: 1 }, ''); } catch (e) {}
+      if (Dialog.open) return;
+      if (!$('modal').hidden) { if (!$('mClose').hidden) Modal.close(); return; }
+      if (S.phase !== 'off') openMenu();
+    });
+    window.addEventListener('beforeunload', e => { if (!this.leaving && (S.phase === 'wave' || S.phase === 'build')) { e.preventDefault(); e.returnValue = ''; } });
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('gesturestart', e => e.preventDefault()); // iOS pinch zoom
+    ['gesturechange', 'gestureend'].forEach(ev => document.addEventListener(ev, e => e.preventDefault()));
+    document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+    // iPhone ignores "no zoom" in the page settings: swallow the second tap of a quick double tap and pass it on as a click
+    let lastEnd = 0;
+    document.addEventListener('touchend', e => {
+      const now = Date.now(), t = e.target;
+      if (now - lastEnd < 350 && e.cancelable && !(t && /INPUT|TEXTAREA|SELECT/.test(t.tagName))) {
+        e.preventDefault();
+        const b = t && t.closest && t.closest('button, [role=button]'); if (b && t !== cv) b.click();
+      }
+      lastEnd = now;
+    }, { passive: false });
+    document.addEventListener('touchmove', e => { if (e.touches.length > 1 && e.cancelable) e.preventDefault(); }, { passive: false });
+  }
+};
+ExitGuard.init();
+/* layout: a 9:16 frame. The keyboard / voice input squeezes the height for a moment — a sudden big height drop at the same
+   width is ignored (never re-laid out for a squeezed screen). If the page got zoomed anyway (some in-app browsers), the
+   frame is laid over exactly the part you can see. */
+let lastW = 0, lastH = 0;
+function layout() {
+  const vv = window.visualViewport, zoomed = vv && vv.scale > 1.02;
+  let vw = zoomed ? vv.width : window.innerWidth, vh = zoomed ? vv.height : window.innerHeight;
+  if (!zoomed && IS_TOUCH && Math.abs(vw - lastW) < 2 && vh < lastH * 0.75) vh = lastH; // keyboard squeeze
+  lastW = vw; lastH = vh;
+  const W = Math.min(vw, Math.round(vh * 9 / 16 > vw ? vw : vh * 9 / 16)), H = vh;
+  const app = $('app');
+  Object.assign(app.style, { width: W + 'px', height: H + 'px', left: ((zoomed ? vv.offsetLeft : 0) + (vw - W) / 2) + 'px', top: (zoomed ? vv.offsetTop : 0) + 'px' });
+  app.style.setProperty('--u', (W / 540) + 'px');
+  const topH = $('top').offsetHeight, size = Math.floor(Math.min(W, H - topH - W * 0.48));
+  const f = $('field'); f.style.width = size + 'px'; f.style.height = size + 'px';
+  if (Math.abs(size - CSS_S) > 1 || cv.width !== Math.round(size * Math.min(2, window.devicePixelRatio || 1))) resizeCanvas(size);
+}
+const unzoom = () => {
+  const vv = window.visualViewport; if (!vv || vv.scale < 1.02) return;
+  const m = document.querySelector('meta[name=viewport]'); if (!m) return;
+  const c = m.getAttribute('content'); m.setAttribute('content', c + ', minimum-scale=1'); setTimeout(() => m.setAttribute('content', c), 60);
+};
+const snapBack = () => { unzoom(); layout(); const z = window.visualViewport && window.visualViewport.scale > 1.02; if (!z && (window.scrollX || window.scrollY)) window.scrollTo(0, 0); };
+window.addEventListener('resize', snapBack);
+window.addEventListener('orientationchange', () => [80, 350, 900].forEach(t => setTimeout(snapBack, t)));
+if (window.visualViewport) { window.visualViewport.addEventListener('resize', snapBack); window.visualViewport.addEventListener('scroll', snapBack); }
+// leaving the page for a moment: mute, and pick things back up on return
+const awayOn = () => { BGM.stop(); SFX.suspend(); releaseTouch(); };
+const awayOff = () => { if (document.hidden) return; SFX.resume(); BGM.kick(); snapBack(); lastT = performance.now(); };
+document.addEventListener('visibilitychange', () => document.hidden ? awayOn() : awayOff());
+window.addEventListener('pagehide', awayOn);
+window.addEventListener('pageshow', awayOff);
+
+/* ---------------- testing hook: play a whole run headless with fixed placements ---------------- */
+window.TD = {
+  S, Save, TUNE,
+  advance(sec) { for (let i = 0; i < sec * 30 && S.phase !== 'over'; i++) step(1 / 30); draw(performance.now()); updateTop(); updateLive(); return S.phase + ' w' + S.wave + ' lives ' + S.lives + ' gold ' + S.gold; },
+  sim(placements, opts) { // placements: [[cls, c, r, beforeWave]]; returns the result of a full run
+    const keepSpeed = S.speed; S.sim = true; newRun(); S.sim = true; S.leakLog = [];
+    if (opts && opts.gold) S.gold = opts.gold;
+    let guard = 0; const log = [];
+    while (S.phase !== 'over' && guard++ < 200000) {
+      if (S.phase === 'build') { log.push(S.lives); for (const p of placements) if ((p[3] || 0) <= S.wave) placeTower(p[0], p[1], p[2], true); startWave(); }
+      if (opts && opts.ult && S.phase === 'wave') for (const tw of S.towers) if (ultReady(tw) && alive().filter(e => Math.hypot(e.x - tw.x, e.y - tw.y) <= tw.range).length >= 3) castUlt(tw);
+      step(1 / 30);
+    }
+    const res = { won: S.lives > 0, wave: S.wave, lives: S.lives, leaks: S.leaks, towers: S.towers.map(t => t.cls + ':' + Math.round(t.stats.dmg)), log: log.join(','), leakLog: (S.leakLog || []).join(' ') };
+    S.sim = false; S.speed = keepSpeed; S.phase = 'off'; S.towers = []; S.enemies = [];
+    return res;
+  }
+};
+
+layout();
+const fontReady = (document.fonts && document.fonts.load) ? Promise.race([document.fonts.load('900 20px "Noto Serif TC"', '全員瘋子RPG'), new Promise(r => setTimeout(r, 2500))]) : Promise.resolve();
+fontReady.then(() => { layout(); goHome(); });
+</script>
