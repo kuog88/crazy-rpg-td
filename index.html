@@ -50,7 +50,7 @@
   #vCtl { flex: none; display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: calc(var(--u) * 10); padding: calc(var(--u) * 10) calc(var(--u) * 12) max(calc(var(--u) * 12), env(safe-area-inset-bottom, 0px)); background: linear-gradient(#16120d, #0d0a07); border-top: 1px solid var(--line); }
   #vCtl button { font-size: calc(var(--u) * 26); padding: calc(var(--u) * 16) calc(var(--u) * 6); touch-action: none; font-weight: 900; }
   #vTalk:disabled { opacity: .35; }
-  #vTitle { position: absolute; left: 0; right: 0; top: calc(var(--u) * 10); text-align: center; font-size: calc(var(--u) * 40); font-weight: 900; color: #ffe9a8; text-shadow: 0 calc(var(--u) * 3) 0 #5a3a12, 0 0 calc(var(--u) * 18) rgba(0,0,0,.9); pointer-events: none; }
+  #vTitle { transition: opacity .3s; position: absolute; left: 0; right: 0; top: calc(var(--u) * 10); text-align: center; font-size: calc(var(--u) * 40); font-weight: 900; color: #ffe9a8; text-shadow: 0 calc(var(--u) * 3) 0 #5a3a12, 0 0 calc(var(--u) * 18) rgba(0,0,0,.9); pointer-events: none; }
   /* field: party strip */
   #fPartyRow { flex: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: calc(var(--u) * 6); padding: calc(var(--u) * 6) calc(var(--u) * 10); background: #120e09; border-bottom: 1px solid var(--line); }
   .pm { font-size: calc(var(--u) * 17); line-height: 1.2; text-align: center; }
@@ -167,6 +167,81 @@
   /* keyboard highlight (shown once the keyboard is used) */
   .kfoc { outline: calc(var(--u) * 4) solid #ffe066 !important; outline-offset: 2px; box-shadow: 0 0 calc(var(--u) * 16) rgba(255,224,102,.7) !important; }
   #flash { position: absolute; inset: 0; z-index: 7; background: #fff; opacity: 0; pointer-events: none; transition: opacity .18s; }
+  /* ===== mobile-game skin: glossy pressable buttons, framed windows, rarity cards (overrides the plain styles above) ===== */
+  button { background: linear-gradient(180deg, #5c472a 0%, #3b2d19 55%, #2a1f11 100%); border: 1px solid #c9a45c; border-radius: calc(var(--u) * 14);
+    box-shadow: inset 0 1px 0 rgba(255,236,190,.35), inset 0 -2px 0 rgba(0,0,0,.35), 0 calc(var(--u) * 4) 0 #120d07, 0 calc(var(--u) * 6) calc(var(--u) * 12) rgba(0,0,0,.45);
+    text-shadow: 0 1px 0 #000; transition: transform .07s, box-shadow .07s, filter .15s; color: #f6ecd2; }
+  button:active:not(:disabled), button.press { transform: translateY(calc(var(--u) * 3)) scale(.97); box-shadow: inset 0 1px 0 rgba(255,236,190,.25), inset 0 -1px 0 rgba(0,0,0,.35), 0 calc(var(--u) * 1) 0 #120d07; }
+  button.primary { background: linear-gradient(180deg, #ffe39a 0%, #f0b84a 40%, #b97a1f 100%); color: #2a1700; border-color: #fff0c0; text-shadow: 0 1px 0 rgba(255,244,210,.7); }
+  button.on { background: linear-gradient(180deg, #4f8a5a 0%, #2f6a3c 55%, #1e4a28 100%); border-color: #a8f0b0; color: #effff0; }
+  button:disabled { filter: grayscale(.7) brightness(.7); opacity: .7; }
+  .bar { background: linear-gradient(180deg, #2a2014 0%, #15100a 100%); border-bottom: 2px solid #8a6a32; box-shadow: 0 calc(var(--u) * 4) calc(var(--u) * 12) rgba(0,0,0,.5); }
+  .bar .stat { background: linear-gradient(180deg, #120d07, #241a0e); border: 1px solid #6a5230; border-radius: 999px; padding: calc(var(--u) * 2) calc(var(--u) * 14) calc(var(--u) * 2) calc(var(--u) * 4); box-shadow: inset 0 2px 4px rgba(0,0,0,.6); }
+  .bar button { position: relative; }
+  .rdot { position: absolute; top: calc(var(--u) * -5); right: calc(var(--u) * -5); width: calc(var(--u) * 16); height: calc(var(--u) * 16); border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ff9a8a, #e0281a); border: 2px solid #fff; box-shadow: 0 0 6px rgba(255,60,40,.8); }
+  /* windows: double gold frame, ribbon title, pop-in */
+  #modal { background: radial-gradient(ellipse at 50% 40%, rgba(0,0,0,.45), rgba(0,0,0,.75)); }
+  #modal .box { background: radial-gradient(ellipse at 50% 0%, #3a2b18 0%, #1a130b 55%, #110c07 100%); border: 2px solid #d9b45a; border-radius: calc(var(--u) * 18);
+    box-shadow: inset 0 0 0 calc(var(--u) * 3) #1a130b, inset 0 0 0 calc(var(--u) * 4) #7a5f30, 0 0 0 calc(var(--u) * 2) #2a1f12, 0 calc(var(--u) * 14) calc(var(--u) * 40) rgba(0,0,0,.7);
+    animation: popIn .2s cubic-bezier(.2,1.4,.5,1); }
+  @keyframes popIn { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  #modal header { position: relative; justify-content: center; padding: calc(var(--u) * 12) calc(var(--u) * 70); background: linear-gradient(180deg, #e9c46a 0%, #b98a32 60%, #8a6220 100%); border-bottom: 2px solid #5a3e12; box-shadow: inset 0 1px 0 rgba(255,245,210,.6); }
+  #modal h2 { flex: none; text-align: center; color: #2a1700; text-shadow: 0 1px 0 rgba(255,240,200,.7); letter-spacing: calc(var(--u) * 2); }
+  #modal h2::before, #modal h2::after { content: '◆'; color: #5a3e12; font-size: .6em; margin: 0 calc(var(--u) * 10); vertical-align: middle; }
+  #mClose { position: absolute; right: calc(var(--u) * 10); top: 50%; transform: translateY(-50%); width: calc(var(--u) * 50); height: calc(var(--u) * 50); padding: 0; border-radius: 50%; font-size: 0; background: radial-gradient(circle at 35% 30%, #7a3a2a, #3a120a); border: 2px solid #ffd0a0; }
+  #mClose::before { content: '✕'; font-size: calc(var(--u) * 24); color: #ffe9d0; }
+  #mClose:active { transform: translateY(-50%) scale(.92); }
+  .sub { display: flex; align-items: center; gap: calc(var(--u) * 10); color: #ffd98a; letter-spacing: calc(var(--u) * 1); }
+  .sub::before, .sub::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, transparent, #b98a32); }
+  .sub::after { background: linear-gradient(90deg, #b98a32, transparent); }
+  .say2 { background: linear-gradient(180deg, #2a2016, #1c150d); border: 1px solid #6a5230; border-left: 4px solid #e9c46a; border-radius: calc(var(--u) * 10); box-shadow: inset 0 1px 0 rgba(255,236,190,.08); }
+  .hrow, .shop, .skc, .detail { background: linear-gradient(180deg, #2a2016 0%, #1a130c 100%); border: 1px solid #6a5230; border-radius: calc(var(--u) * 14); box-shadow: inset 0 1px 0 rgba(255,236,190,.1), 0 calc(var(--u) * 3) calc(var(--u) * 8) rgba(0,0,0,.35); }
+  .hrow.on, .skc.on { border-color: #ffe066; box-shadow: 0 0 0 1px #ffe066, 0 0 calc(var(--u) * 14) rgba(255,224,102,.35), inset 0 1px 0 rgba(255,236,190,.15); }
+  /* item icons: rarity background glow + frame, like gacha cards */
+  .ic { border-width: 3px; border-radius: calc(var(--u) * 14); box-shadow: inset 0 0 0 1px rgba(0,0,0,.6), inset 0 calc(var(--u) * 10) calc(var(--u) * 18) rgba(255,255,255,.08), 0 calc(var(--u) * 3) calc(var(--u) * 6) rgba(0,0,0,.5); }
+  .ic.r0 { background: radial-gradient(circle at 50% 40%, #5a5a5a, #1e1e1e 75%); border-color: #a8a8a8; }
+  .ic.r1 { background: radial-gradient(circle at 50% 40%, #3f7a3a, #102010 75%); border-color: #7ee87a; }
+  .ic.r2 { background: radial-gradient(circle at 50% 40%, #2f5e9a, #0e1a30 75%); border-color: #6ab8ff; }
+  .ic.r3 { background: radial-gradient(circle at 50% 40%, #6a3a9a, #1e0e30 75%); border-color: #d09aff; box-shadow: 0 0 calc(var(--u) * 10) rgba(192,123,255,.55), inset 0 0 0 1px rgba(0,0,0,.6); }
+  .ic.r4 { background: radial-gradient(circle at 50% 40%, #a8641e, #301808 75%); border-color: #ffc05a; box-shadow: 0 0 calc(var(--u) * 14) rgba(255,154,46,.75), inset 0 0 0 1px rgba(0,0,0,.6); }
+  .ic.r4::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(115deg, transparent 35%, rgba(255,240,200,.45) 50%, transparent 65%); background-size: 250% 100%; animation: shine 2.4s infinite; pointer-events: none; }
+  @keyframes shine { from { background-position: 150% 0; } to { background-position: -100% 0; } }
+  .ic.empty { background: repeating-linear-gradient(45deg, #1a140c, #1a140c 6px, #20180e 6px, #20180e 12px); border: 2px dashed #6a5230; }
+  .ic .pl { background: linear-gradient(180deg, #ffe066, #c08a1a); color: #2a1700; border-radius: calc(var(--u) * 8); padding: 0 calc(var(--u) * 5); right: calc(var(--u) * -6); bottom: calc(var(--u) * -6); text-shadow: none; border: 1px solid #fff4c0; }
+  .bagit { background: linear-gradient(180deg, #241b10, #17110a); border: 1px solid #4a3a22; padding: calc(var(--u) * 8) calc(var(--u) * 2); gap: calc(var(--u) * 4); transition: transform .08s; }
+  .bagit:active { transform: scale(.95); }
+  .bagit.sel { border-color: #ffe066; background: linear-gradient(180deg, #3a2e14, #221a0c); box-shadow: 0 0 calc(var(--u) * 12) rgba(255,224,102,.45); }
+  /* svg stat icons */
+  .svgi { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.15em; margin-right: calc(var(--u) * 4); }
+  .svgi svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,.8)); }
+  .stats > span { background: rgba(0,0,0,.25); border-radius: calc(var(--u) * 8); padding: calc(var(--u) * 3) calc(var(--u) * 8); }
+  .attr div { background: linear-gradient(180deg, #2a2016, #18120b); border-radius: calc(var(--u) * 12); }
+  /* party page: hero showcase on a lit stage */
+  .eq .fig { position: relative; }
+  .eq .fig::before { content: ''; position: absolute; left: 10%; right: 10%; bottom: 0; height: 30%; background: radial-gradient(ellipse at 50% 70%, rgba(255,214,120,.35), transparent 70%); }
+  .eq .fig::after { content: ''; position: absolute; inset: 0 5%; background: radial-gradient(ellipse at 50% 55%, rgba(255,220,140,.18), transparent 65%); pointer-events: none; }
+  .eq .fig img { position: relative; z-index: 1; }
+  .eslot span { background: rgba(0,0,0,.45); border-radius: calc(var(--u) * 8); padding: 0 calc(var(--u) * 6); }
+  .pgc { background: radial-gradient(ellipse at 20% 50%, #4a3618, #1e160c 70%); box-shadow: inset 0 1px 0 rgba(255,236,190,.2), 0 calc(var(--u) * 4) calc(var(--u) * 10) rgba(0,0,0,.4); }
+  .pgc img { border: 2px solid #e9c46a; box-shadow: 0 0 calc(var(--u) * 10) rgba(233,196,106,.5); }
+  .skc img { border: 2px solid #c9a45c; }
+  .lvb { display: inline-block; min-width: calc(var(--u) * 34); text-align: center; background: linear-gradient(180deg, #ffe066, #c08a1a); color: #2a1700; border-radius: 999px; font-weight: 900; padding: 0 calc(var(--u) * 6); margin-left: calc(var(--u) * 6); font-size: .8em; }
+  /* NPC talk: a bottom sheet, the zoomed street stays visible above it */
+  #modal.sheet { align-items: flex-end; padding: 0 0 max(calc(var(--u) * 8), env(safe-area-inset-bottom, 0px)); background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.55) 60%); }
+  #modal.sheet .box { max-height: 64%; border-radius: calc(var(--u) * 22) calc(var(--u) * 22) calc(var(--u) * 14) calc(var(--u) * 14); animation: sheetUp .22s ease-out; margin: 0 calc(var(--u) * 6); }
+  @keyframes sheetUp { from { transform: translateY(40%); opacity: 0; } to { transform: none; opacity: 1; } }
+  #modal.sheet header { display: none; }
+  #modal.sheet #mBody { padding-top: calc(var(--u) * 46); }
+  .npcsay { position: relative; margin-bottom: calc(var(--u) * 12); }
+  .npcname { position: absolute; left: calc(var(--u) * 6); top: calc(var(--u) * -40); display: flex; align-items: center; gap: calc(var(--u) * 8); padding: calc(var(--u) * 4) calc(var(--u) * 20) calc(var(--u) * 4) calc(var(--u) * 4); background: linear-gradient(180deg, #ffe39a, #c08a2a); color: #2a1700; font-weight: 900; font-size: calc(var(--u) * 24); border-radius: 999px; border: 2px solid #fff0c0; box-shadow: 0 calc(var(--u) * 4) calc(var(--u) * 10) rgba(0,0,0,.5); }
+  .npcname img { width: calc(var(--u) * 48); height: calc(var(--u) * 48); border-radius: 50%; object-fit: cover; object-position: top; background: #2a1f12; border: 2px solid #5a3e12; }
+  .npcsheetclose { position: absolute; right: calc(var(--u) * 4); top: calc(var(--u) * -40); width: calc(var(--u) * 48); height: calc(var(--u) * 48); padding: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #7a3a2a, #3a120a); border: 2px solid #ffd0a0; font-size: calc(var(--u) * 22); }
+  .npctext { position: relative; background: linear-gradient(180deg, #f6ead0, #e2cfa6); color: #2a1a08; border: 2px solid #8a6a32; border-radius: calc(var(--u) * 16); padding: calc(var(--u) * 16) calc(var(--u) * 18); font-size: calc(var(--u) * 22); line-height: 1.6; box-shadow: inset 0 0 calc(var(--u) * 20) rgba(120,80,30,.25), 0 calc(var(--u) * 4) calc(var(--u) * 10) rgba(0,0,0,.4); }
+  .npctext::before { content: ''; position: absolute; left: calc(var(--u) * 40); top: calc(var(--u) * -14); border: calc(var(--u) * 12) solid transparent; border-bottom-color: #8a6a32; border-top: 0; }
+  .choice button { text-align: left; padding-left: calc(var(--u) * 48); position: relative; }
+  .choice button::before { content: '▶'; position: absolute; left: calc(var(--u) * 18); color: #ffe066; }
+  .gain { text-align: center; font-weight: 900; font-size: 1.15em; padding: calc(var(--u) * 8); border-radius: calc(var(--u) * 12); margin: calc(var(--u) * 6) 0; }
+  .gain.ok { background: rgba(60,140,60,.25); border: 1px solid #7ddc7a; } .gain.bad { background: rgba(160,40,30,.25); border: 1px solid #ff7a6a; }
 </style>
 <div id="app">
   <div id="village" class="screen" hidden>
@@ -414,6 +489,18 @@ function affLine(a) {
   }
   return '';
 }
+// small vector icons so every stat reads at a glance on a phone
+const ICONS = {
+  hp: ['#ff6a6a', 'M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z'],
+  mp: ['#6ab4ff', 'M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z'],
+  atk: ['#ffd27a', 'M20 3l1 1-11 11 2 2-2 2-2-2-3 3-2-2 3-3-2-2 2-2 2 2L19 3z'],
+  def: ['#9fc3ff', 'M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z'],
+  spd: ['#7ddc9a', 'M13 2L4 14h6l-1 8 9-12h-6z'],
+  crit: ['#ffb36b', 'M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z'],
+  skill: ['#c79bff', 'M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z'],
+  steal: ['#ff4a5a', 'M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z']
+};
+function ico(k) { const [c, d] = ICONS[k]; const e = document.createElement('span'); e.className = 'svgi'; e.innerHTML = `<svg viewBox="0 0 24 24"><path fill="${c}" stroke="#000" stroke-width="1" d="${d}"/></svg>`; return e; }
 function itemName(it) {
   const t = it.slot === 'weapon' ? (it.td ? WAFF[it.td].n : '') + WSHORT[it.wtype] : SLOTS[it.slot];
   return (it.plus ? '+' + it.plus + ' ' : '') + RAR[it.rarity].n + '的' + t;
@@ -901,6 +988,7 @@ function goField(fromStart) {
   $('fHint').textContent = IS_TOUCH ? '按住畫面往那個方向走（點一下會自己走過去）。草叢裡會遇怪！' : '方向鍵走路・I 隊伍・P 寵物・Esc 選單。草叢裡會遇怪！';
 }
 function renderPartyBar() {
+  updateDots();
   const box = $('fPartyBar'); box.innerHTML = '';
   const wrap = h('div', { id: 'fPartyRow', style: `grid-template-columns:repeat(${Save.d.party.length},1fr)` });
   for (const c of Save.d.party) { const st = heroStats(c, heroCh(c)), hp = curHp(c), mp = curMp(c); const pt = petOf(c); wrap.append(h('div', { class: 'pm' }, h('b', null, CLASSES[c].name + ' ' + Math.ceil(hp)), h('div', { class: 'gbar' }, h('i', { style: `width:${hp / st.maxHp * 100}%` })), h('div', { class: 'gbar mp' }, h('i', { style: `width:${mp / st.maxMp * 100}%` })), pt ? h('span', { class: 'muted' }, pt.name + ' ' + Math.ceil(petHp(pt))) : null)); }
@@ -1492,7 +1580,7 @@ function petCard(p) {
   const ps = petStats(p), sc = petScore(p), [rk, rc] = scoreRank(sc), el = ELEM[MON_EL[p.type]];
   return h('div', { class: 'nm' },
     h('b', null, p.name + ' Lv' + p.lvl), ' ', h('b', { style: `color:${rc}` }, `評分 ${rk}（${sc}）`), ' ', h('b', { style: `color:${el.c}` }, '【' + el.n + '】'),
-    h('div', { class: 'grades' }, ...GRADE_STATS.map(([k, n]) => h('span', null, n + ' ', h('b', { style: `color:${p.g[k] >= 8 ? '#ffb36b' : p.g[k] <= 3 ? '#9a9a9a' : '#ffe9a8'}` }, p.g[k]), h('i', { class: 'gb' }, h('i', { style: `width:${p.g[k] * 10}%` }))))),
+    h('div', { class: 'grades' }, ...GRADE_STATS.map(([k, n]) => h('span', null, ico(k), n + ' ', h('b', { style: `color:${p.g[k] >= 8 ? '#ffb36b' : p.g[k] <= 3 ? '#9a9a9a' : '#ffe9a8'}` }, p.g[k]), h('i', { class: 'gb' }, h('i', { style: `width:${p.g[k] * 10}%` }))))),
     h('div', { class: 'muted' }, `HP ${Math.ceil(petHp(p))}/${ps.maxHp}・攻擊 ${ps.atk}・防禦 ${ps.def}・速度 ${ps.spd}`),
     h('div', null, h('span', { class: 'tdaff' }, '特性：' + TRAITS[p.trait].n), h('span', { class: 'muted' }, '（' + TRAITS[p.trait].d + '）')),
     h('div', { class: 'muted' }, '招式：' + PETSK[p.type].n + '（' + PETSK[p.type].d + '）'));
@@ -1620,10 +1708,11 @@ const Modal = {
   open(title, render, onClose, noClose, full) {
     this.kind = null; KB.el = null;
     $('mTitle').textContent = title; this.onClose = onClose || null; $('mClose').hidden = !!noClose;
-    $('modal').classList.toggle('full', !!full);
+    $('modal').classList.toggle('full', !!full); $('modal').classList.remove('sheet');
     $('modal').hidden = false; this.render = render; this.refresh(true);
   },
   refresh(top) { const b = $('mBody'), y = b.scrollTop, idx = KB.el ? kbList($('modal')).indexOf(KB.el) : -1; b.innerHTML = ''; this.render(b); b.scrollTop = top ? 0 : y; if (KB.used) { const l = kbList($('modal')); kbMark(l[top ? kbFirst(l) : Math.max(0, Math.min(idx, l.length - 1))] || null); } },
+  sheet() { $('modal').classList.add('sheet'); $('modal').classList.remove('full'); },
   close() { if ($('modal').hidden) return; $('modal').hidden = true; const cb = this.onClose; this.onClose = null; if (cb) cb(); }
 };
 $('mClose').addEventListener('click', () => Modal.close());
@@ -1674,20 +1763,20 @@ function renderParty(b) {
   if (partySel) b.append(partyDetail(cls));
   const dr = Math.round((1 - 100 / (100 + st.def)) * 100);
   b.append(h('div', { class: 'stats' },
-    h('span', null, '血量 ', h('b', null, st.maxHp)), h('span', null, '魔力 ', h('b', null, st.maxMp)),
-    h('span', null, '攻擊 ', h('b', null, st.atk)), h('span', null, '防禦 ', h('b', null, st.def), h('span', { class: 'muted' }, `（減傷 ${dr}%）`)),
-    h('span', null, '速度 ', h('b', null, Math.round(st.spd))), h('span', null, '暴擊 ', h('b', null, Math.round(st.crit * 100) + '%')),
-    h('span', null, '普攻倍率 ', h('b', null, Math.round(st.basicMul * 100) + '%')), h('span', null, '技能倍率 ', h('b', null, Math.round(st.skillMul * 100) + '%')),
-    h('span', null, '吸血 ', h('b', null, Math.round(st.steal * 100) + '%')), h('span', null, ''),
+    h('span', null, ico('hp'), '血量 ', h('b', null, st.maxHp)), h('span', null, ico('mp'), '魔力 ', h('b', null, st.maxMp)),
+    h('span', null, ico('atk'), '攻擊 ', h('b', null, st.atk)), h('span', null, ico('def'), '防禦 ', h('b', null, st.def), h('span', { class: 'muted' }, ` -${dr}%`)),
+    h('span', null, ico('spd'), '速度 ', h('b', null, Math.round(st.spd))), h('span', null, ico('crit'), '暴擊 ', h('b', null, Math.round(st.crit * 100) + '%')),
+    h('span', null, ico('atk'), '普攻 ', h('b', null, Math.round(st.basicMul * 100) + '%')), h('span', null, ico('skill'), '技能 ', h('b', null, Math.round(st.skillMul * 100) + '%')),
+    h('span', null, ico('steal'), '吸血 ', h('b', null, Math.round(st.steal * 100) + '%')), h('span', null, ''),
     h('span', { style: 'grid-column:1/3', class: 'muted' }, '普攻：' + st.A.d, st.waff ? h('span', { class: 'tdaff' }, '・' + WAFF[st.waff].n + '：' + WAFF[st.waff].d) : null)));
   const A = [['str', '力量', '普攻 +2%'], ['agi', '敏捷', '速度 +2'], ['int', '智力', '技能 +2%'], ['vit', '體力', '血量 +15']];
-  b.append(h('div', { class: 'sub' }, '屬性點 ' + ch.pts + (ch.pts ? '（點 + 分配）' : '')));
+  b.append(h('div', { class: 'sub' }, '屬性點 ' + ch.pts));
   b.append(h('div', { class: 'attr' }, ...A.map(([k, n, dsc]) => h('div', null, n, h('b', null, ch.attr[k]), h('span', { class: 'muted' }, dsc), ch.pts ? h('br') : null, ch.pts ? h('button', { type: 'button', on: { click: () => { ch.pts--; ch.attr[k]++; Save.write(); Modal.refresh(); } } }, '+') : null))));
-  b.append(h('div', { class: 'sub' }, `技能（學會的最多帶 ${SKILL_SLOTS} 招上場；用越多次等級越高）`));
+  b.append(h('div', { class: 'sub' }, '技能'), h('div', { class: 'muted', style: 'text-align:center;margin-bottom:6px' }, `學會的最多帶 ${SKILL_SLOTS} 招上場，用越多次等級越高`));
   b.append(skillCards(cls, false));
   const mp = petOf(cls);
   b.append(h('div', { class: 'sub' }, '帶的寵物'), mp ? h('div', { class: 'hrow' }, h('img', { class: 'pet', src: ART + mp.type + '.webp', alt: '' }), petCard(mp)) : h('div', { class: 'muted' }, '沒有帶寵物。'), h('div', { class: 'btns' }, h('button', { type: 'button', on: { click: () => openPets(false) } }, '打開寵物欄（' + d.pets.length + '/' + PET_MAX + '）')));
-  b.append(h('div', { class: 'sub' }, '背包（' + d.bag.length + '/' + BAG_MAX + '，灰色的是別人的武器）'));
+  b.append(h('div', { class: 'sub' }, '背包 ' + d.bag.length + '/' + BAG_MAX), h('div', { class: 'muted', style: 'text-align:center;margin-bottom:6px' }, '灰色的是別人的武器'));
   const grid = h('div', { class: 'bag' });
   for (const it of d.bag.slice().sort((a, x) => x.rarity - a.rarity || x.plus - a.plus)) grid.append(h('div', { class: 'bagit' + (partySel && partySel.it === it ? ' sel' : '') + (canEquip(it, cls) ? '' : ' no'), role: 'button', on: { click: () => { partySel = { it, slot: it.slot }; Modal.refresh(); } } }, iconEl(it), h('span', { class: 'r' + it.rarity + 't' }, shortName(it)), h('span', { class: 'muted' }, it.slot === 'weapon' ? CLASSES[it.cls].name : SLOTS[it.slot])));
   b.append(grid);
@@ -1719,7 +1808,7 @@ function skillCards(cls, trainer) {
   const d = Save.d, ch = heroCh(cls), box = h('div', { class: 'sk4' });
   CLASSES[cls].skills.forEach((s, i) => {
     const known = ch.known[i], lv = ch.skills[i], on = ch.load.includes(i), info = SKDESC[s.id], E = evo(lv);
-    const t = h('div', { class: 't' }, h('b', null, s.name), known ? ` Lv${lv}` : '（還沒學）', ' ', h('span', { class: 'rng', style: `background:${TCOL[SK[s.id].lab || SK[s.id].t]}` }, info[0]), h('div', { class: 'muted' }, `MP ${s.mp}` + (i === 3 ? '・大絕招' : '') + (i === STARTER[cls] ? '・天生就會' : '')),
+    const t = h('div', { class: 't' }, h('b', null, s.name), known ? h('span', { class: 'lvb' }, 'Lv' + lv) : h('span', { class: 'muted' }, '（還沒學）'), ' ', h('span', { class: 'rng', style: `background:${TCOL[SK[s.id].lab || SK[s.id].t]}` }, info[0]), h('div', { class: 'muted' }, `MP ${s.mp}` + (i === 3 ? '・大絕招' : '') + (i === STARTER[cls] ? '・天生就會' : '')),
       h('div', null, info[1]), h('div', { class: 'ev' + (E >= 1 ? ' got' : '') }, info[2]), h('div', { class: 'ev' + (E >= 2 ? ' got' : '') }, info[3]),
       known && lv < SKILL_MAX ? h('div', null, h('span', { class: 'muted' }, `熟練度 ${ch.skx[i]}/${skillNeed(lv)}（用一次 +1）`), h('div', { class: 'xp' }, h('i', { style: `width:${ch.skx[i] / skillNeed(lv) * 100}%` }))) : null);
     const btns = h('div', { style: 'display:flex;flex-direction:column;gap:6px' });
@@ -1785,10 +1874,10 @@ function npcPenalty() {
 }
 const npcById = id => NPCS.find(n => n.id === id);
 const npcImg = n => ART + n.key + '.webp';
-const npcHead = (n, text) => h('div', { class: 'npc' }, h('img', { src: npcImg(n), alt: n.name }), h('div', { class: 'say2' }, text));
+const npcHead = (n, text) => h('div', { class: 'npcsay' }, h('div', { class: 'npcname' }, h('img', { src: npcImg(n), alt: '' }), n.name), h('button', { type: 'button', class: 'npcsheetclose', 'aria-label': '離開', on: { click: () => Modal.close() } }, '✕'), h('div', { class: 'npctext' }, text));
 let trainerMsg = '', smithSel = null, smithMsg = '', trainerCls = null, petMsg = '', chatNow = '';
 function talkTo(id) {
-  const n = npcById(id); SFX.resume();
+  const n = npcById(id); SFX.resume(); V.talk = n;
   const ev = NpcEv.at(id);
   if (ev) return npcEvent(n, ev);
   openShop(n, Math.random() < 0.4 ? pick(id === 'elder' ? ELDER_CHAT : NPC_CHAT[id] || ELDER_CHAT) : null);
@@ -1803,10 +1892,11 @@ function npcEvent(n, ev) {
       b.append(h('div', { class: 'choice' }, ...(flip ? [ans('b'), ans('a')] : [ans('a'), ans('b')])));
     } else {
       b.append(npcHead(n, result.text));
-      b.append(h('div', { class: result.good ? 'ok' : 'bad', style: 'font-weight:900;text-align:center;font-size:1.1em' }, result.gain));
+      b.append(h('div', { class: 'gain ' + (result.good ? 'ok' : 'bad') }, (result.good ? '獲得：' : '') + result.gain));
       b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', class: 'primary', on: { click: () => openShop(n, null) } }, '繼續'), h('button', { type: 'button', on: { click: () => Modal.close() } }, '離開')));
     }
   });
+  Modal.sheet();
   function answer(k) {
     const good = q.ok === 'none' ? false : q.ok === 'rand' ? Math.random() < 0.5 : q.ok === k;
     result = good ? { good, text: q.win, gain: npcReward(false) } : { good, text: q.lose, gain: npcPenalty() };
@@ -1894,6 +1984,7 @@ function openShop(n, chat) {
       }
     }
   }, () => { updateWallet(); V.hintDirty = true; });
+  Modal.sheet();
 }
 function smithDetail(it) {
   const d = Save.d, cost = enhCost(it), w = where(it), rate = Math.min(1, ENH_RATE[it.plus] + (d.luck ? 0.1 : 0));
@@ -1937,16 +2028,18 @@ for (const n of NPCS) img(n.key, npcImg(n));
 const vy = t => 0.955 - 0.5 * Math.pow(t, 0.85);
 const vs = t => 1 - 0.66 * t;
 function keyHints() {
-  if (IS_TOUCH) return;
+  if (IS_TOUCH) return updateDots();
   $('vBack').textContent = '↓ 上一位'; $('vFwd').textContent = '↑ 下一位'; $('vParty').textContent = '隊伍 I'; $('vPets').textContent = '寵物 P'; $('vMenu').textContent = '☰ Esc';
   $('fParty').textContent = '隊伍 I'; $('fPets').textContent = '寵物 P'; $('fMenu').textContent = '☰ Esc'; $('bAuto').title = 'A'; $('bSpeed').title = 'Q';
+  updateDots();
 }
 function goVillage() {
   showScreen('village'); V.active = true; F.active = false; B = null; V.hintDirty = true;
   V.LH = resizeCanvasTo(vc) || V.LH; updateWallet(); BGM.play('town');
   if (!Save.d.seenIntro) { Save.d.seenIntro = true; Save.write(); Dialog.play(INTRO); }
 }
-function updateWallet() { const d = Save.d; $('vGold').textContent = d.gold; $('vCry').textContent = d.crystals; }
+function updateWallet() { const d = Save.d; $('vGold').textContent = d.gold; $('vCry').textContent = d.crystals; updateDots(); }
+function updateDots() { const pts = Save.d.party.some(c => heroCh(c).pts > 0) || HEROES.some(c => heroCh(c).pts > 0 && !F.active); for (const id of ['vParty', 'fParty']) { const b = $(id); let dot = b.querySelector('.rdot'); if (pts && !dot) b.append(h('i', { class: 'rdot' })); else if (!pts && dot) dot.remove(); } }
 function villageStep(dt) {
   if (V.hold) { V.goal = null; V.autoTalk = null; }
   const dir = V.hold || (V.goal != null ? Math.sign(V.goal - V.t) : 0);
@@ -1963,28 +2056,43 @@ function villageStep(dt) {
   }
   NpcEv.tick(dt);
 }
+const CAM = { z: 1, fx: 270, fy: 600, ax: 270, ay: 600, ready: false };
+function villageGeo() { const LH = V.LH, D = Math.max(LH, L); return { LH, D, x0: (L - D) / 2, y0: LH - D }; }
+const vP = (G, tt, side) => ({ x: G.x0 + G.D * (0.5 + side * 0.17 * vs(tt)), y: G.y0 + G.D * vy(tt), s: vs(tt) * (G.D / 900) });
 function drawVillage(now) {
-  const g = vctx, k = vc.width / L, LH = V.LH, t = now / 1000;
+  const g = vctx, k = vc.width / L, t = now / 1000, G = villageGeo(), LH = G.LH;
   g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#1a140c'; g.fillRect(0, 0, vc.width, vc.height);
-  g.setTransform(k, 0, 0, k, 0, 0);
-  const D = Math.max(LH, L), x0 = (L - D) / 2, y0 = LH - D;
-  if (ready(VIMG)) g.drawImage(VIMG, x0, y0, D, D);
-  const P = (tt, side) => ({ x: x0 + D * (0.5 + side * 0.17 * vs(tt)), y: y0 + D * vy(tt), s: vs(tt) * (D / 900) });
+  // camera: the deeper into the street, the closer it gets; talking zooms onto the hero and the NPC
+  const talking = V.talk && !$('modal').hidden && $('modal').classList.contains('sheet');
+  V.talking = talking ? V.talk : null;
+  const hp = vP(G, V.t, 0);
+  let fx = hp.x, fy = hp.y - 70 * hp.s, zt = 1 + 1.15 * Math.pow(V.t, 1.15), ax = L / 2, ay = LH * 0.7;
+  if (talking) { const np = vP(G, V.talk.t, V.talk.side); fx = (hp.x + np.x) / 2; fy = (hp.y + np.y) / 2 - 80 * np.s; zt = clamp(zt * 1.35, 1.7, 2.3); ay = LH * 0.24; }
+  const ease = CAM.ready ? 0.12 : 1; CAM.ready = true;
+  CAM.z += (zt - CAM.z) * ease; CAM.ax += (ax - CAM.ax) * ease; CAM.ay += (ay - CAM.ay) * ease;
+  const z = CAM.z;
+  $('vTitle').style.opacity = talking || V.t > 0.12 ? '0' : '1';
+  fx = clamp(fx, G.x0 + CAM.ax / z, G.x0 + G.D - (L - CAM.ax) / z); fy = clamp(fy, G.y0 + CAM.ay / z, G.y0 + G.D - (LH - CAM.ay) / z);
+  CAM.fx += (fx - CAM.fx) * ease; CAM.fy += (fy - CAM.fy) * ease;
+  g.setTransform(k * z, 0, 0, k * z, k * (CAM.ax - CAM.fx * z), k * (CAM.ay - CAM.fy * z));
+  if (ready(VIMG)) g.drawImage(VIMG, G.x0, G.y0, G.D, G.D);
   const ents = [];
-  for (const n of NPCS) { const p = P(n.t, n.side); ents.push({ t: n.t, f: () => drawPerson(g, IMG[n.key], p, 150, n.side > 0 ? -1 : 1, 0, n, t) }); }
-  const hp = P(V.t, 0), bob = (V.hold || V.goal != null) ? Math.abs(Math.sin(V.walkT * 9)) * 6 : 0;
-  ents.push({ t: V.t - 0.001, f: () => drawPerson(g, IMG[Save.d.leader], hp, 165, V.face, bob, null, t) });
+  for (const n of NPCS) { const p = vP(G, n.t, n.side); ents.push({ t: n.t, f: () => drawPerson(g, IMG[n.key], p, 150, n.side > 0 ? -1 : 1, 0, n, t) }); }
+  const bob = (V.hold || V.goal != null) ? Math.abs(Math.sin(V.walkT * 9)) * 6 : 0, face = talking ? (V.talk.side > 0 ? 1 : -1) : V.face;
+  ents.push({ t: V.t - 0.001, f: () => drawPerson(g, IMG[Save.d.leader], hp, 165, face, bob, null, t) });
   ents.sort((a, b) => b.t - a.t).forEach(o => o.f());
-  if (V.near) { const p = P(V.near.t, V.near.side); g.strokeStyle = 'rgba(255,224,102,.9)'; g.lineWidth = 3; g.beginPath(); g.ellipse(p.x, p.y + 4 * p.s, 46 * p.s, 14 * p.s, 0, 0, 7); g.stroke(); }
+  const focusN = talking ? V.talk : V.near;
+  if (focusN) { const p = vP(G, focusN.t, focusN.side); g.strokeStyle = `rgba(255,224,102,${0.7 + 0.3 * Math.sin(t * 6)})`; g.lineWidth = 3 / z * 1.5; g.beginPath(); g.ellipse(p.x, p.y + 4 * p.s, 46 * p.s, 14 * p.s, 0, 0, 7); g.stroke();
+    if (!talking) { const ay2 = p.y - 205 * p.s - Math.abs(Math.sin(t * 5)) * 8 * p.s; g.fillStyle = '#ffe066'; g.beginPath(); g.moveTo(p.x, ay2 + 16 * p.s); g.lineTo(p.x - 11 * p.s, ay2); g.lineTo(p.x + 11 * p.s, ay2); g.fill(); } }
 }
 function drawPerson(g, im, p, hh, face, bob, npc, t) {
   const s = p.s, H = hh * s;
   g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(p.x, p.y, 34 * s, 10 * s, 0, 0, 7); g.fill();
   if (ready(im)) { const w = H * im.naturalWidth / im.naturalHeight; g.save(); g.translate(p.x, p.y - bob * s); g.scale(face, 1); g.drawImage(im, -w / 2, -H, w, H); g.restore(); }
-  if (!npc) return;
-  g.font = `900 ${Math.max(17, 24 * s)}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000';
+  if (!npc || (V.talking && V.talking !== npc)) return; // while talking only the one you talk to keeps a name tag
+  g.font = `900 ${Math.max(17, 24 * s) / Math.sqrt(CAM.z)}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000';
   g.strokeText(npc.name, p.x, p.y - H - 6 * s); g.fillStyle = '#ffe9a8'; g.fillText(npc.name, p.x, p.y - H - 6 * s);
-  if (NpcEv.at(npc.id)) { const yy = p.y - H - 26 * s - Math.abs(Math.sin(t * 4)) * 8 * s; g.fillStyle = '#ff3a2a'; g.beginPath(); g.arc(p.x, yy, 13 * s + 4, 0, 7); g.fill(); g.fillStyle = '#fff'; g.font = `900 ${18 * s + 6}px sans-serif`; g.fillText('!', p.x, yy + 7 * s + 2); }
+  if (NpcEv.at(npc.id) && !V.talking) { const yy = p.y - H - 26 * s - Math.abs(Math.sin(t * 4)) * 8 * s; g.fillStyle = '#ff3a2a'; g.beginPath(); g.arc(p.x, yy, 13 * s + 4, 0, 7); g.fill(); g.fillStyle = '#fff'; g.font = `900 ${18 * s + 6}px sans-serif`; g.fillText('!', p.x, yy + 7 * s + 2); }
 }
 // the arrows: a quick tap walks to the next NPC that way, holding walks freely
 function nextNpc(dir) { const list = NPCS.filter(n => dir > 0 ? n.t > V.t + 0.012 : n.t < V.t - 0.012).sort((a, b) => dir > 0 ? a.t - b.t : b.t - a.t); if (list.length) { V.goal = list[0].t; V.autoTalk = null; } }
@@ -1997,8 +2105,9 @@ function holdBtn(el, dir) {
 holdBtn($('vFwd'), 1); holdBtn($('vBack'), -1);
 vc.addEventListener('pointerdown', e => {
   e.preventDefault(); SFX.resume(); BGM.kick();
-  const r = vc.getBoundingClientRect(), y = (e.clientY - r.top) / r.height * V.LH, x = (e.clientX - r.left) / r.width * L;
-  const D = Math.max(V.LH, L), x0 = (L - D) / 2, y0 = V.LH - D;
+  const r = vc.getBoundingClientRect(), sy = (e.clientY - r.top) / r.height * V.LH, sx = (e.clientX - r.left) / r.width * L;
+  // screen → street coordinates through the camera
+  const x = (sx - CAM.ax) / CAM.z + CAM.fx, y = (sy - CAM.ay) / CAM.z + CAM.fy, G = villageGeo(), D = G.D, x0 = G.x0, y0 = G.y0;
   for (const n of NPCS) { const px = x0 + D * (0.5 + n.side * 0.17 * vs(n.t)), py = y0 + D * vy(n.t), s = vs(n.t) * (D / 900); if (Math.abs(x - px) < 55 * s + 6 && y < py + 10 && y > py - 175 * s - 20) { if (V.near === n && Math.abs(V.t - n.t) < 0.02) return talkTo(n.id); V.goal = n.t; V.autoTalk = n.id; return; } }
   const heroY = y0 + D * vy(V.t); V.hold = y < heroY ? 1 : -1; V.ptr = e.pointerId; try { vc.setPointerCapture(e.pointerId); } catch (er) {}
 });
