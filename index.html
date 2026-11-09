@@ -36,50 +36,50 @@
   .screen { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--bg); }
   .screen[hidden], #modal[hidden], #dlg[hidden] { display: none; }
   .bar { flex: none; display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 8) calc(var(--u) * 12); background: linear-gradient(#1d170f, #110e09); border-bottom: 1px solid var(--line); }
-  .bar .stat { display: flex; align-items: center; gap: calc(var(--u) * 5); font-weight: 900; font-size: calc(var(--u) * 22); white-space: nowrap; }
-  .bar .stat img { width: calc(var(--u) * 28); height: calc(var(--u) * 28); object-fit: contain; }
+  .bar .stat { display: flex; align-items: center; gap: calc(var(--u) * 5); font-weight: 900; font-size: calc(var(--u) * 25); white-space: nowrap; }
+  .bar .stat img { width: calc(var(--u) * 32); height: calc(var(--u) * 32); object-fit: contain; }
   .bar .sp { flex: 1; min-width: 0; }
-  .bar button { padding: calc(var(--u) * 5) calc(var(--u) * 10); font-size: calc(var(--u) * 17); min-width: calc(var(--u) * 50); white-space: nowrap; flex: none; }
-  .bar .title { font-weight: 900; color: #ffe9a8; font-size: calc(var(--u) * 21); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar button { padding: calc(var(--u) * 7) calc(var(--u) * 12); font-size: calc(var(--u) * 21); min-width: calc(var(--u) * 58); white-space: nowrap; flex: none; }
+  .bar .title { font-weight: 900; color: #ffe9a8; font-size: calc(var(--u) * 24); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .cvwrap { position: relative; flex: 1; min-height: 0; }
   .cvwrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
   .toast { position: absolute; left: 50%; top: 40%; transform: translateX(-50%); max-width: 94%; padding: calc(var(--u) * 8) calc(var(--u) * 16); background: rgba(60,20,14,.92); border: 1px solid #ff9a6a; border-radius: calc(var(--u) * 10); color: #ffe0d0; font-size: calc(var(--u) * 19); pointer-events: none; opacity: 0; transition: opacity .2s; text-align: center; z-index: 8; width: max-content; white-space: pre-line; }
   .toast.show { opacity: 1; }
-  .hint { position: absolute; left: 50%; bottom: calc(var(--u) * 10); transform: translateX(-50%); width: max-content; max-width: 94%; padding: calc(var(--u) * 6) calc(var(--u) * 14); background: rgba(10,8,5,.78); border: 1px solid var(--line); border-radius: calc(var(--u) * 10); font-size: calc(var(--u) * 17); text-align: center; pointer-events: none; }
+  .hint { position: absolute; left: 50%; bottom: calc(var(--u) * 10); transform: translateX(-50%); width: max-content; max-width: 94%; padding: calc(var(--u) * 6) calc(var(--u) * 14); background: rgba(10,8,5,.78); border: 1px solid var(--line); border-radius: calc(var(--u) * 10); font-size: calc(var(--u) * 20); text-align: center; pointer-events: none; }
   /* village */
   #vCtl { flex: none; display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: calc(var(--u) * 10); padding: calc(var(--u) * 10) calc(var(--u) * 12) max(calc(var(--u) * 12), env(safe-area-inset-bottom, 0px)); background: linear-gradient(#16120d, #0d0a07); border-top: 1px solid var(--line); }
-  #vCtl button { font-size: calc(var(--u) * 24); padding: calc(var(--u) * 16) calc(var(--u) * 6); touch-action: none; font-weight: 900; }
+  #vCtl button { font-size: calc(var(--u) * 26); padding: calc(var(--u) * 16) calc(var(--u) * 6); touch-action: none; font-weight: 900; }
   #vTalk:disabled { opacity: .35; }
   #vTitle { position: absolute; left: 0; right: 0; top: calc(var(--u) * 10); text-align: center; font-size: calc(var(--u) * 40); font-weight: 900; color: #ffe9a8; text-shadow: 0 calc(var(--u) * 3) 0 #5a3a12, 0 0 calc(var(--u) * 18) rgba(0,0,0,.9); pointer-events: none; }
   /* field: party strip */
-  #fParty { flex: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: calc(var(--u) * 6); padding: calc(var(--u) * 6) calc(var(--u) * 10); background: #120e09; border-bottom: 1px solid var(--line); }
-  .pm { font-size: calc(var(--u) * 13); line-height: 1.2; text-align: center; }
+  #fPartyRow { flex: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: calc(var(--u) * 6); padding: calc(var(--u) * 6) calc(var(--u) * 10); background: #120e09; border-bottom: 1px solid var(--line); }
+  .pm { font-size: calc(var(--u) * 17); line-height: 1.2; text-align: center; }
   .pm b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .gbar { height: calc(var(--u) * 7); background: #3a1210; border-radius: 4px; overflow: hidden; margin-top: calc(var(--u) * 2); }
+  .gbar { height: calc(var(--u) * 10); background: #3a1210; border-radius: 4px; overflow: hidden; margin-top: calc(var(--u) * 2); }
   .gbar i { display: block; height: 100%; background: linear-gradient(#8fe07a, #4fa83f); }
   .gbar.mp { background: #101a3a; } .gbar.mp i { background: linear-gradient(#7ab4ff, #3f6fd8); }
   /* battle command panel */
   #bCmd { flex: none; min-height: calc(var(--u) * 250); display: flex; flex-direction: column; gap: calc(var(--u) * 8); padding: calc(var(--u) * 8) calc(var(--u) * 10) max(calc(var(--u) * 10), env(safe-area-inset-bottom, 0px)); background: linear-gradient(#1a140d, #0d0a07); border-top: 2px solid var(--gold); }
-  #bWho { display: flex; align-items: center; gap: calc(var(--u) * 10); font-size: calc(var(--u) * 17); min-height: calc(var(--u) * 46); }
-  #bWho img { width: calc(var(--u) * 46); height: calc(var(--u) * 46); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 8); border: 1px solid var(--line); }
-  #bWho b { color: #ffe9a8; font-size: calc(var(--u) * 20); }
+  #bWho { display: flex; align-items: center; gap: calc(var(--u) * 10); font-size: calc(var(--u) * 19); min-height: calc(var(--u) * 54); }
+  #bWho img { width: calc(var(--u) * 56); height: calc(var(--u) * 56); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 8); border: 1px solid var(--line); }
+  #bWho b { color: #ffe9a8; font-size: calc(var(--u) * 24); }
   #bWho .sp { flex: 1; }
-  #bWho button { font-size: calc(var(--u) * 15); padding: calc(var(--u) * 4) calc(var(--u) * 10); }
+  #bWho button { font-size: calc(var(--u) * 18); padding: calc(var(--u) * 4) calc(var(--u) * 10); }
   #bBtns { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(var(--u) * 8); flex: 1; align-content: start; overflow-y: auto; touch-action: pan-y; }
-  #bBtns button { font-size: calc(var(--u) * 21); font-weight: 900; padding: calc(var(--u) * 12) calc(var(--u) * 4); line-height: 1.2; }
-  #bBtns button small { display: block; font-size: calc(var(--u) * 13); font-weight: 600; color: var(--muted); }
+  #bBtns button { font-size: calc(var(--u) * 25); font-weight: 900; padding: calc(var(--u) * 12) calc(var(--u) * 4); line-height: 1.2; }
+  #bBtns button small { display: block; font-size: calc(var(--u) * 16); font-weight: 600; color: var(--muted); }
   #bBtns.list { grid-template-columns: 1fr 1fr; }
-  #bBtns.list button { display: flex; align-items: center; gap: calc(var(--u) * 6); text-align: left; font-size: calc(var(--u) * 17); padding: calc(var(--u) * 6); }
-  #bBtns.list button img { width: calc(var(--u) * 44); height: calc(var(--u) * 44); border-radius: calc(var(--u) * 6); flex: none; }
-  #bMsg { font-size: calc(var(--u) * 18); color: #ffe9a8; text-align: center; min-height: 1.4em; }
+  #bBtns.list button { display: flex; align-items: center; gap: calc(var(--u) * 8); text-align: left; font-size: calc(var(--u) * 20); padding: calc(var(--u) * 6); }
+  #bBtns.list button img { width: calc(var(--u) * 56); height: calc(var(--u) * 56); border-radius: calc(var(--u) * 6); flex: none; }
+  #bMsg { font-size: calc(var(--u) * 21); color: #ffe9a8; text-align: center; min-height: 1.4em; }
   /* gear icons */
-  .ic { position: relative; display: inline-flex; align-items: center; justify-content: center; width: calc(var(--u) * 64); height: calc(var(--u) * 64); border-radius: calc(var(--u) * 10); background: #120e09; border: 2px solid #777; flex: none; }
+  .ic { position: relative; display: inline-flex; align-items: center; justify-content: center; width: calc(var(--u) * 76); height: calc(var(--u) * 76); border-radius: calc(var(--u) * 10); background: #120e09; border: 2px solid #777; flex: none; }
   .ic img { width: 88%; height: 88%; object-fit: contain; pointer-events: none; }
-  .ic .pl { position: absolute; right: calc(var(--u) * 2); bottom: 0; font-size: calc(var(--u) * 14); font-weight: 900; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+  .ic .pl { position: absolute; right: calc(var(--u) * 2); bottom: 0; font-size: calc(var(--u) * 18); font-weight: 900; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; }
   .ic.r0 { border-color: #9a9a9a; } .ic.r1 { border-color: #6fe06a; } .ic.r2 { border-color: #4aa3ff; } .ic.r3 { border-color: #c07bff; } .ic.r4 { border-color: #ff9a2e; box-shadow: 0 0 calc(var(--u) * 10) rgba(255,154,46,.6); }
-  .ic.empty { border-style: dashed; color: var(--muted); font-size: calc(var(--u) * 14); }
+  .ic.empty { border-style: dashed; color: var(--muted); font-size: calc(var(--u) * 17); }
   .bag { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 8); }
-  .bagit { display: flex; flex-direction: column; align-items: center; width: calc(var(--u) * 92); font-size: calc(var(--u) * 13); line-height: 1.2; text-align: center; padding: calc(var(--u) * 4) 0; border-radius: calc(var(--u) * 10); border: 1px solid transparent; cursor: pointer; }
+  .bagit { display: flex; flex-direction: column; align-items: center; width: calc(var(--u) * 116); font-size: calc(var(--u) * 16); line-height: 1.2; text-align: center; padding: calc(var(--u) * 4) 0; border-radius: calc(var(--u) * 10); border: 1px solid transparent; cursor: pointer; }
   .bagit.sel { border-color: #ffe066; background: #2a2214; }
   .bagit.no { opacity: .4; }
   .r0t { color: #d8d8d8; } .r1t { color: #6fe06a; } .r2t { color: #4aa3ff; } .r3t { color: #c07bff; } .r4t { color: #ff9a2e; }
@@ -91,26 +91,26 @@
   #modal .box { width: 100%; max-height: 100%; display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--gold); border-radius: calc(var(--u) * 14); overflow: hidden; }
   #modal.full .box { height: 100%; }
   #modal header { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 10) calc(var(--u) * 14); background: var(--panel2); border-bottom: 1px solid var(--line); }
-  #modal h2 { flex: 1; margin: 0; font-size: calc(var(--u) * 26); color: var(--gold2); }
-  #mBody { flex: 1; overflow-y: auto; padding: calc(var(--u) * 12) calc(var(--u) * 14) calc(var(--u) * 16); font-size: calc(var(--u) * 18); line-height: 1.5; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  #modal h2 { flex: 1; margin: 0; font-size: calc(var(--u) * 29); color: var(--gold2); }
+  #mBody { flex: 1; overflow-y: auto; padding: calc(var(--u) * 12) calc(var(--u) * 16) calc(var(--u) * 20); font-size: calc(var(--u) * 21); line-height: 1.5; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
   .say2 { background: var(--panel2); border-left: 3px solid var(--gold); padding: calc(var(--u) * 8) calc(var(--u) * 12); border-radius: 4px; margin-bottom: calc(var(--u) * 10); }
   .npc { display: flex; gap: calc(var(--u) * 12); align-items: flex-end; margin-bottom: calc(var(--u) * 10); }
-  .npc img { height: calc(var(--u) * 150); flex: none; filter: drop-shadow(0 4px 6px #000); }
+  .npc img { height: calc(var(--u) * 170); flex: none; filter: drop-shadow(0 4px 6px #000); }
   .npc .say2 { flex: 1; margin: 0; }
   .hrow { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 8); border: 1px solid var(--line); border-radius: calc(var(--u) * 10); margin-bottom: calc(var(--u) * 8); background: #1a140e; }
   .hrow.on { border-color: #ffe066; background: #2a2214; }
   .hrow img.hp { width: calc(var(--u) * 56); height: calc(var(--u) * 64); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 8); }
-  .hrow img.pet { width: calc(var(--u) * 64); height: calc(var(--u) * 56); object-fit: contain; }
-  .hrow .nm { flex: 1; min-width: 0; font-size: calc(var(--u) * 16); line-height: 1.35; }
-  .hrow button { flex: none; font-size: calc(var(--u) * 15); padding: calc(var(--u) * 6) calc(var(--u) * 10); }
+  .hrow img.pet { width: calc(var(--u) * 84); height: calc(var(--u) * 76); object-fit: contain; }
+  .hrow .nm { flex: 1; min-width: 0; font-size: calc(var(--u) * 19); line-height: 1.35; }
+  .hrow button { flex: none; font-size: calc(var(--u) * 19); padding: calc(var(--u) * 6) calc(var(--u) * 10); }
   .xp { height: calc(var(--u) * 6); background: #333; border-radius: 3px; overflow: hidden; margin-top: calc(var(--u) * 3); }
   .xp i { display: block; height: 100%; background: #e9c46a; }
-  .detail { border: 1px solid var(--gold); border-radius: calc(var(--u) * 10); padding: calc(var(--u) * 10); margin: calc(var(--u) * 8) 0; background: #1d1710; font-size: calc(var(--u) * 16); line-height: 1.45; }
+  .detail { border: 1px solid var(--gold); border-radius: calc(var(--u) * 10); padding: calc(var(--u) * 12); margin: calc(var(--u) * 8) 0; background: #1d1710; font-size: calc(var(--u) * 19); line-height: 1.45; }
   .btns { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 8); margin-top: calc(var(--u) * 8); }
-  .btns button { font-size: calc(var(--u) * 16); padding: calc(var(--u) * 6) calc(var(--u) * 10); }
+  .btns button { font-size: calc(var(--u) * 20); padding: calc(var(--u) * 9) calc(var(--u) * 14); }
   .btnrow { display: flex; gap: calc(var(--u) * 10); justify-content: center; flex-wrap: wrap; margin-top: calc(var(--u) * 12); }
-  .btnrow button { font-size: calc(var(--u) * 20); }
-  .sub { margin: calc(var(--u) * 12) 0 calc(var(--u) * 4); color: var(--gold2); font-weight: 900; font-size: calc(var(--u) * 17); }
+  .btnrow button { font-size: calc(var(--u) * 23); padding: calc(var(--u) * 12) calc(var(--u) * 18); }
+  .sub { margin: calc(var(--u) * 16) 0 calc(var(--u) * 6); color: var(--gold2); font-weight: 900; font-size: calc(var(--u) * 22); }
   .htabs { display: grid; grid-template-columns: repeat(6, 1fr); gap: calc(var(--u) * 6); margin-bottom: calc(var(--u) * 10); }
   .htabs button { padding: calc(var(--u) * 2); display: flex; flex-direction: column; align-items: center; font-size: calc(var(--u) * 13); line-height: 1.2; }
   .htabs img { width: 100%; height: calc(var(--u) * 54); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 6); }
@@ -119,31 +119,31 @@
   .eq .fig img { height: 100%; filter: drop-shadow(0 6px 8px #000); }
   .eslot { display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 2); font-size: calc(var(--u) * 13); cursor: pointer; width: calc(var(--u) * 96); text-align: center; line-height: 1.2; }
   .eslot.sel .ic { outline: 3px solid #ffe066; }
-  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--u) * 2) calc(var(--u) * 14); font-size: calc(var(--u) * 16); margin-top: calc(var(--u) * 8); }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--u) * 4) calc(var(--u) * 14); font-size: calc(var(--u) * 19); margin-top: calc(var(--u) * 8); }
   .stats b { color: #ffe9a8; }
   .attr { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(var(--u) * 6); margin-top: calc(var(--u) * 6); }
-  .attr div { background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 8); padding: calc(var(--u) * 4); text-align: center; font-size: calc(var(--u) * 14); line-height: 1.3; }
-  .attr b { display: block; font-size: calc(var(--u) * 20); color: #ffe9a8; }
-  .attr button { padding: 0 calc(var(--u) * 10); font-size: calc(var(--u) * 16); margin-top: calc(var(--u) * 2); }
+  .attr div { background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 8); padding: calc(var(--u) * 6); text-align: center; font-size: calc(var(--u) * 16); line-height: 1.3; }
+  .attr b { display: block; font-size: calc(var(--u) * 26); color: #ffe9a8; }
+  .attr button { padding: calc(var(--u) * 2) calc(var(--u) * 18); font-size: calc(var(--u) * 22); margin-top: calc(var(--u) * 2); }
   .sk4 { display: grid; grid-template-columns: 1fr; gap: calc(var(--u) * 8); }
-  .skc { display: flex; gap: calc(var(--u) * 10); align-items: flex-start; padding: calc(var(--u) * 8); background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 10); font-size: calc(var(--u) * 15); line-height: 1.4; }
+  .skc { display: flex; gap: calc(var(--u) * 10); align-items: flex-start; padding: calc(var(--u) * 10); background: #1c160f; border: 1px solid var(--line); border-radius: calc(var(--u) * 10); font-size: calc(var(--u) * 18); line-height: 1.4; }
   .skc.on { border-color: #ffe066; background: #2a2214; }
   .skc.no { opacity: .6; }
   .skc.no img { filter: grayscale(1); }
-  .skc img { width: calc(var(--u) * 60); height: calc(var(--u) * 60); border-radius: calc(var(--u) * 8); flex: none; }
+  .skc img { width: calc(var(--u) * 76); height: calc(var(--u) * 76); border-radius: calc(var(--u) * 8); flex: none; }
   .skc .t { flex: 1; min-width: 0; }
-  .skc .t b { color: #ffe9a8; font-size: calc(var(--u) * 18); }
-  .skc button { flex: none; font-size: calc(var(--u) * 15); padding: calc(var(--u) * 6) calc(var(--u) * 8); white-space: pre-line; }
-  .grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(var(--u) * 4) calc(var(--u) * 8); margin: calc(var(--u) * 3) 0; font-size: calc(var(--u) * 14); }
+  .skc .t b { color: #ffe9a8; font-size: calc(var(--u) * 22); }
+  .skc button { flex: none; font-size: calc(var(--u) * 18); padding: calc(var(--u) * 6) calc(var(--u) * 8); white-space: pre-line; }
+  .grades { display: grid; grid-template-columns: repeat(2, 1fr); gap: calc(var(--u) * 4) calc(var(--u) * 14); margin: calc(var(--u) * 4) 0; font-size: calc(var(--u) * 18); }
   .grades span { white-space: nowrap; }
-  .gb { display: block; height: calc(var(--u) * 5); background: #333; border-radius: 3px; overflow: hidden; }
+  .gb { display: block; height: calc(var(--u) * 7); background: #333; border-radius: 3px; overflow: hidden; }
   .gb i { display: block; height: 100%; background: linear-gradient(90deg, #c9a45c, #ffe066); }
   .ev { color: #9a9a9a; } .ev.got { color: #ffd76b; }
-  .shop { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 8); border: 1px solid var(--line); border-radius: calc(var(--u) * 10); margin-bottom: calc(var(--u) * 8); background: #1a140e; font-size: calc(var(--u) * 16); line-height: 1.35; }
-  .shop img { width: calc(var(--u) * 56); height: calc(var(--u) * 56); object-fit: contain; flex: none; }
+  .shop { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: calc(var(--u) * 10); border: 1px solid var(--line); border-radius: calc(var(--u) * 10); margin-bottom: calc(var(--u) * 8); background: #1a140e; font-size: calc(var(--u) * 19); line-height: 1.35; }
+  .shop img { width: calc(var(--u) * 68); height: calc(var(--u) * 68); object-fit: contain; flex: none; }
   .shop .t { flex: 1; min-width: 0; }
   .choice { display: flex; flex-direction: column; gap: calc(var(--u) * 10); margin-top: calc(var(--u) * 10); }
-  .choice button { font-size: calc(var(--u) * 20); padding: calc(var(--u) * 12); }
+  .choice button { font-size: calc(var(--u) * 23); padding: calc(var(--u) * 14); }
   /* story dialogue: portraits above the text box (portrait screen) */
   #dlg { position: absolute; inset: 0; z-index: 6; background: rgba(0,0,0,.35); }
   #dlg img { position: absolute; z-index: 2; bottom: calc(var(--u) * 190); height: 44%; max-width: 56%; object-fit: contain; object-position: bottom; filter: drop-shadow(0 6px 10px #000); transition: filter .15s; }
@@ -154,6 +154,18 @@
   #dlgText { font-size: calc(var(--u) * 23); line-height: 1.6; white-space: pre-wrap; }
   #dlg .dhint { position: absolute; right: calc(var(--u) * 14); bottom: calc(var(--u) * 6); color: #e9c46a; }
   #dlgSkip { position: absolute; right: calc(var(--u) * 10); top: calc(var(--u) * -22); font-size: calc(var(--u) * 16); padding: calc(var(--u) * 3) calc(var(--u) * 10); background: rgba(40,30,20,.95); }
+  /* party window pager: one hero per page */
+  .pager { display: flex; align-items: center; gap: calc(var(--u) * 8); margin-bottom: calc(var(--u) * 10); }
+  .pager .pg { flex: none; width: calc(var(--u) * 64); height: calc(var(--u) * 96); font-size: calc(var(--u) * 30); padding: 0; }
+  .pgc { flex: 1; display: flex; align-items: center; gap: calc(var(--u) * 12); background: #221b13; border: 1px solid var(--gold); border-radius: calc(var(--u) * 14); padding: calc(var(--u) * 8); min-width: 0; }
+  .pgc img { width: calc(var(--u) * 80); height: calc(var(--u) * 88); object-fit: cover; object-position: top; border-radius: calc(var(--u) * 10); flex: none; }
+  .pgc b { font-size: calc(var(--u) * 30); color: #ffe9a8; }
+  .dots { display: flex; gap: calc(var(--u) * 7); margin: calc(var(--u) * 6) 0 calc(var(--u) * 2); }
+  .dots i { width: calc(var(--u) * 12); height: calc(var(--u) * 12); border-radius: 50%; background: #5a4a32; }
+  .dots i.on { background: #ffe066; } .dots i.pt { background: #b88a3a; }
+  .rng { display: inline-block; padding: 0 calc(var(--u) * 8); border-radius: calc(var(--u) * 8); color: #1b140c; font-weight: 900; font-size: .85em; }
+  /* keyboard highlight (shown once the keyboard is used) */
+  .kfoc { outline: calc(var(--u) * 4) solid #ffe066 !important; outline-offset: 2px; box-shadow: 0 0 calc(var(--u) * 16) rgba(255,224,102,.7) !important; }
   #flash { position: absolute; inset: 0; z-index: 7; background: #fff; opacity: 0; pointer-events: none; transition: opacity .18s; }
 </style>
 <div id="app">
@@ -346,7 +358,36 @@ const WAFF = {
   stun: { n: '震暈', d: '普攻 15% 機率暈眩 1 回合' },
   blast: { n: '爆裂', d: '普攻波及旁邊的敵人（40%）' }
 };
-const SKILL_PRICE = [0, 500, 1500, 4000];           // the first skill is known from the start; the trainer sells the rest
+// each class starts with its signature skill; the trainer sells the other three
+const STARTER = { warrior: 0, mage: 0, shield: 1, paladin: 1, berserker: 0, archer: 0 };
+function skillPrice(cls, i) { if (i === 3) return 4000; const others = [0, 1, 2].filter(k => k !== STARTER[cls]); return others[0] === i ? 500 : 1500; }
+// what each skill does in a turn-based fight: [range, base, Lv5 evolution, Lv10 evolution]; damage grows 12% per skill level
+const SKDESC = {
+  whirl: ['前排全體', '旋轉砍前排所有怪 90%', '5 級：前排 120%', '10 級：連後排也砍到（60%）'],
+  charge: ['單體', '衝過去 160%，30% 暈眩', '5 級：暈眩 50%', '10 級：貫穿，後面那隻也吃 100%'],
+  smash: ['單體', '220%＋破甲 3 回合（受傷 +30%、無視護甲）', '5 級：旁邊的怪也破甲', '10 級：再補一擊 100%'],
+  quake: ['全體', '全體 150%（地屬性），20% 暈眩', '5 級：全體 180%', '10 級：連震兩次'],
+  fireball: ['單體＋波及', '火屬性 180%，旁邊的怪 60%', '5 級：一次丟三顆', '10 級：命中的怪燃燒 3 回合'],
+  nova: ['全體', '水屬性全體 80%，30% 凍住（凍住的怪被物理攻擊 +30%）', '5 級：凍住機率 50%', '10 級：全體 120%、凍住 70%'],
+  beam: ['一直排', '同一直線的前後兩隻 160%（風屬性）', '5 級：200%', '10 級：結束時全體爆炸 50%'],
+  meteor: ['全體', '火屬性全體 200%', '5 級：全體 240%', '10 級：全體燃燒 3 回合'],
+  bash: ['單體', '120%，50% 暈眩', '5 級：暈眩 70%', '10 級：旁邊的怪也一起暈'],
+  roar: ['自己', '怪物「一定」先打盾戰士：2 回合（每 3 級 +1 回合），自己減傷 30%（每級 +2%）。嘲諷中被聖騎士治療多補 50%', '5 級：嘲諷時被打會反擊 50%', '10 級：怒吼時全體 20% 暈眩'],
+  wall: ['我方全體', '全隊減傷 40%，2 回合', '5 級：減傷 50%、3 回合', '10 級：反彈 30% 傷害'],
+  ram: ['全體', '全體 120%，40% 暈眩', '5 級：暈眩 60%', '10 級：全體 200%'],
+  holyslash: ['一排', '聖光斬一整排 130%', '5 級：160%', '10 級：每打中一隻回自己 5% 血'],
+  heal: ['我方全體', '全隊回血 20%（每級 +2.5%），嘲諷中的盾戰士多補 50%', '5 級：順便解除燃燒和流血', '10 級：倒下的隊友也會被救起來（20% 血）'],
+  aegis: ['隊友單體', '護盾吸收 50% 最大血量（每級 +5%），3 回合', '5 級：護盾期間受傷再 -20%', '10 級：護盾破掉時聖光炸全體 200%'],
+  judge: ['單體', '聖光巨錘 350%', '5 級：400%', '10 級：旁邊的怪也吃 200%'],
+  flurry: ['隨機連擊', '隨機亂砍 4 下（每 2 級多 1 下），每下 40%', '5 級：每下 50%', '10 級：每下吸血 20%'],
+  leap: ['單體＋波及', '跳砸 150%，旁邊 80%（地屬性）', '5 級：180%', '10 級：40% 暈眩'],
+  bloodlust: ['自己', '3 回合吸血 30%', '5 級：吸血 40%、4 回合', '10 級：同時攻擊 +20%'],
+  frenzy: ['自己', '3 回合攻擊 +50%、速度 +20%，但受傷 +20%', '5 級：4 回合', '10 級：攻擊 +80%'],
+  triple: ['隨機連擊', '亂射 3 箭（每 2 級多 1 箭，10 級 8 箭），每箭 70%（風屬性）。射暈住或凍住的怪 +30%', '5 級：每箭 80%', '10 級：每箭 90%'],
+  backshot: ['單體', '140%，然後下一擊 50% 閃開', '5 級：170%', '10 級：再射另一隻 100%'],
+  blast: ['單體＋波及', '火屬性 160%，旁邊 80%', '5 級：190%', '10 級：命中的怪燃燒'],
+  rain: ['全體', '風屬性箭雨全體 130%', '5 級：160%', '10 級：下兩波'],
+};
 const skillNeed = lv => lv * 3;                      // uses needed to go from lv to lv+1
 const evo = lv => lv >= 10 ? 2 : lv >= 5 ? 1 : 0;    // Lv5 and Lv10 evolutions, like the action game
 function heroStats(cls, ch, mods) {
@@ -724,7 +765,7 @@ const INTRO = [
 const SPEAKER = { warrior: '戰士', mage: '魔法師', shield: '盾戰士', paladin: '聖騎士', berserker: '狂戰士', archer: '弓箭手', boss: '腐根樹妖', elder: '聖堂老教主', npc_trainer: '技能導師', npc_smith: '鐵匠', npc_guard: '城門守衛', npc_elder: '聖堂老教主' };
 
 /* ---------------- save (own key, the action game's save is never touched) ---------------- */
-function newHero(cls) { return { lvl: 1, exp: 0, pts: 0, attr: { str: 0, agi: 0, int: 0, vit: 0 }, skills: [1, 1, 1, 1], known: [true, false, false, false], skx: [0, 0, 0, 0], load: [0], hp: null, mp: null, equip: { weapon: makeItem(cls, 1, 0, 'weapon', WTYPES[cls][0].id, 0), helm: null, chest: null, acc: null } }; }
+function newHero(cls) { return { lvl: 1, exp: 0, pts: 0, attr: { str: 0, agi: 0, int: 0, vit: 0 }, skills: [1, 1, 1, 1], known: [0, 1, 2, 3].map(i => i === STARTER[cls]), skx: [0, 0, 0, 0], load: [STARTER[cls]], hp: null, mp: null, equip: { weapon: makeItem(cls, 1, 0, 'weapon', WTYPES[cls][0].id, 0), helm: null, chest: null, acc: null } }; }
 function starterBag() {
   const mk = (cls, wt, td) => { const it = makeItem(cls, 1, 0, 'weapon', wt, 1); it.td = td; return it; };
   return [mk('mage', 'staff', 'frost'), mk('archer', 'longbow', 'split'), mk('shield', 'hammer', 'pierce'), mk('warrior', 'sword', 'fire'),
@@ -743,6 +784,7 @@ const Save = {
       if (ch.pts === undefined) { ch.pts = (ch.lvl - 1) * 5; ch.attr = { str: 0, agi: 0, int: 0, vit: 0 }; }
       // earlier test versions: skills were levelled with points; a skill above Lv1 counts as learned
       if (!ch.known) ch.known = ch.skills.map((lv, i) => i === 0 || lv > 1);
+      if (!ch.known[STARTER[c]]) { ch.known[STARTER[c]] = true; if (ch.load.length < SKILL_SLOTS && !ch.load.includes(STARTER[c])) ch.load.push(STARTER[c]); } // signature skill is free
       if (!ch.skx) ch.skx = [0, 0, 0, 0];
       ch.load = (ch.load || [0]).filter(i => ch.known[i]).slice(0, SKILL_SLOTS); if (!ch.load.length) ch.load = [0];
       if (ch.hp === undefined) ch.hp = null; if (ch.mp === undefined) ch.mp = null;
@@ -856,11 +898,11 @@ function goField(fromStart) {
   if (fromStart) { F.x = 7.5 * FT; F.y = (FR - 2.3) * FT; F.trail = []; F.acc = 0; F.next = rand(160, 360); F.cool = 1.5; F.bossBeat = false; }
   F.LH = resizeCanvasTo(fc) || F.LH; F.hold = null; F.goal = null; B = null;
   renderPartyBar(); BGM.play('stage');
-  $('fHint').textContent = '按住畫面往那個方向走（點一下會自己走過去）。草叢裡會遇怪！';
+  $('fHint').textContent = IS_TOUCH ? '按住畫面往那個方向走（點一下會自己走過去）。草叢裡會遇怪！' : '方向鍵走路・I 隊伍・P 寵物・Esc 選單。草叢裡會遇怪！';
 }
 function renderPartyBar() {
   const box = $('fPartyBar'); box.innerHTML = '';
-  const wrap = h('div', { id: 'fParty', style: `grid-template-columns:repeat(${Save.d.party.length},1fr)` });
+  const wrap = h('div', { id: 'fPartyRow', style: `grid-template-columns:repeat(${Save.d.party.length},1fr)` });
   for (const c of Save.d.party) { const st = heroStats(c, heroCh(c)), hp = curHp(c), mp = curMp(c); const pt = petOf(c); wrap.append(h('div', { class: 'pm' }, h('b', null, CLASSES[c].name + ' ' + Math.ceil(hp)), h('div', { class: 'gbar' }, h('i', { style: `width:${hp / st.maxHp * 100}%` })), h('div', { class: 'gbar mp' }, h('i', { style: `width:${mp / st.maxMp * 100}%` })), pt ? h('span', { class: 'muted' }, pt.name + ' ' + Math.ceil(petHp(pt))) : null)); }
   box.append(wrap);
 }
@@ -914,13 +956,13 @@ function drawField(now) {
   for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
     const tt = FMAP[r][c];
     if (tt === 2) ents.push({ y: r * FT + FT, f: () => drawTree(g, c, r, H) });
-    if (tt === 6 && !F.bossBeat) ents.push({ y: r * FT + FT, f: () => { const im = IMG.boss; if (ready(im)) { const hh = 150, w = hh * im.naturalWidth / im.naturalHeight; g.drawImage(im, c * FT + FT / 2 - w / 2, r * FT + FT - hh + 10, w, hh); } g.font = '900 16px "Noto Serif TC", serif'; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000'; g.strokeText('腐根樹妖', c * FT + FT / 2, r * FT - 96); g.fillStyle = '#ff9a8a'; g.fillText('腐根樹妖', c * FT + FT / 2, r * FT - 96); } });
+    if (tt === 6 && !F.bossBeat) ents.push({ y: r * FT + FT, f: () => { const im = IMG.boss; if (ready(im)) { const hh = 150, w = hh * im.naturalWidth / im.naturalHeight; g.drawImage(im, c * FT + FT / 2 - w / 2, r * FT + FT - hh + 10, w, hh); } g.font = '900 22px "Noto Serif TC", serif'; g.textAlign = 'center'; g.lineWidth = 5; g.strokeStyle = '#000'; g.strokeText('腐根樹妖', c * FT + FT / 2, r * FT - 96); g.fillStyle = '#ff9a8a'; g.fillText('腐根樹妖', c * FT + FT / 2, r * FT - 96); } });
   }
   // only the leader is drawn on the map (the others are in the party bar)
   ents.push({ y: F.y + 1, f: () => drawWalker(g, Save.d.leader, { x: F.x, y: F.y }, 0) });
   ents.sort((a, b) => a.y - b.y).forEach(o => o.f());
   if (F.goal) { g.strokeStyle = 'rgba(255,240,180,.7)'; g.lineWidth = 2; g.beginPath(); g.arc(F.goal.x, F.goal.y, 10 + Math.sin(t * 8) * 2, 0, 7); g.stroke(); }
-  g.font = '900 15px "Noto Serif TC", serif'; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000';
+  g.font = '900 21px "Noto Serif TC", serif'; g.textAlign = 'center'; g.lineWidth = 5; g.strokeStyle = '#000';
   for (const [r, s] of [[30, '▲ 森林深處：怪物變強'], [FR - 1, '▼ 回村莊']]) { g.strokeText(s, 7.5 * FT, r * FT + 22); g.fillStyle = '#ffe9a8'; g.fillText(s, 7.5 * FT, r * FT + 22); }
   g.restore();
 }
@@ -1058,7 +1100,7 @@ function renderCmd() {
       h('button', { type: 'button', class: 'primary', on: { click: () => pickTarget('enemy', '點一隻怪物', t => setCmd({ u, act: 'attack', t })) } }, '攻擊', badge('enemy')),
       h('button', { type: 'button', on: { click: () => sk.t === 'enemy' ? pickTarget('enemy', '點一隻怪物', t => setCmd({ u, act: 'petskill', t })) : setCmd({ u, act: 'petskill' }) } }, sk.n, badge(sk.t)),
       h('button', { type: 'button', on: { click: () => setCmd({ u, act: 'defend' }) } }, '防禦', h('small', null, '受傷減半')));
-    return;
+    kbCmdFocus(); return;
   }
   who.append(h('img', { src: ART + 'portraits/' + u.cls + '_n.webp', alt: '' }), h('div', null, h('b', null, u.name), ` 第 ${B.round} 回合`, h('br'), h('span', { class: 'muted' }, `HP ${Math.ceil(u.hp)}/${u.maxHp}　MP ${Math.ceil(u.mp)}/${u.maxMp}`)), h('div', { class: 'sp' }), ...undo);
   if (B.mode && B.mode.pick) { msg.textContent = B.mode.prompt; btns.append(h('button', { type: 'button', on: { click: () => { B.mode = B.mode.back || null; renderCmd(); } } }, '取消')); return; }
@@ -1066,14 +1108,14 @@ function renderCmd() {
     msg.textContent = '選一招技能（括號是打的範圍）'; btns.className = 'list';
     for (const i of u.ch.load) { const s = CLASSES[u.cls].skills[i], lv = u.ch.skills[i], cost = skillMp(u, i), t = skT(s.id); btns.append(h('button', { type: 'button', disabled: u.mp < cost, on: { click: () => chooseSkill(u, i) } }, h('img', { src: skillIcon(u.cls, i, lv), alt: '' }), h('span', null, s.name + ' Lv' + lv, h('br'), badge(t), h('small', null, ' MP ' + cost)))); }
     btns.append(h('button', { type: 'button', on: { click: () => { B.mode = null; renderCmd(); } } }, '返回'));
-    return;
+    kbCmdFocus(); return;
   }
   if (B.mode === 'items') {
     msg.textContent = '選一個道具'; btns.className = 'list';
     btns.append(h('button', { type: 'button', disabled: !d.pots.red, on: { click: () => pickTarget('ally', '選要喝紅藥水的隊友', t => setCmd({ u, act: 'item', k: 'red', t }), 'items') } }, h('img', { src: ART + 'items/pot_red.webp', alt: '' }), h('span', null, '紅藥水 ×' + d.pots.red, h('br'), badge('ally'), h('small', null, ' HP +40%'))));
     btns.append(h('button', { type: 'button', disabled: !d.pots.blue, on: { click: () => pickTarget('hero', '選要喝藍藥水的英雄', t => setCmd({ u, act: 'item', k: 'blue', t }), 'items') } }, h('img', { src: ART + 'items/pot_blue.webp', alt: '' }), h('span', null, '藍藥水 ×' + d.pots.blue, h('br'), badge('ally'), h('small', null, ' MP +40%'))));
     btns.append(h('button', { type: 'button', on: { click: () => { B.mode = null; renderCmd(); } } }, '返回'));
-    return;
+    kbCmdFocus(); return;
   }
   msg.textContent = '主神，' + u.name + '要做什麼？';
   const A = ATK[u.st.wtype], at = A.area === 'row' ? 'row' : A.area === 'col' ? 'col' : 'enemy';
@@ -1084,8 +1126,12 @@ function renderCmd() {
     h('button', { type: 'button', on: { click: () => { B.mode = 'items'; renderCmd(); } } }, '道具', h('small', null, '紅 ' + d.pots.red + '・藍 ' + d.pots.blue)),
     h('button', { type: 'button', disabled: !d.seals || B.boss, on: { click: () => pickTarget('enemy', '點要抓的怪物（打到越少血越好抓）', t => setCmd({ u, act: 'seal', t })) } }, '捕捉', h('small', null, '封印符 ×' + d.seals)),
     h('button', { type: 'button', disabled: B.boss, on: { click: () => setCmd({ u, act: 'run' }) } }, '逃跑', h('small', null, B.boss ? '魔王戰不能逃' : '70%')));
+  kbCmdFocus();
 }
-function pickTarget(side, prompt, done, back) { B.mode = { pick: side, prompt, done, back }; renderCmd(); }
+function kbCmdFocus() { if (!KB.used || SIM.on) return; const l = kbList($('bBtns')); kbMark(l[0] || null); }
+function pickTarget(side, prompt, done, back) { B.mode = { pick: side, prompt: prompt + (IS_TOUCH ? '' : '（← → 選、Enter 確定、Esc 取消）'), done, back }; const pool = pickPool(); B.mode.kbT = side === 'enemy' ? pool.slice().sort((a, b) => b.y - a.y || a.x - b.x)[0] : pool[0]; renderCmd(); }
+const pickPool = () => { const m = B.mode; const pool = m.pick === 'enemy' ? livingE() : m.pick === 'hero' ? heroesUp() : livingP(); return pool.slice().sort((a, b) => Math.abs(a.y - b.y) > 0.06 ? b.y - a.y : a.x - b.x); };
+function kbTarget(dir) { const pool = pickPool(); if (!pool.length) return; const i = pool.indexOf(B.mode.kbT); B.mode.kbT = pool[(i + dir + pool.length) % pool.length]; }
 function chooseSkill(u, i) {
   const id = CLASSES[u.cls].skills[i].id, t = SK[id].t;
   if (t === 'enemy' || t === 'row') pickTarget('enemy', t === 'row' ? '點一隻怪物（打牠那一整排）' : '點一隻怪物', tt => setCmd({ u, act: 'skill', i, t: tt }), 'skills');
@@ -1126,7 +1172,7 @@ function aiCommand(u) {
   if (u.boss && B.round % 3 === 0) return { u, act: 'sweep' };
   const P = livingP(), taunt = P.find(p => p.buffs.taunt > 0);
   // monsters prefer what stands in front: pets are hit a bit more often than the heroes behind them
-  const front = P.filter(p => p.kind === 'pet'), tgt = taunt && Math.random() < 0.75 ? taunt : (front.length && Math.random() < 0.45 ? pick(front) : pick(P));
+  const front = P.filter(p => p.kind === 'pet'), tgt = taunt ? taunt : (front.length && Math.random() < 0.45 ? pick(front) : pick(P)); // a taunting hero takes every blow
   return { u, act: 'attack', t: tgt };
 }
 
@@ -1268,6 +1314,8 @@ function dmgEnemy(u, e, base, o) {
   const pierce = u.st && u.st.waff === 'pierce';
   if ((e.elite || e.boss) && pierce) d *= 1.4;
   if (e.buffs.broke > 0) d *= 1.3;
+  if (e.buffs.stun > 0 && !o.magic) d *= 1.3;              // 暈住或凍住：物理攻擊 +30%
+  if (e.buffs.burn > 0 && unitEl(u) === 'fire') d *= 1.2;  // 燒著的怪再吃火 +20%
   if (e.armor && !pierce && !(e.buffs.broke > 0) && !o.magic) d *= e.armor;
   const em = elemMul(unitEl(u), e.el); d *= em;
   d = Math.max(1, Math.round(d));
@@ -1302,7 +1350,8 @@ function hurtUnit(t, dmg, src) {
   if (t.buffs.dodge > 0 && Math.random() < 0.5) { pop(t, '閃開', '#cfe'); return; }
   if (t.buffs.wall > 0) d *= 1 - (t.wallAmt || 0.4);
   if (t.buffs.guard > 0) d *= 0.5;
-  if (t.buffs.taunt > 0 && t.cls === 'shield') d *= 1 - (t.tauntDr || 0.3);
+  if (t.buffs.taunt > 0 && t.cls === 'shield') { d *= 1 - (t.tauntDr || 0.3); if (t.counter && src && src.hp > 0) dmgEnemy(t, src, t.st.atk * 0.5); }
+  if (t.absorb > 0 && t.aegisDr) d *= 0.8;
   if (t.buffs.frenzy > 0) d *= 1.2;
   if (t.absorb > 0) { const a = Math.min(t.absorb, d); t.absorb -= a; d -= a; if (t.absorb <= 0 && t.burst) { t.burst = false; const by = t.burstBy || t; for (const e of livingE()) { burst(e, '#ffe9a0'); dmgEnemy(by, e, by.st.atk * 2, { magic: true }); } } }
   if (t.buffs.wall > 0 && t.reflect && src && src.hp > 0) dmgEnemy(t, src, d * t.reflect);
@@ -1364,18 +1413,18 @@ const SK = {
   beam: { t: 'enemy', lab: 'col', go(u, lv, E, t) { for (const e of [t, ...column(t)]) dmgEnemy(u, e, S_(u, lv, E >= 1 ? 2 : 1.6), { magic: true }); if (E >= 2) for (const e of livingE()) dmgEnemy(u, e, S_(u, lv, 0.5), { magic: true }); } },
   meteor: { t: 'all', ult: 1, go(u, lv, E) { for (const e of livingE()) { dmgEnemy(u, e, S_(u, lv, E >= 1 ? 2.4 : 2), { magic: true }); if (E >= 2 && e.hp > 0) e.buffs.burn = 3; } } },
   bash: { t: 'enemy', go(u, lv, E, t) { for (const e of E >= 2 ? [t, ...neighbours(t)] : [t]) { dmgEnemy(u, e, S_(u, lv, 1.2)); if (Math.random() < (E >= 1 ? 0.7 : 0.5)) stunE(e); } } },
-  roar: { t: 'self', buff: 'taunt', go(u, lv, E) { u.buffs.taunt = 3; u.tauntDr = [0.3, 0.4, 0.5][E]; pop(u, '嘲諷！', '#ffd27a'); if (E >= 2) for (const e of livingE()) if (Math.random() < 0.2) stunE(e); } },
+  roar: { t: 'self', buff: 'taunt', go(u, lv, E) { u.buffs.taunt = 3 + Math.floor(lv / 3); u.tauntDr = 0.3 + 0.02 * (lv - 1); u.counter = E >= 1; burst(u, '#ffd27a'); pop(u, '嘲諷！全部衝著我來！', '#ffd27a'); if (E >= 2) for (const e of livingE()) if (Math.random() < 0.2) stunE(e); } },
   wall: { t: 'party', buff: 'wall', go(u, lv, E) { for (const p of livingP()) { p.buffs.wall = E >= 1 ? 3 : 2; p.wallAmt = E >= 1 ? 0.5 : 0.4; p.reflect = E >= 2 ? 0.3 : 0; burst(p, '#a8c8ff'); } } },
   ram: { t: 'all', ult: 1, go(u, lv, E) { for (const e of livingE()) { dmgEnemy(u, e, S_(u, lv, E >= 2 ? 2 : 1.2)); if (Math.random() < (E >= 1 ? 0.6 : 0.4)) stunE(e); } } },
   holyslash: { t: 'row', go(u, lv, E, t) { for (const e of rowOf(t)) { dmgEnemy(u, e, S_(u, lv, E >= 1 ? 1.6 : 1.3), { magic: true }); if (E >= 2) healUnit(u, u.maxHp * 0.05); } } },
-  heal: { t: 'party', heal: 1, go(u, lv, E) { for (const p of livingP()) { burst(p, '#7dff8a'); healUnit(p, p.maxHp * [0.25, 0.35, 0.45][E]); } if (E >= 2) for (const p of livingP()) { p.buffs.burn = 0; p.buffs.bleed = 0; } } },
-  aegis: { t: 'ally', heal: 1, go(u, lv, E, t) { t.absorb = t.maxHp * [0.5, 0.7, 1][E]; t.buffs.shield = 3; t.burst = E >= 2; t.burstBy = u; burst(t, '#ffe9a0'); pop(t, '神聖護盾', '#ffe9a0'); } },
+  heal: { t: 'party', heal: 1, go(u, lv, E) { const pct = 0.2 + 0.025 * (lv - 1); if (E >= 2) for (const p of B.party) if (p.hp <= 0 && p.kind === 'hero') { p.hp = Math.round(p.maxHp * 0.2); pop(p, '救起來了！', '#7dff8a'); } for (const p of livingP()) { burst(p, '#7dff8a'); healUnit(p, p.maxHp * pct * (p.buffs.taunt > 0 && p.cls === 'shield' ? 1.5 : 1)); if (E >= 1) { p.buffs.burn = 0; p.buffs.bleed = 0; } } } },
+  aegis: { t: 'ally', heal: 1, go(u, lv, E, t) { t.absorb = t.maxHp * (0.5 + 0.05 * (lv - 1)); t.aegisDr = E >= 1; t.buffs.shield = 3; t.burst = E >= 2; t.burstBy = u; burst(t, '#ffe9a0'); pop(t, '神聖護盾', '#ffe9a0'); } },
   judge: { t: 'enemy', ult: 1, go(u, lv, E, t) { dmgEnemy(u, t, S_(u, lv, E >= 1 ? 4 : 3.5), { magic: true }); if (E >= 2) for (const o of neighbours(t)) dmgEnemy(u, o, S_(u, lv, 2), { magic: true }); } },
-  flurry: { t: 'all', lab: 'rand', go(u, lv, E) { for (let k = 0; k < (E >= 1 ? 7 : 5); k++) { const e = pick(livingE()); if (!e) break; slash(e, '#ff8a5a'); const got = dmgEnemy(u, e, S_(u, lv, 0.4)); if (E >= 2) healUnit(u, got * 0.2); } } },
+  flurry: { t: 'all', lab: 'rand', go(u, lv, E) { for (let k = 0; k < 4 + Math.floor(lv / 2); k++) { const e = pick(livingE()); if (!e) break; slash(e, '#ff8a5a'); const got = dmgEnemy(u, e, S_(u, lv, E >= 1 ? 0.5 : 0.4)); if (E >= 2) healUnit(u, got * 0.2); } } },
   leap: { t: 'enemy', go(u, lv, E, t) { dmgEnemy(u, t, S_(u, lv, E >= 1 ? 1.8 : 1.5)); for (const o of neighbours(t)) { dmgEnemy(u, o, S_(u, lv, 0.8)); if (E >= 2 && Math.random() < 0.4) stunE(o); } if (E >= 2 && Math.random() < 0.4) stunE(t); } },
   bloodlust: { t: 'self', buff: 'lust', go(u, lv, E) { u.buffs.lust = E >= 1 ? 4 : 3; u.lustAmt = E >= 1 ? 0.4 : 0.3; if (E >= 2) u.buffs.might = u.buffs.lust; burst(u, '#ff4a3a'); } },
   frenzy: { t: 'self', buff: 'frenzy', ult: 1, go(u, lv, E) { u.buffs.frenzy = E >= 1 ? 4 : 3; u.frenzyMul = E >= 2 ? 1.8 : 1.5; burst(u, '#ff4a3a'); } },
-  triple: { t: 'all', lab: 'rand', go(u, lv, E) { for (let k = 0; k < (E >= 1 ? 5 : 3); k++) { const e = pick(livingE()); if (!e) break; dmgEnemy(u, e, S_(u, lv, E >= 2 ? 0.9 : 0.7)); } } },
+  triple: { t: 'all', lab: 'rand', go(u, lv, E) { const n = Math.min(8, 3 + Math.floor(lv / 2)); pop(u, n + ' 箭！', '#d8ffb0'); for (let k = 0; k < n; k++) { const e = pick(livingE()); if (!e) break; slash(e, '#d8ffb0'); dmgEnemy(u, e, S_(u, lv, [0.7, 0.8, 0.9][E])); } } },
   backshot: { t: 'enemy', go(u, lv, E, t) { dmgEnemy(u, t, S_(u, lv, E >= 1 ? 1.7 : 1.4)); u.buffs.dodge = 1; if (E >= 2) { const o = livingE().filter(e => e !== t); if (o.length) dmgEnemy(u, pick(o), S_(u, lv, 1)); } } },
   blast: { t: 'enemy', go(u, lv, E, t) { dmgEnemy(u, t, S_(u, lv, E >= 1 ? 1.9 : 1.6)); for (const o of neighbours(t)) { dmgEnemy(u, o, S_(u, lv, 0.8)); if (E >= 2 && o.hp > 0) o.buffs.burn = 2; } if (E >= 2 && t.hp > 0) t.buffs.burn = 2; } },
   rain: { t: 'all', ult: 1, go(u, lv, E) { const v = E >= 2 ? 2 : 1; for (let k = 0; k < v; k++) for (const e of livingE()) dmgEnemy(u, e, S_(u, lv, E >= 1 ? 1.6 : 1.3) * (v > 1 ? 0.6 : 1)); } }
@@ -1471,7 +1520,7 @@ function showReward(rw) {
 
 /* ---------------- battle drawing ---------------- */
 const BIMG = img('battlebg', TDART + 'battle_forest.webp');
-function pop(u, text, col, size) { if (SIM.on || !B) return; B.floats.push({ u, text, col, size: size || 22, t: 1.1, dy: 0 }); }
+function pop(u, text, col, size) { if (SIM.on || !B) return; B.floats.push({ u, text, col, size: Math.round((size || 22) * 1.3), t: 1.2, dy: 0 }); }
 function shake() { if (SIM.on || !B) return; B.shake = 0.35; }
 function sayB(u, text) { if (SIM.on || !B || !u) return; u.bubble = { text, t: 3.2 }; }
 function drawBattle(now, dt) {
@@ -1517,7 +1566,9 @@ function drawUnit(g, u, t, dt, picking, isCmd) {
   if (isCmd) { const gl = g.createRadialGradient(p.x, p.y - p.h * 0.4, 4, p.x, p.y - p.h * 0.4, p.h * 0.75); gl.addColorStop(0, 'rgba(255,224,102,.45)'); gl.addColorStop(1, 'rgba(255,224,102,0)'); g.fillStyle = gl; g.fillRect(p.x - p.h, p.y - p.h * 1.3, p.h * 2, p.h * 1.5); g.strokeStyle = `rgba(255,224,102,${0.7 + 0.3 * Math.sin(t * 8)})`; g.lineWidth = 4; g.beginPath(); g.ellipse(p.x, p.y, p.h * 0.42, p.h * 0.12, 0, 0, 7); g.stroke(); }
   if (u.elite || u.boss) { g.strokeStyle = u.boss ? '#ff5a3a' : '#ffcf5a'; g.lineWidth = 3; g.beginPath(); g.ellipse(p.x, p.y, p.h * 0.36, p.h * 0.1, 0, 0, 7); g.stroke(); }
   const valid = picking && !down && (picking === 'enemy' ? u.kind === 'enemy' : picking === 'hero' ? u.kind === 'hero' : u.kind !== 'enemy');
-  if (valid || isCmd) { g.fillStyle = isCmd ? '#ffe066' : '#ff9a4a'; const ay = p.y - p.h - 30 - Math.abs(Math.sin(t * 6)) * 7; g.beginPath(); g.moveTo(p.x, ay + 16); g.lineTo(p.x - 11, ay); g.lineTo(p.x + 11, ay); g.fill(); g.strokeStyle = '#000'; g.lineWidth = 2; g.stroke(); }
+  const kbT = picking && B.mode.kbT === u;
+  if (kbT) { g.strokeStyle = '#ffffff'; g.lineWidth = 5; g.beginPath(); g.ellipse(p.x, p.y, p.h * 0.5, p.h * 0.15, 0, 0, 7); g.stroke(); }
+  if ((valid && (!B.mode.kbT || kbT || IS_TOUCH)) || isCmd) { g.fillStyle = isCmd ? '#ffe066' : kbT ? '#ffffff' : '#ff9a4a'; const ay = p.y - p.h - 30 - Math.abs(Math.sin(t * 6)) * 7; g.beginPath(); g.moveTo(p.x, ay + 16); g.lineTo(p.x - 11, ay); g.lineTo(p.x + 11, ay); g.fill(); g.strokeStyle = '#000'; g.lineWidth = 2; g.stroke(); }
   if (valid) { g.strokeStyle = `rgba(255,154,74,${0.6 + 0.4 * Math.sin(t * 8)})`; g.lineWidth = 3; g.beginPath(); g.ellipse(p.x, p.y, p.h * 0.4, p.h * 0.12, 0, 0, 7); g.stroke(); }
   if (ready(im)) {
     const w = p.h * im.naturalWidth / im.naturalHeight;
@@ -1530,51 +1581,57 @@ function drawUnit(g, u, t, dt, picking, isCmd) {
   }
   g.restore();
   if (u.moving) return; // no bars while running across the field
-  const bw = u.boss ? 120 : u.kind === 'pet' ? 50 : 64, by = p.y + 6;
+  const bw = u.boss ? 130 : u.kind === 'pet' ? 62 : 80, by = p.y + 6;
   g.fillStyle = 'rgba(0,0,0,.7)'; g.fillRect(p.x - bw / 2 - 2, by - 2, bw + 4, u.kind === 'hero' ? 14 : 9);
   g.fillStyle = u.kind === 'enemy' ? '#e05a4a' : '#5fd04a'; g.fillRect(p.x - bw / 2, by, bw * clamp(u.hp / u.maxHp, 0, 1), 5);
   if (u.kind === 'hero') { g.fillStyle = '#4a7ff0'; g.fillRect(p.x - bw / 2, by + 7, bw * clamp(u.mp / u.maxMp, 0, 1), 4); }
   if (u.shield > 0 || u.absorb > 0) { g.fillStyle = '#9fd3ff'; g.fillRect(p.x - bw / 2, by - 4, bw * clamp((u.shield || u.absorb) / (u.maxHp * 0.5), 0, 1), 2); }
-  g.font = `900 ${isCmd ? 15 : 12}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 3; g.strokeStyle = '#000';
+  g.font = `900 ${isCmd ? 21 : 17}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 3; g.strokeStyle = '#000';
   const el = u.kind === 'enemy' ? ELEM[u.el] : u.kind === 'pet' ? ELEM[MON_EL[u.type]] : null;
   const tag = u.kind === 'enemy' ? `Lv${u.lvl} ${u.name}` + (u.elite ? '・' + EAFFIX[u.aff[0]].n : '') : u.kind === 'pet' ? `${u.name} ${Math.ceil(u.hp)}` : `${u.name} ${Math.max(0, Math.ceil(u.hp))}`;
-  const ty = by + (u.kind === 'hero' ? 27 : 21);
+  const ty = by + (u.kind === 'hero' ? 31 : 25);
   g.strokeText(tag, p.x, ty); g.fillStyle = isCmd ? '#ffe066' : u.kind === 'enemy' ? (u.elite ? '#ffcf5a' : '#ffd0c8') : '#e8ffe0'; g.fillText(tag, p.x, ty);
-  if (el) { const tw2 = g.measureText(tag).width; g.font = '900 12px sans-serif'; g.fillStyle = el.c; g.strokeText(el.n, p.x + tw2 / 2 + 9, ty); g.fillText(el.n, p.x + tw2 / 2 + 9, ty); }
+  if (el) { const tw2 = g.measureText(tag).width; g.font = '900 17px sans-serif'; g.fillStyle = el.c; g.strokeText(el.n, p.x + tw2 / 2 + 9, ty); g.fillText(el.n, p.x + tw2 / 2 + 9, ty); }
   const st = [], bf = u.buffs || {};
   if (bf.stun > 0) st.push('暈'); if (bf.burn > 0) st.push('燃'); if (bf.bleed > 0) st.push('血'); if (bf.broke > 0) st.push('破甲'); if (bf.slow > 0) st.push('慢');
   if (bf.taunt > 0) st.push('嘲諷'); if (bf.wall > 0) st.push('盾牆'); if (bf.guard > 0) st.push('石化'); if (bf.frenzy > 0) st.push('狂暴'); if (bf.lust > 0) st.push('嗜血'); if (u.defend) st.push('防禦');
-  if (st.length) { g.font = 'bold 12px sans-serif'; const s = st.join('・'); g.strokeText(s, p.x, p.y - p.h - 4); g.fillStyle = '#ffe066'; g.fillText(s, p.x, p.y - p.h - 4); }
+  if (st.length) { g.font = 'bold 16px sans-serif'; const s = st.join('・'); g.strokeText(s, p.x, p.y - p.h - 4); g.fillStyle = '#ffe066'; g.fillText(s, p.x, p.y - p.h - 4); }
 }
 function wrapLines(g, text, maxW) { const lines = []; let cur = ''; for (const chr of text) { if (g.measureText(cur + chr).width > maxW) { lines.push(cur); cur = chr; } else cur += chr; } if (cur) lines.push(cur); return lines; }
 function bubble(g, text, x, y, alpha, W) {
-  g.font = '600 15px "Noto Serif TC", serif';
-  const lines = wrapLines(g, text, 230), w = Math.min(230, Math.max(...lines.map(l => g.measureText(l).width))) + 20, hh = lines.length * 20 + 12;
+  g.font = '600 19px "Noto Serif TC", serif';
+  const lines = wrapLines(g, text, 300), w = Math.min(300, Math.max(...lines.map(l => g.measureText(l).width))) + 22, hh = lines.length * 25 + 14;
   const bx = clamp(x - w / 2, 4, W - w - 4); let by = y - hh; if (by < 4) by = 4;
   g.globalAlpha = alpha;
   g.fillStyle = 'rgba(255,250,235,.96)'; g.strokeStyle = '#5a4a32'; g.lineWidth = 2;
   g.beginPath(); g.roundRect ? g.roundRect(bx, by, w, hh, 10) : g.rect(bx, by, w, hh); g.fill(); g.stroke();
   g.fillStyle = '#2a1e10'; g.textAlign = 'left';
-  lines.forEach((l, i) => g.fillText(l, bx + 10, by + 22 + i * 20));
+  lines.forEach((l, i) => g.fillText(l, bx + 11, by + 27 + i * 25));
   g.globalAlpha = 1;
 }
 function flash() { const f = $('flash'); f.style.opacity = '0.9'; setTimeout(() => { f.style.opacity = '0'; }, 120); }
 $('bSpeed').addEventListener('click', () => { if (!B) return; B.speed = B.speed === 1 ? 2 : B.speed === 2 ? 3 : 1; speedPref = B.speed; $('bSpeed').textContent = B.speed + 'x'; });
 $('bAuto').addEventListener('click', () => { Save.d.auto = !Save.d.auto; Save.write(); updateAutoBtn(); if (Save.d.auto && B && B.phase === 'cmd') { for (let i = Math.max(0, B.cur); i < B.queue.length; i++) B.cmds.push(aiCommand(B.queue[i])); resolveRound(); } });
-function updateAutoBtn() { $('bAuto').classList.toggle('on', !!Save.d.auto); $('bAuto').textContent = Save.d.auto ? '自動中' : '自動'; }
+function updateAutoBtn() { $('bAuto').classList.toggle('on', !!Save.d.auto); $('bAuto').textContent = (Save.d.auto ? '自動中' : '自動') + (IS_TOUCH ? '' : ' A'); }
 
 /* ================= windows ================= */
 const Modal = {
   onClose: null,
   open(title, render, onClose, noClose, full) {
+    this.kind = null; KB.el = null;
     $('mTitle').textContent = title; this.onClose = onClose || null; $('mClose').hidden = !!noClose;
     $('modal').classList.toggle('full', !!full);
     $('modal').hidden = false; this.render = render; this.refresh(true);
   },
-  refresh(top) { const b = $('mBody'), y = b.scrollTop; b.innerHTML = ''; this.render(b); b.scrollTop = top ? 0 : y; },
+  refresh(top) { const b = $('mBody'), y = b.scrollTop, idx = KB.el ? kbList($('modal')).indexOf(KB.el) : -1; b.innerHTML = ''; this.render(b); b.scrollTop = top ? 0 : y; if (KB.used) { const l = kbList($('modal')); kbMark(l[top ? kbFirst(l) : Math.max(0, Math.min(idx, l.length - 1))] || null); } },
   close() { if ($('modal').hidden) return; $('modal').hidden = true; const cb = this.onClose; this.onClose = null; if (cb) cb(); }
 };
 $('mClose').addEventListener('click', () => Modal.close());
+{ // swipe left / right through the heroes in the party window
+  let sx = 0, sy = 0;
+  $('mBody').addEventListener('touchstart', e => { if (e.touches.length === 1) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; } }, { passive: true });
+  $('mBody').addEventListener('touchend', e => { if (Modal.kind !== 'party' || !e.changedTouches.length) return; const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) partyStep(dx < 0 ? 1 : -1); }, { passive: true });
+}
 $('modal').addEventListener('pointerdown', e => { if (e.target.id === 'modal' && !$('mClose').hidden) Modal.close(); });
 function openMenu() {
   Modal.open('選單', b => {
@@ -1589,13 +1646,22 @@ function openMenu() {
 
 /* ================= party window: four equipment slots, attributes, skills, pets ================= */
 let partyCls = 'warrior', partySel = null, partyMsg = '';
-function openParty(cls) { partyCls = cls || Save.d.leader || 'warrior'; partySel = null; partyMsg = ''; Modal.open('隊伍', renderParty, () => { if (F.active) renderPartyBar(); }, false, true); }
+const partyList = () => F.active ? Save.d.party : HEROES;           // outside town only the four who came along
+function openParty(cls) { const list = partyList(); partyCls = list.includes(cls) ? cls : list.includes(Save.d.leader) ? Save.d.leader : list[0]; partySel = null; partyMsg = ''; Modal.open('隊伍', renderParty, () => { if (F.active) renderPartyBar(); }, false, true); Modal.kind = 'party'; }
+function partyStep(dir) { const list = partyList(), i = list.indexOf(partyCls); partyCls = list[(i + dir + list.length) % list.length]; partySel = null; partyMsg = ''; Modal.refresh(true); }
 function where(it) { for (const c of HEROES) for (const s in SLOTS) if (heroCh(c).equip[s] === it) return [c, s]; return null; }
 function renderParty(b) {
   const d = Save.d, cls = partyCls, ch = heroCh(cls), st = heroStats(cls, ch), cap = levelCap(), inParty = d.party.includes(cls);
-  b.append(h('div', { class: 'htabs' }, ...HEROES.map(c => h('button', { type: 'button', class: c === cls ? 'on' : '', on: { click: () => { partyCls = c; partySel = null; partyMsg = ''; Modal.refresh(true); } } }, h('img', { src: ART + 'portraits/' + c + '_n.webp', alt: '' }), (d.party.includes(c) ? '★' : '') + CLASSES[c].name + (heroCh(c).pts ? '•' : '')))));
+  const list = partyList(), idx = list.indexOf(cls);
+  b.append(h('div', { class: 'pager' },
+    h('button', { type: 'button', class: 'pg', 'aria-label': '上一位', on: { click: () => partyStep(-1) } }, '◀'),
+    h('div', { class: 'pgc' }, h('img', { src: ART + 'portraits/' + cls + '_n.webp', alt: '' }),
+      h('div', null, h('b', null, CLASSES[cls].name), h('span', null, ' Lv' + ch.lvl), inParty ? h('span', { class: 'tdaff' }, d.leader === cls ? '　★帶隊' : '　★出城') : null,
+        h('div', { class: 'dots' }, ...list.map(c => h('i', { class: c === cls ? 'on' : heroCh(c).pts ? 'pt' : '' }))),
+        h('span', { class: 'muted' }, `${idx + 1} / ${list.length}　` + (IS_TOUCH ? '左右滑動換人' : '← → 換人')))),
+    h('button', { type: 'button', class: 'pg', 'aria-label': '下一位', on: { click: () => partyStep(1) } }, '▶')));
   if (partyMsg) b.append(h('div', { class: 'say2' }, partyMsg));
-  b.append(h('div', null, h('b', { style: 'font-size:1.2em;color:#ffe9a8' }, CLASSES[cls].name + ' Lv' + ch.lvl), h('span', { class: 'muted' }, ch.lvl >= cap ? `（等級上限 ${cap}，打倒魔王會提高）` : `　經驗 ${ch.exp}/${expNext(ch.lvl)}`),
+  b.append(h('div', null, h('span', { class: 'muted' }, ch.lvl >= cap ? `（等級上限 ${cap}，打倒魔王會提高）` : `　經驗 ${ch.exp}/${expNext(ch.lvl)}`),
     h('div', { class: 'xp' }, h('i', { style: `width:${Math.round(ch.exp / expNext(ch.lvl) * 100)}%` })),
     h('div', { class: 'btns' },
       F.active ? null : h('button', { type: 'button', class: inParty ? 'on' : '', on: { click: () => { if (inParty) { if (d.party.length <= 1) return toast('至少要帶一位英雄'); d.party = d.party.filter(c => c !== cls); if (d.leader === cls) d.leader = d.party[0]; } else { if (d.party.length >= 4) return toast('最多帶 4 位英雄出城'); d.party.push(cls); } Save.write(); Modal.refresh(); } } }, inParty ? '✓ 出城隊伍' : '加入出城隊伍'),
@@ -1652,13 +1718,13 @@ function equipTo(it, cls) {
 function skillCards(cls, trainer) {
   const d = Save.d, ch = heroCh(cls), box = h('div', { class: 'sk4' });
   CLASSES[cls].skills.forEach((s, i) => {
-    const known = ch.known[i], lv = ch.skills[i], on = ch.load.includes(i), info = SKILL_INFO[s.id], E = evo(lv);
-    const t = h('div', { class: 't' }, h('b', null, s.name), known ? ` Lv${lv}` : '（還沒學）', h('span', { class: 'muted' }, `　MP ${s.mp}` + (i === 3 ? '・大絕招' : '')),
-      h('div', null, info[0]), h('div', { class: 'ev' + (E >= 1 ? ' got' : '') }, info[1]), h('div', { class: 'ev' + (E >= 2 ? ' got' : '') }, info[2]),
+    const known = ch.known[i], lv = ch.skills[i], on = ch.load.includes(i), info = SKDESC[s.id], E = evo(lv);
+    const t = h('div', { class: 't' }, h('b', null, s.name), known ? ` Lv${lv}` : '（還沒學）', ' ', h('span', { class: 'rng', style: `background:${TCOL[SK[s.id].lab || SK[s.id].t]}` }, info[0]), h('div', { class: 'muted' }, `MP ${s.mp}` + (i === 3 ? '・大絕招' : '') + (i === STARTER[cls] ? '・天生就會' : '')),
+      h('div', null, info[1]), h('div', { class: 'ev' + (E >= 1 ? ' got' : '') }, info[2]), h('div', { class: 'ev' + (E >= 2 ? ' got' : '') }, info[3]),
       known && lv < SKILL_MAX ? h('div', null, h('span', { class: 'muted' }, `熟練度 ${ch.skx[i]}/${skillNeed(lv)}（用一次 +1）`), h('div', { class: 'xp' }, h('i', { style: `width:${ch.skx[i] / skillNeed(lv) * 100}%` }))) : null);
     const btns = h('div', { style: 'display:flex;flex-direction:column;gap:6px' });
     if (!known) {
-      if (trainer) btns.append(h('button', { type: 'button', class: 'primary', disabled: d.gold < SKILL_PRICE[i], on: { click: () => { d.gold -= SKILL_PRICE[i]; ch.known[i] = true; if (ch.load.length < SKILL_SLOTS) { ch.load.push(i); ch.load.sort(); } Save.write(); SFX.win(); updateWallet(); trainerMsg = CLASSES[cls].name + '：「' + say1(cls, 'learn') + '」　技能導師：「學會了！用越多次越強，練到十級我會哭。」'; Modal.refresh(); } } }, `學習\n${SKILL_PRICE[i]} 金`));
+      if (trainer) btns.append(h('button', { type: 'button', class: 'primary', disabled: d.gold < skillPrice(cls, i), on: { click: () => { d.gold -= skillPrice(cls, i); ch.known[i] = true; if (ch.load.length < SKILL_SLOTS) { ch.load.push(i); ch.load.sort(); } Save.write(); SFX.win(); updateWallet(); trainerMsg = CLASSES[cls].name + '：「' + say1(cls, 'learn') + '」　技能導師：「學會了！用越多次越強，練到十級我會哭。」'; Modal.refresh(); } } }, `學習\n${skillPrice(cls, i)} 金`));
       else btns.append(h('span', { class: 'muted', style: 'font-size:.85em' }, '去技能導師買'));
     } else btns.append(h('button', { type: 'button', class: on ? 'on' : '', on: { click: () => { if (on) { if (ch.load.length <= 1) return toast('至少帶一招'); ch.load = ch.load.filter(x => x !== i); } else { if (ch.load.length >= SKILL_SLOTS) return toast(`最多帶 ${SKILL_SLOTS} 招，先取消一招`); ch.load.push(i); ch.load.sort(); } Save.write(); Modal.refresh(); } } }, on ? '✓ 帶上場' : '帶上場'));
     box.append(h('div', { class: 'skc' + (on ? ' on' : '') + (known ? '' : ' no') }, h('img', { src: skillIcon(cls, i, lv), alt: '' }), t, btns));
@@ -1870,6 +1936,11 @@ const VIMG = img('village', TDART + 'village.webp');
 for (const n of NPCS) img(n.key, npcImg(n));
 const vy = t => 0.955 - 0.5 * Math.pow(t, 0.85);
 const vs = t => 1 - 0.66 * t;
+function keyHints() {
+  if (IS_TOUCH) return;
+  $('vBack').textContent = '↓ 上一位'; $('vFwd').textContent = '↑ 下一位'; $('vParty').textContent = '隊伍 I'; $('vPets').textContent = '寵物 P'; $('vMenu').textContent = '☰ Esc';
+  $('fParty').textContent = '隊伍 I'; $('fPets').textContent = '寵物 P'; $('fMenu').textContent = '☰ Esc'; $('bAuto').title = 'A'; $('bSpeed').title = 'Q';
+}
 function goVillage() {
   showScreen('village'); V.active = true; F.active = false; B = null; V.hintDirty = true;
   V.LH = resizeCanvasTo(vc) || V.LH; updateWallet(); BGM.play('town');
@@ -1887,7 +1958,7 @@ function villageStep(dt) {
   for (const n of NPCS) { const dd = Math.abs(n.t - V.t); if (dd < bd) { bd = dd; near = n; } }
   if (near !== V.near || V.hintDirty) {
     V.near = near; V.hintDirty = false; const b = $('vTalk');
-    b.disabled = !near; b.textContent = near ? (near.id === 'gate' ? '出城／守衛' : '和' + near.name + '說話') : '說話';
+    b.disabled = !near; b.textContent = (near ? (near.id === 'gate' ? '出城／守衛' : '和' + near.name + '說話') : '說話') + (IS_TOUCH ? '' : '（Enter）');
     $('vHint').textContent = near ? (NpcEv.at(near.id) ? near.name + '有話要問你！' : '按「說話」') : '點 NPC 就會走過去；▲▼ 點一下到下一位，按住自由走';
   }
   NpcEv.tick(dt);
@@ -1911,7 +1982,7 @@ function drawPerson(g, im, p, hh, face, bob, npc, t) {
   g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(p.x, p.y, 34 * s, 10 * s, 0, 0, 7); g.fill();
   if (ready(im)) { const w = H * im.naturalWidth / im.naturalHeight; g.save(); g.translate(p.x, p.y - bob * s); g.scale(face, 1); g.drawImage(im, -w / 2, -H, w, H); g.restore(); }
   if (!npc) return;
-  g.font = `900 ${Math.max(12, 17 * s)}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000';
+  g.font = `900 ${Math.max(17, 24 * s)}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000';
   g.strokeText(npc.name, p.x, p.y - H - 6 * s); g.fillStyle = '#ffe9a8'; g.fillText(npc.name, p.x, p.y - H - 6 * s);
   if (NpcEv.at(npc.id)) { const yy = p.y - H - 26 * s - Math.abs(Math.sin(t * 4)) * 8 * s; g.fillStyle = '#ff3a2a'; g.beginPath(); g.arc(p.x, yy, 13 * s + 4, 0, 7); g.fill(); g.fillStyle = '#fff'; g.font = `900 ${18 * s + 6}px sans-serif`; g.fillText('!', p.x, yy + 7 * s + 2); }
 }
@@ -1974,30 +2045,65 @@ const Dialog = {
 };
 $('dlg').addEventListener('pointerdown', e => { if (e.target.id !== 'dlgSkip') { e.preventDefault(); Dialog.next(); } });
 $('dlgSkip').addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); Dialog.finish(); });
+/* ---------------- keyboard focus: arrows move a highlight, Enter presses it, Esc goes back ---------------- */
+const KB = { el: null, used: false };
+const kbList = root => [...root.querySelectorAll('button:not(:disabled), [role=button]')].filter(e => e.offsetParent !== null && !e.closest('[hidden]'));
+const kbFirst = l => { const i = l.findIndex(e => e.classList.contains('primary') && e.id !== 'mClose'); return i >= 0 ? i : l.findIndex(e => e.id !== 'mClose') >= 0 ? l.findIndex(e => e.id !== 'mClose') : 0; };
+function kbMark(el) { document.querySelectorAll('.kfoc').forEach(x => x.classList.remove('kfoc')); KB.el = el; if (el) { el.classList.add('kfoc'); try { el.scrollIntoView({ block: 'nearest' }); } catch (e) {} } }
+function kbMove(root, dir) {
+  const list = kbList(root); if (!list.length) return;
+  if (!KB.el || !list.includes(KB.el)) return kbMark(list[kbFirst(list)]);
+  const r = KB.el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, vert = dir === 'up' || dir === 'down';
+  let best = null, bs = 1e9;
+  for (const e of list) {
+    if (e === KB.el) continue;
+    const q = e.getBoundingClientRect(), dx = q.left + q.width / 2 - cx, dy = q.top + q.height / 2 - cy;
+    if (!(dir === 'up' ? dy < -6 : dir === 'down' ? dy > 6 : dir === 'left' ? dx < -6 : dx > 6)) continue;
+    const sc = (vert ? Math.abs(dy) : Math.abs(dx)) + (vert ? Math.abs(dx) : Math.abs(dy)) * 2.2;
+    if (sc < bs) { bs = sc; best = e; }
+  }
+  if (best) kbMark(best);
+}
+const KEYDIR4 = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
 const KEYDIR = { ArrowUp: [0, -1], KeyW: [0, -1], ArrowDown: [0, 1], KeyS: [0, 1], ArrowLeft: [-1, 0], KeyA: [-1, 0], ArrowRight: [1, 0], KeyD: [1, 0] };
 const held = {};
 window.addEventListener('keydown', e => {
   if (Dialog.open) { if (['Space', 'Enter', 'NumpadEnter'].includes(e.code)) { e.preventDefault(); if (!e.repeat) Dialog.next(); } else if (e.code === 'Escape') { e.preventDefault(); Dialog.finish(); } return; }
-  if (!$('modal').hidden) { if (e.code === 'Escape' && !$('mClose').hidden) Modal.close(); return; }
+  if (KEYDIR4[e.code] || e.code === 'Enter' || e.code === 'NumpadEnter') { if (!KB.used) { KB.used = true; document.body.classList.add('kb'); } }
+  if (!$('modal').hidden) {
+    e.preventDefault();
+    if (e.code === 'Escape' || e.code === 'Backspace') { if (!$('mClose').hidden) Modal.close(); else { const l = kbList($('modal')); const p = l.find(x => x.classList.contains('primary')); if (p) p.click(); } return; }
+    if (Modal.kind === 'party' && (e.code === 'ArrowLeft' || e.code === 'ArrowRight') && !e.repeat && !partySel) return partyStep(e.code === 'ArrowLeft' ? -1 : 1);
+    if (KEYDIR4[e.code]) return kbMove($('modal'), KEYDIR4[e.code]);
+    if ((e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Space') && !e.repeat) { if (KB.el && document.contains(KB.el)) KB.el.click(); else kbMove($('modal'), 'down'); }
+    return;
+  }
   if (V.active) {
     if (e.code === 'ArrowUp' || e.code === 'KeyW') { e.preventDefault(); if (!e.repeat) nextNpc(1); }
     else if (e.code === 'ArrowDown' || e.code === 'KeyS') { e.preventDefault(); if (!e.repeat) nextNpc(-1); }
     else if ((e.code === 'Space' || e.code === 'Enter') && V.near && !e.repeat) { e.preventDefault(); talkTo(V.near.id); }
     else if (e.code === 'KeyI' || e.code === 'KeyC') openParty();
+    else if (e.code === 'KeyP') openPets(false);
     else if (e.code === 'Escape') openMenu();
     return;
   }
   if (F.active) {
     if (KEYDIR[e.code]) { e.preventDefault(); held[e.code] = 1; updateKeyHold(); }
     else if (e.code === 'KeyI' || e.code === 'KeyC') openParty();
+    else if (e.code === 'KeyP') openPets(false);
     else if (e.code === 'Escape') openMenu();
     return;
   }
+  if (B && (e.code === 'KeyA' || e.code === 'KeyQ') && !e.repeat) { $(e.code === 'KeyA' ? 'bAuto' : 'bSpeed').click(); return; }
+  if (B && B.phase === 'cmd' && B.mode && B.mode.pick && !e.repeat && KEYDIR4[e.code]) { e.preventDefault(); kbTarget(KEYDIR4[e.code] === 'left' || KEYDIR4[e.code] === 'up' ? -1 : 1); return; }
+  if (B && B.phase === 'cmd' && !B.mode && KEYDIR4[e.code]) { e.preventDefault(); kbMove($('bBtns'), KEYDIR4[e.code]); return; }
+  if (B && B.phase === 'cmd' && B.mode === 'skills' || B && B.phase === 'cmd' && B.mode === 'items') { if (KEYDIR4[e.code]) { e.preventDefault(); kbMove($('bBtns'), KEYDIR4[e.code]); return; } }
+  if (B && B.phase === 'cmd' && !e.repeat && (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Space') && !(B.mode && B.mode.pick)) { e.preventDefault(); if (KB.el && $('bBtns').contains(KB.el)) KB.el.click(); else kbMove($('bBtns'), 'down'); return; }
   if (B && B.phase === 'cmd' && !e.repeat) {
     const map = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5 }, bt = [...$('bBtns').querySelectorAll('button')];
     if (e.code in map && bt[map[e.code]] && !bt[map[e.code]].disabled) { e.preventDefault(); bt[map[e.code]].click(); }
     else if (e.code === 'Escape' || e.code === 'Backspace') { if (B.mode) { B.mode = B.mode.back || null; renderCmd(); } else undoCmd(); }
-    else if (B.mode && B.mode.pick && (e.code === 'Space' || e.code === 'Enter')) { const pool = B.mode.pick === 'enemy' ? livingE() : B.mode.pick === 'hero' ? heroesUp() : livingP(); const f = B.mode.done; B.mode = null; f(pool[0]); }
+    else if (B.mode && B.mode.pick && (e.code === 'Space' || e.code === 'Enter' || e.code === 'NumpadEnter')) { const pool = pickPool(); const t = B.mode.kbT && pool.includes(B.mode.kbT) ? B.mode.kbT : pool[0]; const f = B.mode.done; B.mode = null; f(t); }
   }
 });
 window.addEventListener('keyup', e => {
@@ -2111,5 +2217,5 @@ window.TD = {
 
 layout();
 const fontReady = (document.fonts && document.fonts.load) ? Promise.race([document.fonts.load('900 20px "Noto Serif TC"', '全員瘋子RPG'), new Promise(r => setTimeout(r, 2500))]) : Promise.resolve();
-fontReady.then(() => { layout(); goVillage(); });
+fontReady.then(() => { layout(); keyHints(); goVillage(); });
 </script>
