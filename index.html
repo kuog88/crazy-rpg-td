@@ -438,30 +438,30 @@ const STARTER = { warrior: 0, mage: 0, shield: 1, paladin: 1, berserker: 0, arch
 function skillPrice(cls, i) { if (i === 3) return 4000; const others = [0, 1, 2].filter(k => k !== STARTER[cls]); return others[0] === i ? 500 : 1500; }
 // what each skill does in a turn-based fight: [range, base, Lv5 evolution, Lv10 evolution]; damage grows 12% per skill level
 const SKDESC = {
-  whirl: ['前排全體', '旋轉砍前排所有怪 90%', '5 級：前排 120%', '10 級：連後排也砍到（60%）'],
-  charge: ['單體', '衝過去 160%，30% 暈眩', '5 級：暈眩 50%', '10 級：貫穿，後面那隻也吃 100%'],
-  smash: ['單體', '220%＋破甲 3 回合（受傷 +30%、無視護甲）', '5 級：旁邊的怪也破甲', '10 級：再補一擊 100%'],
-  quake: ['全體', '全體 150%（地屬性），20% 暈眩', '5 級：全體 180%', '10 級：連震兩次'],
-  fireball: ['單體＋波及', '火屬性 180%，旁邊的怪 60%', '5 級：一次丟三顆', '10 級：命中的怪燃燒 3 回合'],
-  nova: ['全體', '水屬性全體 80%，30% 凍住（凍住的怪被物理攻擊 +30%）', '5 級：凍住機率 50%', '10 級：全體 120%、凍住 70%'],
-  beam: ['一直排', '同一直線的前後兩隻 160%（風屬性）', '5 級：200%', '10 級：結束時全體爆炸 50%'],
-  meteor: ['全體', '火屬性全體 200%', '5 級：全體 240%', '10 級：全體燃燒 3 回合'],
-  bash: ['單體', '120%，50% 暈眩', '5 級：暈眩 70%', '10 級：旁邊的怪也一起暈'],
-  roar: ['自己', '怪物「一定」先打盾戰士：2 回合（每 3 級 +1 回合），自己減傷 30%（每級 +2%）。嘲諷中被聖騎士治療多補 50%', '5 級：嘲諷時被打會反擊 50%', '10 級：怒吼時全體 20% 暈眩'],
-  wall: ['我方全體', '全隊減傷 40%，2 回合', '5 級：減傷 50%、3 回合', '10 級：反彈 30% 傷害'],
-  ram: ['全體', '全體 120%，40% 暈眩', '5 級：暈眩 60%', '10 級：全體 200%'],
-  holyslash: ['一排', '聖光斬一整排 130%', '5 級：160%', '10 級：每打中一隻回自己 5% 血'],
-  heal: ['我方全體', '全隊回血 20%（每級 +2.5%），嘲諷中的盾戰士多補 50%', '5 級：順便解除燃燒和流血', '10 級：倒下的隊友也會被救起來（20% 血）'],
-  aegis: ['隊友單體', '護盾吸收 50% 最大血量（每級 +5%），3 回合', '5 級：護盾期間受傷再 -20%', '10 級：護盾破掉時聖光炸全體 200%'],
-  judge: ['單體', '聖光巨錘 350%', '5 級：400%', '10 級：旁邊的怪也吃 200%'],
-  flurry: ['隨機連擊', '隨機亂砍 4 下（每 2 級多 1 下），每下 40%', '5 級：每下 50%', '10 級：每下吸血 20%'],
-  leap: ['單體＋波及', '跳砸 150%，旁邊 80%（地屬性）', '5 級：180%', '10 級：40% 暈眩'],
+  whirl: ['身邊一圈', '旋轉砍身邊所有怪 90%', '5 級：前排 120%', '10 級：連後排也砍到（60%）'],
+  charge: ['直線 3 格', '衝過去 160%，30% 暈眩', '5 級：暈眩 50%', '10 級：貫穿，後面那隻也吃 100%'],
+  smash: ['單體（近戰）', '220%＋破甲 3 回合（受傷 +30%、無視護甲）', '5 級：旁邊的怪也破甲', '10 級：再補一擊 100%'],
+  quake: ['身邊 3 格內', '範圍內 150%（地屬性），20% 暈眩', '5 級：範圍內 180%', '10 級：連震兩次'],
+  fireball: ['九宮格・射程 4', '火屬性 180%，旁邊的怪 60%', '5 級：一次丟三顆', '10 級：命中的怪燃燒 3 回合'],
+  nova: ['身邊 2 格內', '水屬性範圍內 80%，30% 凍住（凍住的怪被物理攻擊 +30%）', '5 級：凍住機率 50%', '10 級：範圍內 120%、凍住 70%'],
+  beam: ['直線 5 格', '一直線上的怪 160%（風屬性）', '5 級：200%', '10 級：結束時範圍內爆炸 50%'],
+  meteor: ['大範圍・射程 5', '火屬性範圍內 200%', '5 級：範圍內 240%', '10 級：範圍內燃燒 3 回合'],
+  bash: ['單體（近戰）', '120%，50% 暈眩', '5 級：暈眩 70%', '10 級：旁邊的怪也一起暈'],
+  roar: ['自己', '怪物「一定」先打盾戰士：2 回合（每 3 級 +1 回合），自己減傷 30%（每級 +2%）。嘲諷中被聖騎士治療多補 50%', '5 級：嘲諷時被打會反擊 50%', '10 級：怒吼時範圍內 20% 暈眩'],
+  wall: ['身邊 2 格的隊友', '全隊減傷 40%，2 回合', '5 級：減傷 50%、3 回合', '10 級：反彈 30% 傷害'],
+  ram: ['直線 3 格', '範圍內 120%，40% 暈眩', '5 級：暈眩 60%', '10 級：範圍內 200%'],
+  holyslash: ['橫排・射程 2', '聖光斬一整排 130%', '5 級：160%', '10 級：每打中一隻回自己 5% 血'],
+  heal: ['身邊 2 格的隊友', '全隊回血 20%（每級 +2.5%），嘲諷中的盾戰士多補 50%', '5 級：順便解除燃燒和流血', '10 級：倒下的隊友也會被救起來（20% 血）'],
+  aegis: ['隊友單體・射程 3', '護盾吸收 50% 最大血量（每級 +5%），3 回合', '5 級：護盾期間受傷再 -20%', '10 級：護盾破掉時聖光炸範圍內 200%'],
+  judge: ['單點・射程 4', '聖光巨錘 350%', '5 級：400%', '10 級：旁邊的怪也吃 200%'],
+  flurry: ['身邊隨機連擊', '隨機亂砍 4 下（每 2 級多 1 下），每下 40%', '5 級：每下 50%', '10 級：每下吸血 20%'],
+  leap: ['九宮格・射程 3', '跳砸 150%，旁邊 80%（地屬性）', '5 級：180%', '10 級：40% 暈眩'],
   bloodlust: ['自己', '3 回合吸血 30%', '5 級：吸血 40%、4 回合', '10 級：同時攻擊 +20%'],
   frenzy: ['自己', '3 回合攻擊 +50%、速度 +20%，但受傷 +20%', '5 級：4 回合', '10 級：攻擊 +80%'],
-  triple: ['隨機連擊', '亂射 3 箭（每 2 級多 1 箭，10 級 8 箭），每箭 70%（風屬性）。射暈住或凍住的怪 +30%', '5 級：每箭 80%', '10 級：每箭 90%'],
-  backshot: ['單體', '140%，然後下一擊 50% 閃開', '5 級：170%', '10 級：再射另一隻 100%'],
-  blast: ['單體＋波及', '火屬性 160%，旁邊 80%', '5 級：190%', '10 級：命中的怪燃燒'],
-  rain: ['全體', '風屬性箭雨全體 130%', '5 級：160%', '10 級：下兩波'],
+  triple: ['射程 4 內隨機', '亂射 3 箭（每 2 級多 1 箭，10 級 8 箭），每箭 70%（風屬性）。射暈住或凍住的怪 +30%', '5 級：每箭 80%', '10 級：每箭 90%'],
+  backshot: ['單體・射程 4', '140%，然後下一擊 50% 閃開', '5 級：170%', '10 級：再射另一隻 100%'],
+  blast: ['九宮格・射程 4', '火屬性 160%，旁邊 80%', '5 級：190%', '10 級：命中的怪燃燒'],
+  rain: ['大範圍・射程 5', '風屬性箭雨範圍內 130%', '5 級：160%', '10 級：下兩波'],
 };
 const skillNeed = lv => lv * 3;                      // uses needed to go from lv to lv+1
 const evo = lv => lv >= 10 ? 2 : lv >= 5 ? 1 : 0;    // Lv5 and Lv10 evolutions, like the action game
@@ -563,11 +563,11 @@ const PETSK = {
   mud: { n: '泥巴噴射', d: '敵方全體 50%，降低速度', t: 'all' }, gargoyle: { n: '石化皮膚', d: '自己 3 回合受傷 -50%，並吸引攻擊', t: 'self' }, boss: { n: '根鬚橫掃', d: '敵方全體 70%', t: 'all' }
 };
 const ZONES = [
-  { name: '迷霧森林・外圍', lv: [1, 4], mobs: ['hydra', 'hydra', 'fish', 'wolf'], elite: ['mud'], count: [1, 3] },
-  { name: '迷霧森林・深處', lv: [5, 9], mobs: ['fish', 'wolf', 'mud', 'gargoyle'], elite: ['gargoyle', 'mud'], count: [2, 5] }
+  { name: '迷霧森林・外圍', lv: [1, 4], mobs: ['hydra', 'hydra', 'fish', 'wolf'], elite: ['mud'], count: [2, 4] },
+  { name: '迷霧森林・深處', lv: [5, 9], mobs: ['fish', 'wolf', 'mud', 'gargoyle'], elite: ['gargoyle', 'mud'], count: [3, 6] }
 ];
 // turn-based tuning (monster HP x base, monster attack x base, experience x base)
-const TB = { mob: 1.2, elite: 2.4, boss: 0.55, atk: 0.62, exp: 0.7 };
+const TB = { mob: 1.5, elite: 2.8, boss: 0.85, atk: 0.8, exp: 0.6 };
 function monsterStats(type, lv, elite, boss) {
   const b = ENEMY[type];
   const hp = Math.round(b.hp * (boss ? TB.boss : elite ? TB.elite : TB.mob) * (1 + 0.15 * (lv - 1)));
@@ -982,10 +982,11 @@ const F = { x: 7.5 * FT, y: (FR - 2) * FT, hold: null, goal: null, acc: 0, next:
 const fc = $('fc'), fctx = fc.getContext('2d');
 function goField(fromStart) {
   showScreen('field'); F.active = true; V.active = false;
-  if (fromStart) { F.x = 7.5 * FT; F.y = (FR - 2.3) * FT; F.trail = []; F.acc = 0; F.next = rand(160, 360); F.cool = 1.5; F.bossBeat = false; }
+  if (fromStart) { F.x = 7.5 * FT; F.y = (FR - 2.3) * FT; F.trail = []; F.acc = 0; F.next = rand(160, 360); F.cool = 1.5; F.bossBeat = false; F.mobs = []; F.respawn = 25; for (let i = 0; i < 9; i++) spawnMob(5); }
+  if (!F.mobs) { F.mobs = []; F.respawn = 25; }
   F.LH = resizeCanvasTo(fc) || F.LH; F.hold = null; F.goal = null; B = null;
   renderPartyBar(); BGM.play('stage');
-  $('fHint').textContent = IS_TOUCH ? '按住畫面往那個方向走（點一下會自己走過去）。草叢裡會遇怪！' : '方向鍵走路・I 隊伍・P 寵物・Esc 選單。草叢裡會遇怪！';
+  $('fHint').textContent = (IS_TOUCH ? '按住畫面往那個方向走，點一下會自己走過去。' : '方向鍵走路・I 隊伍・P 寵物・Esc 選單。') + '碰到怪物就開打！';
 }
 function renderPartyBar() {
   updateDots();
@@ -1012,10 +1013,10 @@ function fieldStep(dt) {
     F.walkT += dt; if (Math.floor(F.walkT * 3.5) !== Math.floor((F.walkT - dt) * 3.5)) SFX.step();
     if (moved > 0.1) { F.trail.unshift({ x: F.x, y: F.y }); if (F.trail.length > 120) F.trail.length = 120; }
     const t = ftile(Math.floor(F.x / FT), Math.floor(F.y / FT));
-    if (t === 1 && F.cool <= 0) { F.acc += moved; if (F.acc >= F.next) { F.acc = 0; F.next = rand(150, 380); encounter(zoneAt(Math.floor(F.y / FT))); return; } }
     if (t === 5) { F.hold = null; F.goal = null; F.y -= 24; askLeave(); return; }
     if (t === 6 && !F.bossBeat) { F.hold = null; F.goal = null; F.y += 34; askBoss(); return; }
   }
+  mobStep(dt);
   NpcEv.tick(dt);
 }
 function askLeave() { Modal.open('回村莊？', b => { b.append(h('div', { class: 'say2' }, '前面就是村莊的城門了。')); b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', class: 'primary', on: { click: () => { Modal.close(); goVillage(); } } }, '回村莊'), h('button', { type: 'button', on: { click: () => Modal.close() } }, '繼續探索'))); }); }
@@ -1046,6 +1047,7 @@ function drawField(now) {
     if (tt === 2) ents.push({ y: r * FT + FT, f: () => drawTree(g, c, r, H) });
     if (tt === 6 && !F.bossBeat) ents.push({ y: r * FT + FT, f: () => { const im = IMG.boss; if (ready(im)) { const hh = 150, w = hh * im.naturalWidth / im.naturalHeight; g.drawImage(im, c * FT + FT / 2 - w / 2, r * FT + FT - hh + 10, w, hh); } g.font = '900 22px "Noto Serif TC", serif'; g.textAlign = 'center'; g.lineWidth = 5; g.strokeStyle = '#000'; g.strokeText('腐根樹妖', c * FT + FT / 2, r * FT - 96); g.fillStyle = '#ff9a8a'; g.fillText('腐根樹妖', c * FT + FT / 2, r * FT - 96); } });
   }
+  for (const m of F.mobs || []) if (m.y > camY - 80 && m.y < camY + LH + 80) ents.push({ y: m.y, f: () => drawMob(g, m, t) });
   // only the leader is drawn on the map (the others are in the party bar)
   ents.push({ y: F.y + 1, f: () => drawWalker(g, Save.d.leader, { x: F.x, y: F.y }, 0) });
   ents.sort((a, b) => a.y - b.y).forEach(o => o.f());
@@ -1053,6 +1055,9 @@ function drawField(now) {
   g.font = '900 21px "Noto Serif TC", serif'; g.textAlign = 'center'; g.lineWidth = 5; g.strokeStyle = '#000';
   for (const [r, s] of [[30, '▲ 森林深處：怪物變強'], [FR - 1, '▼ 回村莊']]) { g.strokeText(s, 7.5 * FT, r * FT + 22); g.fillStyle = '#ffe9a8'; g.fillText(s, 7.5 * FT, r * FT + 22); }
   g.restore();
+  // warm light around the hero, darker further away
+  const lx = F.x - camX, ly = F.y - camY - 30, lg = g.createRadialGradient(lx, ly, 90, lx, ly, Math.max(L, LH) * 0.75);
+  lg.addColorStop(0, 'rgba(255,200,120,0)'); lg.addColorStop(0.35, 'rgba(30,16,6,.18)'); lg.addColorStop(1, 'rgba(10,5,2,.7)'); g.fillStyle = lg; g.fillRect(0, 0, L, LH);
 }
 function drawTree(g, c, r, H) {
   const x = c * FT + FT / 2, y = r * FT + FT, n = H(c, r, 3);
@@ -1091,6 +1096,48 @@ function toWorld(e) {
 }
 function holdDir(e) { const w = toWorld(e); const dx = w.x - F.x, dy = w.y - (F.y - 30); return Math.hypot(dx, dy) < 18 ? null : { x: dx, y: dy }; }
 const avgPartyLv = () => Save.d.party.reduce((a, c) => a + heroCh(c).lvl, 0) / Save.d.party.length;
+// monsters you can see: groups wander, chase you when you get close, and touching one starts the fight
+function makeGroup(zone) {
+  const z = ZONES[zone], lvMax = Math.min(z.lv[1], z.lv[0] + Math.floor(avgPartyLv() / 2) + 1);
+  const n = randi(z.count[0], Math.min(z.count[1], z.count[0] + Math.floor(avgPartyLv() / 3) + 1)), list = [];
+  for (let i = 0; i < n; i++) { const el = Math.random() < 0.07; list.push({ type: el ? pick(z.elite) : pick(z.mobs), lvl: randi(z.lv[0], lvMax), elite: el }); }
+  return list;
+}
+function spawnMob(far) {
+  for (let tries = 0; tries < 40; tries++) {
+    const c = randi(1, FC - 2), r = randi(7, FR - 4), t = FMAP[r][c];
+    if (blocked(t) || t === 5 || t === 6) continue;
+    const x = c * FT + FT / 2, y = r * FT + FT / 2;
+    if (Math.hypot(x - F.x, y - F.y) < (far || 6) * FT) continue;
+    const list = makeGroup(zoneAt(r));
+    F.mobs.push({ x, y, list, type: list[0].type, lvl: Math.max(...list.map(m => m.lvl)), elite: list.some(m => m.elite), dir: rand(0, 6.28), t: rand(1, 3), stun: 0, chase: false });
+    return;
+  }
+}
+function mobStep(dt) {
+  F.respawn -= dt; if (F.respawn <= 0) { F.respawn = 25; if (F.mobs.length < 11) spawnMob(); }
+  for (const m of F.mobs) {
+    if (m.stun > 0) { m.stun -= dt; continue; }
+    const dx = F.x - m.x, dy = F.y - m.y, dd = Math.hypot(dx, dy);
+    m.chase = dd < FT * 3.2 && F.cool <= 0;
+    let vx, vy, sp;
+    if (m.chase) { vx = dx / dd; vy = dy / dd; sp = 125; }
+    else { if ((m.t -= dt) <= 0) { m.t = rand(1.5, 3.5); m.dir = rand(0, 6.28); m.idle = Math.random() < 0.35; } vx = Math.cos(m.dir); vy = Math.sin(m.dir); sp = m.idle ? 0 : 38; }
+    const nx = m.x + vx * sp * dt, ny = m.y + vy * sp * dt, tl = ftile(Math.floor(nx / FT), Math.floor(ny / FT));
+    if (!blocked(tl) && tl !== 5 && tl !== 6 && ny > 6 * FT) { m.x = nx; m.y = ny; if (Math.abs(vx) > 0.2) m.face = vx > 0 ? 1 : -1; } else m.dir += 2;
+    if (dd < 36 && F.cool <= 0) { F.engaged = m; F.hold = null; F.goal = null; startBattle(m.list, false); return; }
+  }
+}
+function drawMob(g, m, t) {
+  const im = IMG[m.type], hh = (SIZE[m.type] || 70) * 0.85, bob = m.chase ? Math.abs(Math.sin(t * 14)) * 4 : Math.sin(t * 3 + m.x) * 1.5;
+  g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(m.x, m.y + 2, 18, 7, 0, 0, 7); g.fill();
+  g.strokeStyle = m.elite ? '#ffcf5a' : 'rgba(255,90,70,.85)'; g.lineWidth = 2.5; g.beginPath(); g.ellipse(m.x, m.y + 2, 22, 9, 0, 0, 7); g.stroke();
+  if (ready(im)) { const w = hh * im.naturalWidth / im.naturalHeight; g.save(); g.translate(m.x, m.y - bob); g.scale(m.face || 1, 1); g.drawImage(im, -w / 2, -hh, w, hh); g.restore(); }
+  g.font = '900 16px "Noto Serif TC", serif'; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000';
+  const tag = `Lv${m.lvl}` + (m.list.length > 1 ? ` ×${m.list.length}` : '');
+  g.strokeText(tag, m.x, m.y - hh - 6); g.fillStyle = m.elite ? '#ffcf5a' : '#ffd0c8'; g.fillText(tag, m.x, m.y - hh - 6);
+  if (m.chase) { g.fillStyle = '#ff3a2a'; g.font = '900 26px sans-serif'; g.strokeText('!', m.x + 22, m.y - hh); g.fillText('!', m.x + 22, m.y - hh); }
+}
 function encounter(zone) {
   const z = ZONES[zone], lvMax = Math.min(z.lv[1], z.lv[0] + Math.floor(avgPartyLv() / 2) + 1);
   const n = randi(z.count[0], Math.min(z.count[1], z.count[0] + Math.floor(avgPartyLv() / 3) + 1));
@@ -1100,280 +1147,399 @@ function encounter(zone) {
   startBattle(list, false);
 }
 
-/* ================= turn-based battle ================= */
+/* ================= tactics battle: an isometric board, move on tiles, then act ================= */
 const bc = $('bc'), bctx = bc.getContext('2d');
 let B = null, speedPref = 1;
-// layout: monsters on two rows at the top (back row first), each pet stands in front of its owner, heroes at the bottom
-const ESLOT = [[0.2, 0.16], [0.4, 0.14], [0.6, 0.14], [0.8, 0.16], [0.13, 0.33], [0.37, 0.32], [0.63, 0.32], [0.87, 0.33]];
-const ROW_PET = 0.67, ROW_HERO = 0.89;
+const BW = 7, BH = 7;                                     // board size in tiles
+const MOVE = { warrior: 4, shield: 3, paladin: 3, berserker: 4, archer: 4, mage: 3 };
+const MON_MOVE = { hydra: 3, fish: 3, wolf: 5, mud: 2, gargoyle: 4, boss: 0 };
+const MON_RNG = { hydra: 1, fish: 2, wolf: 1, mud: 1, gargoyle: 1, boss: 2 };
+const WRNG = { spear: 2, staff: 3, tome: 3, orb: 3, longbow: 4, crossbow: 5, shortbow: 3, scepter: 3 };   // weapon reach (others 1)
+const FLY = { gargoyle: 1 };
+const key2 = (c, r) => c + ',' + r;
+const mdist = (a, b) => Math.abs(a.c - b.c) + Math.abs(a.r - b.r);
+const inB = (c, r) => c >= 0 && r >= 0 && c < BW && r < BH;
+const tileOf = (c, r) => inB(c, r) ? B.tiles[r * BW + c] : null;
+const unitAt = (c, r) => B.units.find(u => u.hp > 0 && !u.gone && u.c === c && u.r === r);
+const allies = () => B.units.filter(u => u.side === 'ally' && u.hp > 0);
+const foes = () => B.units.filter(u => u.side === 'enemy' && u.hp > 0 && !u.gone);
+const livingE = foes, livingP = allies;
+const heroesUp = () => allies().filter(u => u.kind === 'hero');
+// ---------- the board: heights, a few rocks and trees, two flat camps ----------
+function makeBoard(boss) {
+  const t = [];
+  const n = (c, r, f) => { const x = Math.sin(c * 12.9898 * f + r * 78.233 * f + B.seed) * 43758.5453; return x - Math.floor(x); };
+  for (let r = 0; r < BH; r++) for (let c = 0; c < BW; c++) {
+    const camp = c + r >= BW + BH - 4 || c + r <= 2;
+    let h = camp ? 0 : Math.floor(n(c, r, 1) * 2.6);
+    if (h > 2) h = 2;
+    const block = !camp && !boss && n(c, r, 3.7) > 0.86;
+    t.push({ c, r, h, block, deco: Math.floor(n(c, r, 5.3) * 4), grass: n(c, r, 7.1) });
+  }
+  return t;
+}
+const ALLY_START = [[5, 6], [6, 5], [3, 6], [6, 3], [4, 5], [5, 4], [2, 6], [6, 2]];
+const FOE_START = [[1, 0], [0, 1], [3, 0], [0, 3], [2, 1], [1, 2], [0, 0], [2, 2]];
 function startBattle(list, boss) {
   const d = Save.d;
   const mods = { atk: 1, spd: 1, hp: 1 };
   if (d.bless === 'atk') mods.atk *= 1.1;
   if (d.curse === 'weak') mods.atk *= 0.88; else if (d.curse === 'slow') mods.spd *= 0.85; else if (d.curse === 'frail') mods.hp *= 0.9;
-  B = { round: 0, phase: 'cmd', cur: 0, cmds: [], queue: [], boss, mods, log: '', floats: [], fx: [], proj: [], speed: speedPref, mode: null, result: null, LH: 900, gold: 0, exp: 0, drops: [], caught: [], skillUps: [] };
-  const order = [4, 5, 6, 7, 0, 1, 2, 3];   // front row fills first
-  B.enemies = boss ? [mkEnemy(list[0], 1, true), mkEnemy(list[1], 4), mkEnemy(list[2], 7)] : list.map((m, i) => mkEnemy(m, order[i]));
-  B.party = [];
-  const n = d.party.length;
-  d.party.forEach((cls, i) => {
+  B = { round: 0, phase: 'player', boss, mods, log: '', floats: [], fx: [], proj: [], speed: speedPref, mode: 'idle', sel: null, result: null, LH: 900, gold: 0, exp: 0, drops: [], caught: [], skillUps: [], seed: Math.random() * 100, cursor: { c: 6, r: 6 }, units: [] };
+  B.tiles = makeBoard(boss);
+  let si = 0;
+  d.party.forEach(cls => {
     const ch = heroCh(cls), st = heroStats(cls, ch, mods);
-    const hu = { kind: 'hero', cls, name: CLASSES[cls].name, st, ch, hp: Math.max(1, Math.min(curHp(cls), st.maxHp)), mp: curMp(cls), maxHp: st.maxHp, maxMp: st.maxMp, x: (i + 0.5) / n, y: ROW_HERO, buffs: {}, defend: false };
-    B.party.push(hu);
+    const [c, r] = ALLY_START[si++];
+    const hu = { kind: 'hero', side: 'ally', cls, name: CLASSES[cls].name, st, ch, hp: Math.max(1, Math.min(curHp(cls), st.maxHp)), mp: curMp(cls), maxHp: st.maxHp, maxMp: st.maxMp, c, r, mv: Math.max(2, Math.round(MOVE[cls] * mods.spd)), rng: WRNG[st.wtype] || 1, buffs: {} };
+    B.units.push(hu);
     const p = petOf(cls);
-    if (p) { const ps = petStats(p); const pu = { kind: 'pet', pet: p, owner: hu, type: p.type, name: p.name, hp: Math.max(1, petHp(p)), maxHp: ps.maxHp, mp: 0, maxMp: 0, ps, x: hu.x, y: ROW_PET, buffs: {} }; hu.petU = pu; B.party.push(pu); }
+    if (p) { const ps = petStats(p); const [pc, pr] = ALLY_START[si++]; B.units.push({ kind: 'pet', side: 'ally', pet: p, owner: hu, type: p.type, name: p.name, hp: Math.max(1, petHp(p)), maxHp: ps.maxHp, mp: 0, maxMp: 0, ps, c: pc, r: pr, mv: MON_MOVE[p.type] || 3, rng: MON_RNG[p.type] || 1, buffs: {} }); hu.petU = B.units[B.units.length - 1]; }
+  });
+  const fl = boss ? [[1, 1], [0, 3], [3, 0]] : FOE_START;
+  list.forEach((m, i) => {
+    const s = monsterStats(m.type, m.lvl, m.elite, boss && i === 0), [c, r] = fl[i];
+    const e = Object.assign({ kind: 'enemy', side: 'enemy', type: m.type, lvl: m.lvl, elite: !!m.elite, boss: boss && i === 0, name: ENEMY[m.type].name, el: MON_EL[m.type], buffs: {}, aff: [], c, r, mv: boss && i === 0 ? 0 : MON_MOVE[m.type], rng: boss && i === 0 ? 2 : MON_RNG[m.type] }, s);
+    if (e.elite) { e.aff = [pick(Object.keys(EAFFIX))]; if (e.aff[0] === 'shield') e.shield = Math.round(e.maxHp * 0.4); }
+    B.units.push(e);
   });
   d.bless = null; d.curse = null; Save.write();
-  if (SIM.on) { beginRound(); return; }
+  B.party = B.units.filter(u => u.side === 'ally');
+  B.enemies = B.units.filter(u => u.side === 'enemy');
+  if (SIM.on) { beginPlayerPhase(); return; }
   showScreen('battle'); F.active = false;
   B.LH = resizeCanvasTo(bc) || 900;
   $('bTitle').textContent = boss ? '魔王戰：腐根樹妖' : ZONES[zoneAt(Math.floor(F.y / FT))].name;
   $('bSpeed').textContent = B.speed + 'x'; updateAutoBtn();
   flash(); SFX.meet(); BGM.play(boss ? 'boss' : 'stage');
-  const ali = B.party.filter(u => u.kind === 'hero'), who = pick(ali);
+  const ali = heroesUp(), who = pick(ali);
   setTimeout(() => sayB(who, say1(who.cls, 'meet')), 250);
-  if (B.enemies.some(e => e.elite)) { const w2 = pick(ali); setTimeout(() => sayB(w2, pick(BANTER[w2.cls].elite)), 1800); }
-  beginRound();
+  if (foes().some(e => e.elite)) { const w2 = pick(ali); setTimeout(() => sayB(w2, pick(BANTER[w2.cls].elite)), 1800); }
+  beginPlayerPhase();
 }
-function mkEnemy(m, slot, isBoss) {
-  const s = monsterStats(m.type, m.lvl, m.elite, isBoss), e = Object.assign({ kind: 'enemy', type: m.type, lvl: m.lvl, elite: !!m.elite, boss: !!isBoss, big: !!isBoss, slot, name: ENEMY[m.type].name, el: MON_EL[m.type], buffs: {}, aff: [] }, s);
-  if (e.elite) { e.aff = [pick(Object.keys(EAFFIX))]; if (e.aff[0] === 'shield') e.shield = Math.round(e.maxHp * 0.4); }
-  const [x, y] = ESLOT[slot]; e.x = isBoss ? 0.5 : x; e.y = isBoss ? 0.26 : y;
-  return e;
+
+/* ---------- iso projection ---------- */
+function iso() { const TW = L / (BW + 0.3), TH = TW * 0.58, HZ = TH * 0.6, ox = L / 2, oy = Math.max(110, B.LH * 0.56 - 3.5 * TH); return { TW, TH, HZ, ox, oy }; }
+function scr(c, r, h) { const I = iso(); return { x: I.ox + (c - r) * I.TW / 2, y: I.oy + (c + r + 1) * I.TH / 2 - (h || 0) * I.HZ }; }
+const tileTop = (c, r) => { const t = tileOf(c, r); return scr(c, r, t ? t.h : 0); };
+const upos = u => { if (u.px != null) return { x: u.px, y: u.py, h: unitH(u) }; const p = tileTop(u.c, u.r); return { x: p.x, y: p.y, h: unitH(u) }; };
+const unitH = u => u.kind === 'enemy' ? (u.boss ? 170 : SIZE[u.type] * 1.0) : u.kind === 'pet' ? 64 : 100;
+function pickTile(x, y) {
+  const I = iso(); let best = null;
+  for (const t of B.tiles.slice().sort((a, b) => (b.c + b.r) - (a.c + a.r) || b.h - a.h)) {
+    const p = scr(t.c, t.r, t.h), dx = Math.abs(x - p.x) / (I.TW / 2), dy = Math.abs(y - p.y) / (I.TH / 2);
+    if (dx + dy <= 1) { best = t; break; }
+  }
+  // tapping a unit's body also counts as its tile
+  for (const u of B.units.filter(u => u.hp > 0 && !u.gone).sort((a, b) => (b.c + b.r) - (a.c + a.r))) { const p = upos(u); if (Math.abs(x - p.x) < 26 && y < p.y && y > p.y - p.h) { const t = tileOf(u.c, u.r); if (!best || (t.c + t.r) >= (best.c + best.r) - 1) return t; } }
+  return best;
 }
-const livingE = () => B.enemies.filter(e => e.hp > 0 && !e.gone);
-const livingP = () => B.party.filter(u => u.hp > 0);
-const heroesUp = () => B.party.filter(u => u.kind === 'hero' && u.hp > 0);
-// command order: each hero, then the hero's pet (like the classic games: you command your pet right after yourself)
-function beginRound() {
-  B.round++; B.cmds = []; B.cur = -1; B.phase = 'cmd';
-  for (const u of B.party) u.defend = false;
-  B.queue = livingP();
-  if (SIM.on) { for (const u of B.queue) B.cmds.push(aiCommand(u)); return; } // the test loop drives rounds itself
-  if (Save.d.auto) { for (const u of B.queue) B.cmds.push(aiCommand(u)); return resolveRound(); }
-  nextCommander();
+
+/* ---------- movement ranges ---------- */
+function reach(u) { // BFS: tiles the unit can walk to this turn, with the path
+  const res = new Map(), q = [{ c: u.c, r: u.r, d: 0, path: [] }]; res.set(key2(u.c, u.r), []);
+  const fly = u.kind !== 'hero' && FLY[u.type];
+  while (q.length) {
+    const cur = q.shift(); if (cur.d >= u.mv) continue;
+    for (const [dc, dr] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const c = cur.c + dc, r = cur.r + dr, t = tileOf(c, r); if (!t || t.block) continue;
+      if (!fly && Math.abs(t.h - tileOf(cur.c, cur.r).h) > 1) continue;
+      const o = unitAt(c, r); if (o && o.side !== u.side) continue;
+      const k = key2(c, r); if (res.has(k)) continue;
+      const path = cur.path.concat([[c, r]]); res.set(k, path); q.push({ c, r, d: cur.d + 1, path });
+    }
+  }
+  for (const [k] of [...res]) { const [c, r] = k.split(',').map(Number); const o = unitAt(c, r); if (o && o !== u) res.delete(k); }
+  return res;
 }
-function nextCommander() {
-  B.cur++;
-  while (B.cur < B.queue.length && (B.queue[B.cur].buffs.stun > 0 || B.queue[B.cur].hp <= 0)) { B.cmds.push({ u: B.queue[B.cur], act: 'stunned' }); B.cur++; }
-  if (B.cur >= B.queue.length) return resolveRound();
-  B.mode = null; renderCmd();
+const inRangeTiles = (from, rng, minR) => B.tiles.filter(t => { const d = mdist(from, t); return d <= rng && d >= (minR == null ? 1 : minR); });
+const hMul = (a, b) => { const ha = tileOf(a.c, a.r).h, hb = tileOf(b.c, b.r).h; return ha > hb ? 1.15 : ha < hb ? 0.9 : 1; }; // high ground hits harder
+
+/* ---------- player phase ---------- */
+function beginPlayerPhase() {
+  B.round++; B.phase = 'player'; B.mode = 'idle'; B.sel = null;
+  for (const u of B.units) { u.acted = false; u.moved = false; u.defend = false; }
+  if (SIM.on) return;
+  if (B.round > 1) banner(`第 ${B.round} 回合`);
+  if (Save.d.auto) return autoPlayer();
+  const first = allies().find(u => !u.acted); if (first) B.cursor = { c: first.c, r: first.r };
+  renderCmd();
 }
-function setCmd(c) { B.cmds.push(c); B.mode = null; nextCommander(); }
-function undoCmd() {
-  if (!B || B.phase !== 'cmd') return;
-  while (B.cmds.length && B.cmds[B.cmds.length - 1].act === 'stunned') { B.cmds.pop(); B.cur--; }
-  if (!B.cmds.length) return;
-  B.cmds.pop(); B.cur -= 2;
-  nextCommander();
+function banner(text) { B.banner = { text, t: 1.2 }; }
+function selectUnit(u) {
+  if (B.phase !== 'player' || u.side !== 'ally' || u.acted) return;
+  B.sel = u; B.mode = 'move'; B.moves = reach(u); B.origin = { c: u.c, r: u.r }; B.cursor = { c: u.c, r: u.r };
+  if (!SIM.on) SFX.tick();
+  renderCmd();
 }
-const commander = () => B && B.phase === 'cmd' ? B.queue[B.cur] : null;
-const TLAB = { enemy: '單體', row: '一排', all: '全體', ally: '隊友單體', self: '自己', party: '我方全體', rand: '隨機連擊', col: '一直排' };
-const TCOL = { enemy: '#ffd27a', row: '#ffb36b', all: '#ff7a6a', ally: '#7dff8a', self: '#9fd3ff', party: '#7dff8a', rand: '#ffb36b', col: '#ffb36b' };
+async function moveSel(c, r) {
+  const u = B.sel, path = B.moves.get(key2(c, r)); if (!path) return;
+  B.mode = 'busy'; renderCmd();
+  for (const [pc, pr] of path) { await walkTo(u, pc, pr); }
+  u.moved = true; B.mode = 'act'; renderCmd();
+}
+function undoMove() { const u = B.sel; if (!u || !B.origin) return; u.c = B.origin.c; u.r = B.origin.r; u.px = u.py = null; u.moved = false; B.mode = 'move'; B.moves = reach(u); renderCmd(); }
+function finishUnit(u) {
+  u.acted = true; B.sel = null; B.mode = 'idle'; B.target = null;
+  if (B.result) return;
+  if (!foes().length) return endBattle('win');
+  if (!heroesUp().length) return endBattle('lose');
+  const next = allies().find(x => !x.acted);
+  if (!next) return enemyPhase();
+  if (!SIM.on) { B.cursor = { c: next.c, r: next.r }; renderCmd(); }
+}
+function endTurn() { if (B.phase !== 'player' || B.mode === 'busy') return; for (const u of allies()) u.acted = true; B.sel = null; enemyPhase(); }
+
+/* ---------- command panel ---------- */
+const TLAB = { one: '單體', around: '身邊一圈', area1: '九宮格範圍', area2: '大範圍', line: '直線', row: '橫排', rand: '射程內隨機連擊', ally: '隊友單體', self: '自己', party: '身邊隊友' };
+const TCOL = { one: '#ffd27a', around: '#ff9a6a', area1: '#ff9a6a', area2: '#ff7a6a', line: '#ffb36b', row: '#ffb36b', rand: '#ffb36b', ally: '#7dff8a', self: '#9fd3ff', party: '#7dff8a' };
 const badge = t => h('small', { style: `color:${TCOL[t]};font-weight:900` }, '【' + TLAB[t] + '】');
+const skT = id => SK[id].shape;
+function skillMp(u, i) { return Math.max(1, Math.round(CLASSES[u.cls].skills[i].mp * (1 - (u.st.totals.cdr || 0) / 100))); }
 function renderCmd() {
   if (SIM.on || !B) return;
   const who = $('bWho'), msg = $('bMsg'), btns = $('bBtns');
   who.innerHTML = ''; btns.innerHTML = ''; btns.className = '';
-  if (B.phase !== 'cmd') { msg.textContent = B.log || ''; return; }
-  const u = commander(); if (!u) return;
-  const d = Save.d, canUndo = B.cmds.some(c => c.act !== 'stunned');
-  const undo = canUndo ? [h('button', { type: 'button', on: { click: () => undoCmd() } }, '↶ 上一步')] : [];
-  if (u.kind === 'pet') {
-    const sk = PETSK[u.type];
-    who.append(h('img', { src: ART + u.type + '.webp', alt: '', style: 'object-fit:contain;background:#2a2016' }), h('div', null, h('b', null, u.name), `（${u.owner.name}的寵物）`, h('br'), h('span', { class: 'muted' }, `HP ${Math.ceil(u.hp)}/${u.maxHp}`)), h('div', { class: 'sp' }), ...undo);
-    if (B.mode && B.mode.pick) { msg.textContent = B.mode.prompt; btns.append(h('button', { type: 'button', on: { click: () => { B.mode = null; renderCmd(); } } }, '取消')); return; }
-    msg.textContent = '主神，' + u.name + '要做什麼？';
-    btns.append(
-      h('button', { type: 'button', class: 'primary', on: { click: () => pickTarget('enemy', '點一隻怪物', t => setCmd({ u, act: 'attack', t })) } }, '攻擊', badge('enemy')),
-      h('button', { type: 'button', on: { click: () => sk.t === 'enemy' ? pickTarget('enemy', '點一隻怪物', t => setCmd({ u, act: 'petskill', t })) : setCmd({ u, act: 'petskill' }) } }, sk.n, badge(sk.t)),
-      h('button', { type: 'button', on: { click: () => setCmd({ u, act: 'defend' }) } }, '防禦', h('small', null, '受傷減半')));
+  if (B.phase !== 'player' || B.mode === 'busy') { msg.textContent = B.log || (B.phase === 'enemy' ? '怪物的回合……' : ''); return; }
+  const d = Save.d, u = B.sel;
+  if (!u) {
+    const left = allies().filter(x => !x.acted);
+    msg.textContent = `第 ${B.round} 回合・我方：點一個發亮的角色` + (IS_TOUCH ? '' : '（方向鍵移動游標、Enter 選）');
+    for (const x of left) btns.append(h('button', { type: 'button', on: { click: () => selectUnit(x) } }, x.name, h('small', null, x.kind === 'pet' ? '寵物' : `HP ${Math.ceil(x.hp)}`)));
+    btns.append(h('button', { type: 'button', class: 'primary', on: { click: () => endTurn() } }, '結束回合', h('small', null, IS_TOUCH ? '換怪物行動' : 'E')));
+    if (!B.boss) btns.append(h('button', { type: 'button', on: { click: () => tryRun() } }, '撤退', h('small', null, '70%')));
     kbCmdFocus(); return;
   }
-  who.append(h('img', { src: ART + 'portraits/' + u.cls + '_n.webp', alt: '' }), h('div', null, h('b', null, u.name), ` 第 ${B.round} 回合`, h('br'), h('span', { class: 'muted' }, `HP ${Math.ceil(u.hp)}/${u.maxHp}　MP ${Math.ceil(u.mp)}/${u.maxMp}`)), h('div', { class: 'sp' }), ...undo);
-  if (B.mode && B.mode.pick) { msg.textContent = B.mode.prompt; btns.append(h('button', { type: 'button', on: { click: () => { B.mode = B.mode.back || null; renderCmd(); } } }, '取消')); return; }
+  const pic = u.kind === 'pet' ? h('img', { src: ART + u.type + '.webp', alt: '', style: 'object-fit:contain;background:#2a2016' }) : h('img', { src: ART + 'portraits/' + u.cls + '_n.webp', alt: '' });
+  who.append(pic, h('div', null, h('b', null, u.name), h('br'), h('span', { class: 'muted' }, `HP ${Math.ceil(u.hp)}/${u.maxHp}` + (u.kind === 'hero' ? `　MP ${Math.ceil(u.mp)}/${u.maxMp}` : '') + `　移動 ${u.mv}・射程 ${u.rng}`)), h('div', { class: 'sp' }),
+    h('button', { type: 'button', on: { click: () => { if (B.mode === 'act' && u.moved) undoMove(); else if (B.mode === 'move') { B.sel = null; B.mode = 'idle'; renderCmd(); } else { B.mode = 'act'; B.target = null; renderCmd(); } } } }, '↶ 返回'));
+  if (B.mode === 'move') { msg.textContent = '點綠色格子移動（點自己＝原地不動）'; btns.append(h('button', { type: 'button', class: 'primary', on: { click: () => { u.moved = true; B.mode = 'act'; renderCmd(); } } }, '原地行動')); kbCmdFocus(); return; }
+  if (B.mode === 'target') { msg.textContent = B.tPrompt + (B.target ? '　再點一次或按確定' : ''); btns.append(h('button', { type: 'button', class: 'primary', disabled: !B.target, on: { click: () => confirmTarget() } }, '確定'), h('button', { type: 'button', on: { click: () => { B.mode = 'act'; B.target = null; renderCmd(); } } }, '取消')); kbCmdFocus(); return; }
   if (B.mode === 'skills') {
-    msg.textContent = '選一招技能（括號是打的範圍）'; btns.className = 'list';
-    for (const i of u.ch.load) { const s = CLASSES[u.cls].skills[i], lv = u.ch.skills[i], cost = skillMp(u, i), t = skT(s.id); btns.append(h('button', { type: 'button', disabled: u.mp < cost, on: { click: () => chooseSkill(u, i) } }, h('img', { src: skillIcon(u.cls, i, lv), alt: '' }), h('span', null, s.name + ' Lv' + lv, h('br'), badge(t), h('small', null, ' MP ' + cost)))); }
-    btns.append(h('button', { type: 'button', on: { click: () => { B.mode = null; renderCmd(); } } }, '返回'));
+    msg.textContent = '選一招技能（括號是範圍）'; btns.className = 'list';
+    for (const i of u.ch.load) { const s = CLASSES[u.cls].skills[i], lv = u.ch.skills[i], cost = skillMp(u, i), sk = SK[s.id]; btns.append(h('button', { type: 'button', disabled: u.mp < cost, on: { click: () => chooseSkill(u, i) } }, h('img', { src: skillIcon(u.cls, i, lv), alt: '' }), h('span', null, s.name + ' Lv' + lv, h('br'), badge(sk.shape), h('small', null, (sk.r ? ` 射程${sk.r}` : '') + ' MP ' + cost)))); }
+    btns.append(h('button', { type: 'button', on: { click: () => { B.mode = 'act'; renderCmd(); } } }, '返回'));
     kbCmdFocus(); return;
   }
   if (B.mode === 'items') {
-    msg.textContent = '選一個道具'; btns.className = 'list';
-    btns.append(h('button', { type: 'button', disabled: !d.pots.red, on: { click: () => pickTarget('ally', '選要喝紅藥水的隊友', t => setCmd({ u, act: 'item', k: 'red', t }), 'items') } }, h('img', { src: ART + 'items/pot_red.webp', alt: '' }), h('span', null, '紅藥水 ×' + d.pots.red, h('br'), badge('ally'), h('small', null, ' HP +40%'))));
-    btns.append(h('button', { type: 'button', disabled: !d.pots.blue, on: { click: () => pickTarget('hero', '選要喝藍藥水的英雄', t => setCmd({ u, act: 'item', k: 'blue', t }), 'items') } }, h('img', { src: ART + 'items/pot_blue.webp', alt: '' }), h('span', null, '藍藥水 ×' + d.pots.blue, h('br'), badge('ally'), h('small', null, ' MP +40%'))));
-    btns.append(h('button', { type: 'button', on: { click: () => { B.mode = null; renderCmd(); } } }, '返回'));
+    msg.textContent = '選一個道具（給射程 3 內的隊友）'; btns.className = 'list';
+    btns.append(h('button', { type: 'button', disabled: !d.pots.red, on: { click: () => beginTarget(u, { kind: 'item', k: 'red', shape: 'ally', r: 3 }, '點要喝紅藥水的隊友') } }, h('img', { src: ART + 'items/pot_red.webp', alt: '' }), h('span', null, '紅藥水 ×' + d.pots.red, h('br'), h('small', null, 'HP +40%'))));
+    btns.append(h('button', { type: 'button', disabled: !d.pots.blue, on: { click: () => beginTarget(u, { kind: 'item', k: 'blue', shape: 'ally', r: 3 }, '點要喝藍藥水的英雄') } }, h('img', { src: ART + 'items/pot_blue.webp', alt: '' }), h('span', null, '藍藥水 ×' + d.pots.blue, h('br'), h('small', null, 'MP +40%'))));
+    btns.append(h('button', { type: 'button', on: { click: () => { B.mode = 'act'; renderCmd(); } } }, '返回'));
     kbCmdFocus(); return;
   }
+  // act menu
   msg.textContent = '主神，' + u.name + '要做什麼？';
-  const A = ATK[u.st.wtype], at = A.area === 'row' ? 'row' : A.area === 'col' ? 'col' : 'enemy';
+  if (u.kind === 'pet') {
+    const sk = PETSK[u.type];
+    btns.append(
+      h('button', { type: 'button', class: 'primary', on: { click: () => beginTarget(u, { kind: 'attack', shape: 'one', r: u.rng }, '點紅色範圍內的怪物') } }, '攻擊', h('small', null, '射程 ' + u.rng)),
+      h('button', { type: 'button', on: { click: () => beginTarget(u, { kind: 'petskill', shape: PET_SHAPE[u.type].shape, r: PET_SHAPE[u.type].r }, '選目標') } }, sk.n, badge(PET_SHAPE[u.type].shape)),
+      h('button', { type: 'button', on: { click: () => { u.defend = true; pop(u, '防禦', '#9fd3ff'); finishUnit(u); } } }, '防禦', h('small', null, '受傷減半')),
+      h('button', { type: 'button', on: { click: () => finishUnit(u) } }, '待機'));
+    kbCmdFocus(); return;
+  }
   btns.append(
-    h('button', { type: 'button', class: 'primary', on: { click: () => pickTarget('enemy', '點一隻怪物攻擊', t => setCmd({ u, act: 'attack', t })) } }, '攻擊', badge(at)),
+    h('button', { type: 'button', class: 'primary', on: { click: () => beginTarget(u, { kind: 'attack', shape: 'one', r: u.rng }, '點紅色範圍內的怪物') } }, '攻擊', h('small', null, '射程 ' + u.rng)),
     h('button', { type: 'button', on: { click: () => { B.mode = 'skills'; renderCmd(); } } }, '技能', h('small', null, u.ch.load.length + ' 招')),
-    h('button', { type: 'button', on: { click: () => setCmd({ u, act: 'defend' }) } }, '防禦', h('small', null, '受傷減半')),
+    h('button', { type: 'button', on: { click: () => { u.defend = true; pop(u, '防禦', '#9fd3ff'); finishUnit(u); } } }, '防禦', h('small', null, '受傷減半')),
     h('button', { type: 'button', on: { click: () => { B.mode = 'items'; renderCmd(); } } }, '道具', h('small', null, '紅 ' + d.pots.red + '・藍 ' + d.pots.blue)),
-    h('button', { type: 'button', disabled: !d.seals || B.boss, on: { click: () => pickTarget('enemy', '點要抓的怪物（打到越少血越好抓）', t => setCmd({ u, act: 'seal', t })) } }, '捕捉', h('small', null, '封印符 ×' + d.seals)),
-    h('button', { type: 'button', disabled: B.boss, on: { click: () => setCmd({ u, act: 'run' }) } }, '逃跑', h('small', null, B.boss ? '魔王戰不能逃' : '70%')));
+    h('button', { type: 'button', disabled: !d.seals || B.boss, on: { click: () => beginTarget(u, { kind: 'seal', shape: 'one', r: 2 }, '點射程 2 內要抓的怪物（越少血越好抓）') } }, '捕捉', h('small', null, '封印符 ×' + d.seals)),
+    h('button', { type: 'button', on: { click: () => finishUnit(u) } }, '待機'));
   kbCmdFocus();
 }
 function kbCmdFocus() { if (!KB.used || SIM.on) return; const l = kbList($('bBtns')); kbMark(l[0] || null); }
-function pickTarget(side, prompt, done, back) { B.mode = { pick: side, prompt: prompt + (IS_TOUCH ? '' : '（← → 選、Enter 確定、Esc 取消）'), done, back }; const pool = pickPool(); B.mode.kbT = side === 'enemy' ? pool.slice().sort((a, b) => b.y - a.y || a.x - b.x)[0] : pool[0]; renderCmd(); }
-const pickPool = () => { const m = B.mode; const pool = m.pick === 'enemy' ? livingE() : m.pick === 'hero' ? heroesUp() : livingP(); return pool.slice().sort((a, b) => Math.abs(a.y - b.y) > 0.06 ? b.y - a.y : a.x - b.x); };
-function kbTarget(dir) { const pool = pickPool(); if (!pool.length) return; const i = pool.indexOf(B.mode.kbT); B.mode.kbT = pool[(i + dir + pool.length) % pool.length]; }
-function chooseSkill(u, i) {
-  const id = CLASSES[u.cls].skills[i].id, t = SK[id].t;
-  if (t === 'enemy' || t === 'row') pickTarget('enemy', t === 'row' ? '點一隻怪物（打牠那一整排）' : '點一隻怪物', tt => setCmd({ u, act: 'skill', i, t: tt }), 'skills');
-  else if (t === 'ally') pickTarget('ally', '點一位隊友', tt => setCmd({ u, act: 'skill', i, t: tt }), 'skills');
-  else setCmd({ u, act: 'skill', i });
+function chooseSkill(u, i) { const s = CLASSES[u.cls].skills[i], sk = SK[s.id]; beginTarget(u, { kind: 'skill', i, shape: sk.shape, r: sk.r || 0 }, sk.r ? '點紅色範圍裡的格子（會顯示打到的範圍）' : '確認範圍，按確定施放'); }
+function beginTarget(u, act, prompt) {
+  B.act = act; B.mode = 'target'; B.tPrompt = prompt; B.target = null;
+  if (!act.r) B.target = { c: u.c, r: u.r };                         // self / around / party: no pick
+  else { const first = act.shape === 'ally' ? allies().filter(a => mdist(u, a) <= act.r)[0] : foes().filter(e => mdist(u, e) <= act.r).sort((a, b) => a.hp - b.hp)[0]; if (first) B.target = { c: first.c, r: first.r }; B.cursor = B.target ? { ...B.target } : { c: u.c, r: u.r }; }
+  renderCmd();
 }
-const skT = id => SK[id].lab || SK[id].t;
-function skillMp(u, i) { return Math.max(1, Math.round(CLASSES[u.cls].skills[i].mp * (1 - (u.st.totals.cdr || 0) / 100))); }
-bc.addEventListener('pointerdown', e => {
-  e.preventDefault(); SFX.resume();
-  if (!B || !B.mode || !B.mode.pick) return;
-  const r = bc.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * L, y = (e.clientY - r.top) / r.height * B.LH;
-  const pool = B.mode.pick === 'enemy' ? livingE() : B.mode.pick === 'hero' ? heroesUp() : livingP();
-  let best = null, bd = 1e9;
-  for (const u of pool) { const p = upos(u), dd = Math.hypot(p.x - x, (p.y - p.h * 0.45) - y); if (dd < bd) { bd = dd; best = u; } }
-  if (best && bd < 130) { const f = B.mode.done; B.mode = null; f(best); }
-});
-const pos = u => ({ x: u.px == null ? u.x : u.px, y: u.py == null ? u.y : u.py });
-const unitH = u => u.kind === 'enemy' ? (u.big ? SIZE.boss : SIZE[u.type]) : u.kind === 'pet' ? 58 : 90;
-const upos = u => { const p = pos(u); return { x: p.x * L, y: p.y * B.LH, h: unitH(u) * (commander() === u ? 1.3 : 1) }; };
-
-/* ---------------- AI: monsters, pets and the auto button ---------------- */
-function aiCommand(u) {
-  const E = livingE();
-  if (u.kind === 'hero') {
-    const hurt = livingP().filter(p => p.hp < p.maxHp * 0.45);
-    for (const i of u.ch.load.slice().reverse()) {
-      const s = CLASSES[u.cls].skills[i], def = SK[s.id]; if (u.mp < skillMp(u, i)) continue;
-      if (def.heal) { if (hurt.length) return { u, act: 'skill', i, t: hurt[0] }; continue; }
-      if (def.buff) { if (!(u.buffs[def.buff] > 0) && E.length >= 2 && Math.random() < 0.5) return { u, act: 'skill', i, t: u }; continue; }
-      if ((def.t === 'all' || def.t === 'row') && E.length < 2 && !E.some(e => e.boss)) continue;
-      if (Math.random() < 0.75) return { u, act: 'skill', i, t: E.slice().sort((a, b) => a.hp - b.hp)[0] };
-    }
-    if (!SIM.on && hurt.length && Save.d.pots.red > 0 && hurt[0].hp < hurt[0].maxHp * 0.25) return { u, act: 'item', k: 'red', t: hurt[0] };
-    return { u, act: 'attack', t: E.slice().sort((a, b) => a.hp - b.hp)[0] };
+function tapTile(t) {
+  if (!B || B.phase !== 'player' || B.mode === 'busy') return;
+  const u = unitAt(t.c, t.r);
+  if (B.mode === 'idle') { if (u && u.side === 'ally' && !u.acted) selectUnit(u); return; }
+  if (B.mode === 'move') {
+    if (u && u.side === 'ally' && !u.acted && u !== B.sel) return selectUnit(u);
+    if (t.c === B.sel.c && t.r === B.sel.r) { B.sel.moved = true; B.mode = 'act'; renderCmd(); return; }
+    if (B.moves.has(key2(t.c, t.r))) moveSel(t.c, t.r);
+    return;
   }
-  if (u.kind === 'pet') { const sk = PETSK[u.type]; const useSk = sk.t === 'self' ? !(u.buffs.guard > 0) && Math.random() < 0.4 : Math.random() < 0.4; return { u, act: useSk ? 'petskill' : 'attack', t: E.slice().sort((a, b) => a.hp - b.hp)[0] }; }
-  if (u.boss && B.round % 3 === 0) return { u, act: 'sweep' };
-  const P = livingP(), taunt = P.find(p => p.buffs.taunt > 0);
-  // monsters prefer what stands in front: pets are hit a bit more often than the heroes behind them
-  const front = P.filter(p => p.kind === 'pet'), tgt = taunt ? taunt : (front.length && Math.random() < 0.45 ? pick(front) : pick(P)); // a taunting hero takes every blow
-  return { u, act: 'attack', t: tgt };
-}
-
-/* ---------------- animation helpers: run up, strike, run back; arrows and bolts fly ---------------- */
-const ANIM = ms => SIM.on ? Promise.resolve() : wait(ms / B.speed);
-function moveTo(u, x, y, ms) { if (SIM.on) return Promise.resolve(); const p = pos(u); u.mv = { fx: p.x, fy: p.y, tx: x, ty: y, t0: performance.now(), d: ms / B.speed }; return wait(ms / B.speed); }
-async function dashTo(u, t) {
-  if (SIM.on) return;
-  const tp = pos(t), down = u.kind === 'enemy';
-  await moveTo(u, tp.x + (pos(u).x < tp.x ? -0.07 : 0.07), tp.y + (down ? -0.06 : 0.075), 240);
-}
-const dashBack = u => moveTo(u, u.x, u.y, 210);
-const stepOut = u => moveTo(u, u.x, u.y + (u.kind === 'enemy' ? 0.03 : -0.05), 150);
-function slash(t, col) { if (!SIM.on) B.fx.push({ kind: 'slash', u: t, t: 0.28, t0: 0.28, col: col || '#ffffff', a: rand(-0.6, 0.6) }); }
-function burst(t, col) { if (!SIM.on) B.fx.push({ kind: 'boom', u: t, t: 0.4, t0: 0.4, col }); }
-function shoot(u, t, kind, col) { if (SIM.on || !t) return Promise.resolve(); const d = 280 / B.speed; B.proj.push({ from: pos(u), u, to: t, t0: performance.now(), d, kind, col }); return wait(d); }
-const RANGED = { staff: 1, tome: 1, orb: 1, longbow: 1, crossbow: 1, shortbow: 1, scepter: 1 };
-const isRanged = u => u.kind === 'hero' && RANGED[u.st.wtype];
-const wcol = u => ({ fire: '#ff8a3a', frost: '#8fe6ff', chain: '#fff27a', blast: '#ffb24a', pierce: '#ffffff', split: '#b8ff8a', stun: '#ffe066' })[u.st && u.st.waff] || '#ffffff';
-
-/* ---------------- resolving a round: everyone acts in speed order ---------------- */
-async function resolveRound() {
-  B.phase = 'act'; B.mode = null; renderCmd();
-  const acts = B.cmds.slice();
-  if (acts.some(c => c.act === 'run')) {
-    if (Math.random() < 0.7) { await say('逃跑成功！'); return endBattle('run'); }
-    await say('逃跑失敗……');
-    for (const c of acts) if (c.act === 'run') c.act = 'wait';
+  if (B.mode === 'target') {
+    const a = B.act;
+    if (a.r && mdist(B.sel, t) > a.r) return;
+    if (B.target && B.target.c === t.c && B.target.r === t.r) return confirmTarget();
+    B.target = { c: t.c, r: t.r }; B.cursor = { ...B.target }; renderCmd();
   }
-  for (const e of livingE()) { acts.push(aiCommand(e)); if (e.aff.includes('frenzy') && e.hp < e.maxHp * 0.5) acts.push(aiCommand(e)); }
-  const spdOf = u => (u.kind === 'hero' ? u.st.spd : u.kind === 'pet' ? u.ps.spd : u.spd) * (u.buffs.slow > 0 ? 0.6 : 1) * (u.buffs.frenzy > 0 ? 1.2 : 1) + rand(0, 30);
-  acts.forEach(a => { a.s = a.act === 'defend' ? 9999 : a.act === 'item' ? 5000 + spdOf(a.u) : spdOf(a.u); });
-  acts.sort((a, b) => b.s - a.s);
-  for (const a of acts) {
+}
+function areaOf(u, act, tg) { // the tiles an action covers
+  const cells = [], add = (c, r) => { if (inB(c, r)) cells.push({ c, r }); };
+  const s = act.shape, t = tg || { c: u.c, r: u.r };
+  if (s === 'one' || s === 'ally') add(t.c, t.r);
+  else if (s === 'self') add(u.c, u.r);
+  else if (s === 'around') { for (let dc = -1; dc <= 1; dc++) for (let dr = -1; dr <= 1; dr++) if (dc || dr) add(u.c + dc, u.r + dr); }
+  else if (s === 'party') { for (const tt of B.tiles) if (mdist(u, tt) <= (act.rad || 2)) add(tt.c, tt.r); }
+  else if (s === 'area1') { for (let dc = -1; dc <= 1; dc++) for (let dr = -1; dr <= 1; dr++) add(t.c + dc, t.r + dr); }
+  else if (s === 'area2') { for (const tt of B.tiles) if (mdist(t, tt) <= 2) add(tt.c, tt.r); }
+  else if (s === 'rand') { for (const tt of B.tiles) if (mdist(u, tt) <= (act.r || 1) && mdist(u, tt) > 0) add(tt.c, tt.r); }
+  else if (s === 'line' || s === 'row') {
+    const dc = t.c - u.c, dr = t.r - u.r, horiz = Math.abs(dc) >= Math.abs(dr), sc = horiz ? Math.sign(dc) || 1 : 0, sr = horiz ? 0 : Math.sign(dr) || 1;
+    if (s === 'line') for (let k = 1; k <= (act.len || 4); k++) add(u.c + sc * k, u.r + sr * k);
+    else for (let k = -1; k <= 1; k++) add(t.c + sr * k, t.r + sc * k);
+  }
+  return cells;
+}
+const unitsIn = (cells, side) => cells.map(c => unitAt(c.c, c.r)).filter(u => u && (side ? u.side === side : true));
+async function confirmTarget() {
+  const u = B.sel, a = B.act; if (!u || !B.target) return;
+  const tgtU = unitAt(B.target.c, B.target.r);
+  if ((a.kind === 'attack' || a.kind === 'seal' || (a.shape === 'one' && a.kind !== 'item')) && (!tgtU || tgtU.side !== 'enemy')) return toast('那格沒有怪物');
+  if (a.shape === 'ally' && (!tgtU || tgtU.side !== 'ally')) return toast('那格沒有隊友');
+  B.mode = 'busy'; renderCmd();
+  await doAct(u, a, B.target);
+  finishUnit(u);
+}
+async function doAct(u, a, tg) {
+  const tU = unitAt(tg.c, tg.r);
+  if (a.kind === 'attack') return unitAttack(u, tU);
+  if (a.kind === 'seal') { note(u.name + '丟出封印符！'); await shoot(u, tU, 'card', '#ffe9a0'); return trySeal(u, tU); }
+  if (a.kind === 'item') return useItem(u, a.k, tU);
+  if (a.kind === 'petskill') return petSkill(u, a, tg);
+  if (a.kind === 'skill') return castSkill(u, a.i, tg);
+}
+async function tryRun() { B.mode = 'busy'; renderCmd(); if (Math.random() < 0.7) { await say('撤退成功！'); return endBattle('run'); } await say('撤退失敗……'); for (const x of allies()) x.acted = true; enemyPhase(); }
+
+/* ---------- enemy phase: every monster walks toward a hero and hits it ---------- */
+async function enemyPhase() {
+  if (B.result) return;
+  B.phase = 'enemy'; B.mode = 'busy'; B.sel = null; renderCmd();
+  if (!SIM.on) { banner('怪物的回合'); await ANIM(500); }
+  for (const e of foes()) {
     if (B.result) return;
-    if (a.u.hp <= 0 || a.u.gone) continue;
-    if (a.u.buffs.stun > 0 && a.act !== 'defend') { await say(a.u.name + '暈著，動不了。'); continue; }
-    await doAction(a);
-    if (!livingE().length) { await ANIM(300); return endBattle('win'); }
+    if (e.hp <= 0 || e.gone) continue;
+    if (e.buffs.stun > 0) { await say(e.name + '暈著，動不了。'); continue; }
+    const times = e.aff.includes('frenzy') && e.hp < e.maxHp * 0.5 ? 2 : 1;
+    for (let k = 0; k < times && !B.result; k++) await monsterTurn(e);
     if (!heroesUp().length) { await ANIM(300); return endBattle('lose'); }
+    if (!foes().length) { await ANIM(300); return endBattle('win'); }
   }
-  for (const u of [...B.party, ...B.enemies]) {
+  // end of round: burning, bleeding, buffs wear off
+  for (const u of B.units) {
     if (u.hp <= 0 || u.gone) continue;
     if (u.buffs.burn > 0) { const dmg = Math.max(1, Math.round(u.maxHp * (u.boss ? 0.02 : 0.06))); u.hp -= dmg; pop(u, '-' + dmg, '#ff9a4a'); if (u.hp <= 0) onDeath(u); }
     if (u.buffs.bleed > 0) { const dmg = Math.max(1, Math.round(u.maxHp * (u.boss ? 0.02 : 0.05))); u.hp -= dmg; pop(u, '-' + dmg, '#ff5a5a'); if (u.hp <= 0) onDeath(u); }
     for (const k in u.buffs) if (u.buffs[k] > 0) u.buffs[k]--;
     if (!(u.buffs.shield > 0)) u.absorb = 0;
   }
-  if (!livingE().length) return endBattle('win');
+  if (!foes().length) return endBattle('win');
   if (!heroesUp().length) return endBattle('lose');
-  await ANIM(250);
-  beginRound();
+  await ANIM(200);
+  beginPlayerPhase();
 }
+async function monsterTurn(e) {
+  const A = allies(); if (!A.length) return;
+  if (e.boss && B.round % 3 === 0) { // root sweep: everyone within 3 tiles
+    note(e.name + '的根鬚橫掃！'); shake();
+    for (const p of A.filter(p => mdist(e, p) <= 3)) { burst(p, '#a07a4a'); hurtUnit(p, e.atk * 0.7, e); }
+    return ANIM(500);
+  }
+  const taunt = A.find(p => p.buffs.taunt > 0);
+  let target = taunt || A.slice().sort((a, b) => mdist(e, a) - mdist(e, b) || a.hp - b.hp)[0];
+  if (mdist(e, target) > e.rng) {
+    // walk to the reachable tile closest to the target (prefer one from which it can hit)
+    const R = reach(e); let best = null, bs = 1e9;
+    for (const [k, path] of R) { const [c, r] = k.split(',').map(Number), dd = Math.abs(c - target.c) + Math.abs(r - target.r); const sc = (dd <= e.rng ? 0 : dd * 10) + path.length * 0.1 - (tileOf(c, r).h * 0.3); if (sc < bs) { bs = sc; best = path; } }
+    if (best && best.length) { for (const [c, r] of best) await walkTo(e, c, r); }
+    if (!taunt) { const near = allies().filter(p => mdist(e, p) <= e.rng); if (near.length && !near.includes(target)) target = near.sort((a, b) => a.hp - b.hp)[0]; }
+  }
+  if (mdist(e, target) <= e.rng) await monsterAttack(e, target);
+}
+
+/* ---------- auto play (the "auto" button and the balance tests) ---------- */
+async function autoPlayer() {
+  for (const u of allies()) {
+    if (B.result || B.phase !== 'player') return;
+    if (u.acted || u.hp <= 0) continue;
+    B.sel = u; B.mode = 'busy';
+    if (!SIM.on) renderCmd();
+    const plan = autoPlan(u);
+    if (plan.path && plan.path.length) { for (const [c, r] of plan.path) await walkTo(u, c, r); }
+    if (plan.act) await doAct(u, plan.act, plan.tg); else if (!SIM.on) await ANIM(120);
+    u.acted = true; B.sel = null;
+    if (!foes().length) return endBattle('win');
+  }
+  if (!B.result) return enemyPhase();
+}
+function autoPlan(u) {
+  const R = reach(u), E = foes();
+  let best = { score: -1e9 };
+  for (const [k, path] of R) {
+    const [c, r] = k.split(',').map(Number), from = { c, r };
+    const opts = [];
+    if (u.kind === 'hero') for (const i of u.ch.load) { const s = CLASSES[u.cls].skills[i], sk = SK[s.id]; if (u.mp >= skillMp(u, i)) opts.push({ kind: 'skill', i, shape: sk.shape, r: sk.r || 0, len: sk.len, rad: sk.rad, heal: sk.heal, buff: sk.buff, mult: sk.w || 1 }); }
+    if (u.kind === 'pet') { const ps = PET_SHAPE[u.type]; opts.push({ kind: 'petskill', shape: ps.shape, r: ps.r, mult: 1 }); }
+    opts.push({ kind: 'attack', shape: 'one', r: u.rng, mult: 0.8 });
+    for (const a of opts) {
+      if (a.buff) { if (!(u.buffs[a.buff] > 0) && E.some(e => mdist(from, e) <= 3)) { const sc = 30 - path.length; if (sc > best.score) best = { score: sc, path, act: a, tg: from }; } continue; }
+      if (a.heal) { const hurt = allies().filter(p => p.hp < p.maxHp * 0.6); if (!hurt.length) continue; const tgs = a.shape === 'ally' ? hurt.filter(p => mdist(from, p) <= a.r) : hurt.filter(p => mdist(from, p) <= (a.rad || 2)); if (tgs.length) { const sc = 60 + tgs.length * 10; if (sc > best.score) best = { score: sc, path, act: a, tg: a.shape === 'ally' ? { c: tgs[0].c, r: tgs[0].r } : from }; } continue; }
+      const cand = a.r ? B.tiles.filter(t => mdist(from, t) <= a.r && mdist(from, t) >= 1) : [from];
+      for (const t of cand) {
+        const save = { c: u.c, r: u.r }; u.c = c; u.r = r;
+        const hit = unitsIn(areaOf(u, a, t), 'enemy'); u.c = save.c; u.r = save.r;
+        if (a.shape === 'one' && !unitAt(t.c, t.r)) continue;
+        if (!hit.length) continue;
+        const kills = hit.filter(e => e.hp < (u.st ? u.st.atk * 1.5 : 40)).length;
+        const sc = hit.length * 12 * a.mult + kills * 6 - path.length * 0.3 + (a.kind === 'skill' ? 4 : 0) + tileOf(c, r).h;
+        if (sc > best.score) best = { score: sc, path, act: a, tg: { c: t.c, r: t.r } };
+      }
+    }
+  }
+  if (best.act) return best;
+  // nothing in reach: walk toward the nearest monster
+  const tgt = E.slice().sort((a, b) => mdist(u, a) - mdist(u, b))[0]; let bp = null, bd = 1e9;
+  if (tgt) for (const [k, path] of R) { const [c, r] = k.split(',').map(Number), dd = Math.abs(c - tgt.c) + Math.abs(r - tgt.r); if (dd < bd) { bd = dd; bp = path; } }
+  return { path: bp, act: null };
+}
+
+/* ---------- animation helpers ---------- */
+const ANIM = ms => SIM.on ? Promise.resolve() : wait(ms / B.speed);
+function tween(u, x, y, ms) { if (SIM.on) return Promise.resolve(); const p = upos(u); u.mvA = { fx: p.x, fy: p.y, tx: x, ty: y, t0: performance.now(), d: ms / B.speed }; return wait(ms / B.speed); }
+async function walkTo(u, c, r) { if (SIM.on) { u.c = c; u.r = r; return; } const p = tileTop(c, r); await tween(u, p.x, p.y, 130); u.c = c; u.r = r; u.px = u.py = null; u.mvA = null; if (Math.random() < 0.5) SFX.step(); }
+async function lungeAt(u, t) { if (SIM.on) return; const a = upos(u), b = upos(t); await tween(u, a.x + (b.x - a.x) * 0.55, a.y + (b.y - a.y) * 0.55, 140); }
+async function lungeBack(u) { if (SIM.on) return; const p = tileTop(u.c, u.r); await tween(u, p.x, p.y, 140); u.px = u.py = null; u.mvA = null; }
+function slash(t, col) { if (!SIM.on) B.fx.push({ kind: 'slash', u: t, t: 0.28, t0: 0.28, col: col || '#ffffff' }); }
+function burst(t, col) { if (!SIM.on) B.fx.push({ kind: 'boom', u: t, t: 0.4, t0: 0.4, col }); }
+function burstTile(c, r, col) { if (!SIM.on) B.fx.push({ kind: 'tile', c, r, t: 0.45, t0: 0.45, col }); }
+function shoot(u, t, kind, col) { if (SIM.on || !t) return Promise.resolve(); const d = 300 / B.speed; B.proj.push({ from: upos(u), to: t, t0: performance.now(), d, kind, col }); return wait(d); }
+const wcol = u => ({ fire: '#ff8a3a', frost: '#8fe6ff', chain: '#fff27a', blast: '#ffb24a', pierce: '#ffffff', split: '#b8ff8a', stun: '#ffe066' })[u.st && u.st.waff] || '#ffffff';
 function note(text) { B.log = text; if (!SIM.on) $('bMsg').textContent = text; }
-function say(text) { note(text); return ANIM(480); }
-const retarget = (t, side) => { const pool = side === 'enemy' ? livingE() : livingP(); return t && t.hp > 0 && !t.gone && pool.includes(t) ? t : pick(pool); };
-const neighbours = e => livingE().filter(o => o !== e && Math.abs(o.x - e.x) < 0.26 && Math.abs(o.y - e.y) < 0.05);
-const column = e => livingE().filter(o => o !== e && Math.abs(o.x - e.x) < 0.14);
-const rowOf = e => livingE().filter(o => Math.abs(o.y - e.y) < 0.06);
-async function doAction(a) {
-  const u = a.u;
-  switch (a.act) {
-    case 'wait': case 'stunned': return;
-    case 'defend': u.defend = true; pop(u, '防禦', '#9fd3ff'); return ANIM(200);
-    case 'item': {
-      const d = Save.d, t = retarget(a.t, 'ally');
-      if (!d.pots[a.k] || !t) return say('道具用完了！');
-      d.pots[a.k]--; Save.write();
-      note(u.name + '使用了' + (a.k === 'red' ? '紅藥水' : '藍藥水'));
-      if (a.k === 'red') { const amt = Math.round(t.maxHp * 0.4); t.hp = Math.min(t.maxHp, t.hp + amt); pop(t, '+' + amt, '#7dff8a'); }
-      else { const amt = Math.round((t.maxMp || 0) * 0.4); t.mp = Math.min(t.maxMp, t.mp + amt); pop(t, 'MP+' + amt, '#7ab4ff'); }
-      burst(t, '#7dff8a'); if (!SIM.on) SFX.heal(); return ANIM(450);
+function say(text) { note(text); return ANIM(450); }
+
+/* ---------- actions ---------- */
+const behind = (u, e) => { const dc = Math.sign(e.c - u.c), dr = Math.sign(e.r - u.r); const o = unitAt(e.c + dc, e.r + dr); return o && o.side === 'enemy' ? [o] : []; };
+const adjFoes = e => foes().filter(o => o !== e && Math.max(Math.abs(o.c - e.c), Math.abs(o.r - e.r)) === 1);
+const sideFoes = (u, e) => { const horiz = Math.abs(e.c - u.c) >= Math.abs(e.r - u.r); return [[horiz ? 0 : 1, horiz ? 1 : 0], [horiz ? 0 : -1, horiz ? -1 : 0]].map(([dc, dr]) => unitAt(e.c + dc, e.r + dr)).filter(o => o && o.side === 'enemy'); };
+async function unitAttack(u, t) {
+  if (!t) return;
+  note(u.name + '攻擊' + t.name);
+  const ranged = u.rng > 1 && mdist(u, t) > 1;
+  if (ranged) await shoot(u, t, u.cls === 'archer' ? 'arrow' : 'bolt', u.kind === 'hero' ? wcol(u) : '#ffd0a0'); else await lungeAt(u, t);
+  if (u.kind === 'pet') { slash(t, '#ffd0a0'); dmgEnemy(u, t, u.ps.atk * rand(0.9, 1.1)); }
+  else {
+    const A = u.st.A;
+    for (let k = 0; k < (A.hits || 1); k++) {
+      const tt = k === 0 ? t : (t.hp > 0 ? t : null); if (!tt) break;
+      slash(tt, wcol(u)); const main = dmgEnemy(u, tt, u.st.atk * A.mult * u.st.basicMul * rand(0.9, 1.1));
+      const side = A.area === 'adj' ? adjFoes(tt) : A.area === 'col' ? behind(u, tt) : A.area === 'row' ? sideFoes(u, tt) : [];
+      for (const o of side) { slash(o, wcol(u)); dmgEnemy(u, o, u.st.atk * A.mult * (A.side || 1) * u.st.basicMul * rand(0.9, 1.1)); }
+      if (A.stun && Math.random() < A.stun) stunE(tt);
+      weaponFx(u, tt);
+      if (A.heal) { const w = allies().sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (w) healUnit(w, main * A.heal); }
+      if (k < (A.hits || 1) - 1) await ANIM(120);
     }
-    case 'seal': { const t = retarget(a.t, 'enemy'); note(u.name + '丟出封印符！'); await shoot(u, t, 'card', '#ffe9a0'); return trySeal(u, t); }
-    case 'attack': {
-      if (u.kind === 'enemy') return monsterAttack(u, retarget(a.t, 'ally'));
-      const t = retarget(a.t, 'enemy'); if (!t) return;
-      note(u.name + '攻擊' + t.name);
-      if (u.kind === 'pet') { await dashTo(u, t); slash(t, '#ffd0a0'); dmgEnemy(u, t, u.ps.atk * rand(0.9, 1.1)); await ANIM(140); await dashBack(u); return ANIM(120); }
-      if (isRanged(u)) { await shoot(u, t, u.cls === 'archer' ? 'arrow' : 'bolt', wcol(u)); heroAttack(u, t); return ANIM(320); }
-      await dashTo(u, t); slash(t, wcol(u)); heroAttack(u, t); await ANIM(140); await dashBack(u); return ANIM(120);
-    }
-    case 'petskill': {
-      const sk = PETSK[u.type], at = u.ps.atk;
-      note(u.name + '使出' + sk.n + '！'); pop(u, sk.n, '#ffe9a0', 20);
-      if (sk.t === 'self') { u.buffs.guard = 3; u.buffs.taunt = 3; burst(u, '#cfcfcf'); return ANIM(450); }
-      if (sk.t === 'all') { await stepOut(u); for (const e of livingE()) { burst(e, '#a07a4a'); dmgEnemy(u, e, at * 0.5); if (e.hp > 0) e.buffs.slow = 2; } await ANIM(300); await dashBack(u); return ANIM(100); }
-      const t = retarget(a.t, 'enemy'); if (!t) return;
-      await dashTo(u, t);
-      if (u.type === 'hydra') for (let i = 0; i < 3; i++) { const tt = retarget(t, 'enemy'); if (!tt) break; slash(tt, '#8fe6ff'); dmgEnemy(u, tt, at * 0.45 * rand(0.9, 1.1)); await ANIM(110); }
-      else if (u.type === 'fish') { slash(t, '#6ab4ff'); dmgEnemy(u, t, at * 1.6); }
-      else { slash(t, '#ff5a5a'); dmgEnemy(u, t, at * 1.2); if (t.hp > 0) t.buffs.bleed = 2; }
-      await ANIM(160); await dashBack(u); return ANIM(100);
-    }
-    case 'sweep': {
-      note(u.name + '的根鬚橫掃全隊！'); shake(); await stepOut(u);
-      for (const p of livingP()) { burst(p, '#a07a4a'); hurtUnit(p, u.atk * 0.7, u); }
-      await ANIM(400); await dashBack(u); return ANIM(100);
-    }
-    case 'skill': return castSkill(u, a.i, a.t);
   }
-}
-function heroAttack(u, t) {
-  const A = u.st.A;
-  for (let k = 0; k < (A.hits || 1); k++) {
-    const tt = k === 0 ? t : retarget(t, 'enemy'); if (!tt) break;
-    const main = dmgEnemy(u, tt, u.st.atk * A.mult * u.st.basicMul * rand(0.9, 1.1));
-    const side = A.area === 'adj' ? neighbours(tt) : A.area === 'col' ? column(tt) : A.area === 'row' ? rowOf(tt).filter(o => o !== tt) : [];
-    for (const o of side) { slash(o, wcol(u)); dmgEnemy(u, o, u.st.atk * A.mult * (A.side || 1) * u.st.basicMul * rand(0.9, 1.1)); }
-    if (A.stun && Math.random() < A.stun) stunE(tt);
-    weaponFx(u, tt);
-    if (A.heal) { const w = livingP().sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (w) healUnit(w, main * A.heal); }
-  }
+  await ANIM(140); if (!ranged) await lungeBack(u);
 }
 function weaponFx(u, t) {
   const w = u.st.waff; if (!w) return;
@@ -1382,16 +1548,36 @@ function weaponFx(u, t) {
     if (w === 'fire') t.buffs.burn = 2;
     if (w === 'stun' && Math.random() < 0.15) stunE(t);
   }
-  if (w === 'split' || w === 'chain') { const o = livingE().filter(e => e !== t); if (o.length) { const x = pick(o); slash(x, wcol(u)); dmgEnemy(u, x, u.st.atk * 0.5 * u.st.basicMul); } }
-  if (w === 'blast') for (const o of neighbours(t)) { burst(o, '#ffb24a'); dmgEnemy(u, o, u.st.atk * 0.4 * u.st.basicMul); }
+  if (w === 'split' || w === 'chain') { const o = foes().filter(e => e !== t && mdist(e, t) <= 3); if (o.length) { const x = pick(o); slash(x, wcol(u)); dmgEnemy(u, x, u.st.atk * 0.5 * u.st.basicMul); } }
+  if (w === 'blast') for (const o of adjFoes(t)) { burst(o, '#ffb24a'); dmgEnemy(u, o, u.st.atk * 0.4 * u.st.basicMul); }
+}
+async function useItem(u, k, t) {
+  const d = Save.d; if (!t || !d.pots[k]) return say('道具用完了！');
+  d.pots[k]--; Save.write();
+  note(u.name + '使用了' + (k === 'red' ? '紅藥水' : '藍藥水'));
+  if (k === 'red') { const amt = Math.round(t.maxHp * 0.4); t.hp = Math.min(t.maxHp, t.hp + amt); pop(t, '+' + amt, '#7dff8a'); }
+  else { const amt = Math.round((t.maxMp || 0) * 0.4); t.mp = Math.min(t.maxMp, t.mp + amt); pop(t, 'MP+' + amt, '#7ab4ff'); }
+  burst(t, '#7dff8a'); if (!SIM.on) SFX.heal(); return ANIM(450);
+}
+const PET_SHAPE = { hydra: { shape: 'rand', r: 1 }, fish: { shape: 'one', r: 2 }, wolf: { shape: 'one', r: 1 }, mud: { shape: 'area1', r: 2 }, gargoyle: { shape: 'self', r: 0 }, boss: { shape: 'area2', r: 3 } };
+async function petSkill(u, a, tg) {
+  const sk = PETSK[u.type], at = u.ps.atk;
+  note(u.name + '使出' + sk.n + '！'); pop(u, sk.n, '#ffe9a0', 20);
+  if (u.type === 'gargoyle') { u.buffs.guard = 3; u.buffs.taunt = 3; burst(u, '#cfcfcf'); return ANIM(450); }
+  const cells = areaOf(u, a, tg), hit = unitsIn(cells, 'enemy');
+  for (const c of cells) burstTile(c.c, c.r, '#ffb36b');
+  if (u.type === 'hydra') { for (let i = 0; i < 3; i++) { const t = pick(hit.filter(e => e.hp > 0)); if (!t) break; slash(t, '#8fe6ff'); dmgEnemy(u, t, at * 0.45 * rand(0.9, 1.1)); await ANIM(110); } }
+  else if (u.type === 'mud') for (const e of hit) { dmgEnemy(u, e, at * 0.5); if (e.hp > 0) e.buffs.slow = 2; }
+  else { const t = hit[0]; if (!t) return; await lungeAt(u, t); slash(t, '#ff5a5a'); dmgEnemy(u, t, at * (u.type === 'fish' ? 1.6 : 1.2)); if (u.type === 'wolf' && t.hp > 0) t.buffs.bleed = 2; await ANIM(120); await lungeBack(u); }
+  return ANIM(300);
 }
 const stunE = e => { if (!e || e.hp <= 0 || (e.boss && Math.random() < 0.6)) return; e.buffs.stun = Math.max(e.buffs.stun || 0, 1); };
 const unitEl = u => u.castEl || (u.kind === 'pet' ? MON_EL[u.type] : u.kind === 'hero' ? WAFF_EL[u.st.waff] : u.el) || null;
-// damage formula from the action game: atk x move x random x (skill or basic multiplier) x crit 1.8 x other bonuses; element x1.3 / x0.8; shield first
+// damage formula from the action game: atk x move x random x (skill or basic multiplier) x crit 1.8 x other bonuses; element x1.3 / x0.8; high ground x1.15; shield first
 function dmgEnemy(u, e, base, o) {
   if (!e || e.hp <= 0) return 0;
   o = o || {};
-  let d = base, crit = Math.random() < (u.st ? u.st.crit : u.ps ? u.ps.crit : 0.08);
+  let d = base * hMul(u, e), crit = Math.random() < (u.st ? u.st.crit : u.ps ? u.ps.crit : 0.08);
   if (u.critReady) { crit = true; u.critReady = false; }
   if (crit) d *= 1.8;
   if (u.cls) d *= CLASSES[u.cls].cmul || 1;
@@ -1402,8 +1588,8 @@ function dmgEnemy(u, e, base, o) {
   const pierce = u.st && u.st.waff === 'pierce';
   if ((e.elite || e.boss) && pierce) d *= 1.4;
   if (e.buffs.broke > 0) d *= 1.3;
-  if (e.buffs.stun > 0 && !o.magic) d *= 1.3;              // 暈住或凍住：物理攻擊 +30%
-  if (e.buffs.burn > 0 && unitEl(u) === 'fire') d *= 1.2;  // 燒著的怪再吃火 +20%
+  if (e.buffs.stun > 0 && !o.magic) d *= 1.3;
+  if (e.buffs.burn > 0 && unitEl(u) === 'fire') d *= 1.2;
   if (e.armor && !pierce && !(e.buffs.broke > 0) && !o.magic) d *= e.armor;
   const em = elemMul(unitEl(u), e.el); d *= em;
   d = Math.max(1, Math.round(d));
@@ -1419,13 +1605,14 @@ function dmgEnemy(u, e, base, o) {
 }
 async function monsterAttack(e, t) {
   if (!t) return;
-  // a clingy pet jumps in front of its owner
-  if (t.kind === 'hero' && t.petU && t.petU.hp > 0 && t.petU.pet.trait === 'clingy' && Math.random() < 0.25) { pop(t.petU, '護主！', '#ffe066'); t = t.petU; }
+  if (t.kind === 'hero' && t.petU && t.petU.hp > 0 && t.petU.pet.trait === 'clingy' && mdist(t.petU, e) <= 3 && Math.random() < 0.25) { pop(t.petU, '護主！', '#ffe066'); t = t.petU; }
   note(e.name + '攻擊' + t.name);
-  await dashTo(e, t); slash(t, '#ff5a4a');
-  hurtUnit(t, e.atk * rand(0.9, 1.1), e);
+  const ranged = mdist(e, t) > 1;
+  if (ranged) await shoot(e, t, 'bolt', '#ff8a6a'); else await lungeAt(e, t);
+  slash(t, '#ff5a4a');
+  hurtUnit(t, e.atk * rand(0.9, 1.1) * hMul(e, t), e);
   if (e.aff.includes('vamp')) e.hp = Math.min(e.maxHp, e.hp + e.atk * 0.5);
-  await ANIM(140); await dashBack(e); return ANIM(100);
+  await ANIM(140); if (!ranged) await lungeBack(e); return ANIM(80);
 }
 // taking a hit: defense 100 = half damage (100 / (100 + def)), guarding halves it again
 function hurtUnit(t, dmg, src) {
@@ -1438,10 +1625,10 @@ function hurtUnit(t, dmg, src) {
   if (t.buffs.dodge > 0 && Math.random() < 0.5) { pop(t, '閃開', '#cfe'); return; }
   if (t.buffs.wall > 0) d *= 1 - (t.wallAmt || 0.4);
   if (t.buffs.guard > 0) d *= 0.5;
-  if (t.buffs.taunt > 0 && t.cls === 'shield') { d *= 1 - (t.tauntDr || 0.3); if (t.counter && src && src.hp > 0) dmgEnemy(t, src, t.st.atk * 0.5); }
+  if (t.buffs.taunt > 0 && t.cls === 'shield') { d *= 1 - (t.tauntDr || 0.3); if (t.counter && src && src.hp > 0 && mdist(t, src) <= 1) dmgEnemy(t, src, t.st.atk * 0.5); }
   if (t.absorb > 0 && t.aegisDr) d *= 0.8;
   if (t.buffs.frenzy > 0) d *= 1.2;
-  if (t.absorb > 0) { const a = Math.min(t.absorb, d); t.absorb -= a; d -= a; if (t.absorb <= 0 && t.burst) { t.burst = false; const by = t.burstBy || t; for (const e of livingE()) { burst(e, '#ffe9a0'); dmgEnemy(by, e, by.st.atk * 2, { magic: true }); } } }
+  if (t.absorb > 0) { const a = Math.min(t.absorb, d); t.absorb -= a; d -= a; if (t.absorb <= 0 && t.burst) { t.burst = false; const by = t.burstBy || t; for (const e of foes()) { burst(e, '#ffe9a0'); dmgEnemy(by, e, by.st.atk * 2, { magic: true }); } } }
   if (t.buffs.wall > 0 && t.reflect && src && src.hp > 0) dmgEnemy(t, src, d * t.reflect);
   d = Math.max(0, Math.round(d));
   t.hp -= d; t.hitT = 0.25;
@@ -1454,13 +1641,13 @@ function hurtUnit(t, dmg, src) {
 }
 function healUnit(t, amt) { if (t.hp <= 0) return; amt = Math.round(amt); t.hp = Math.min(t.maxHp, t.hp + amt); if (amt > 0) pop(t, '+' + amt, '#7dff8a'); }
 function onDeath(e) {
-  if (e.kind !== 'enemy' || e.dead) return; e.dead = true;
+  if (e.side !== 'enemy' || e.dead) return; e.dead = true;
   const lvM = 1 + 0.2 * (e.lvl - 1);
   B.exp += Math.round(EXPV[e.type] * lvM * (e.elite ? 3 : 1) * TB.exp);
   B.gold += Math.round(GOLDV[e.type] * lvM * (e.elite ? 3 : 1) * rand(0.8, 1.2));
   if (Math.random() < (e.boss ? 1 : e.elite ? 0.35 : 0.06)) B.drops.push(e.boss ? 2 : 1);
   if (!SIM.on) SFX.kill();
-  if (e.aff.includes('deathbomb')) for (const p of livingP()) hurtUnit(p, e.atk * 0.8, null);
+  if (e.aff.includes('deathbomb')) for (const p of allies().filter(p => mdist(p, e) <= 2)) hurtUnit(p, e.atk * 0.8, null);
 }
 async function trySeal(u, e) {
   const d = Save.d;
@@ -1474,7 +1661,6 @@ async function trySeal(u, e) {
     e.gone = true; e.dead = true;
     const pet = rollPet(e.type, e.lvl, e.elite);
     d.pets.push(pet);
-    // the catcher keeps it if they have no pet yet, else the first hero without one
     const owner = u.cls && !d.petOf[u.cls] ? u.cls : d.party.find(c => !d.petOf[c]);
     if (owner) d.petOf[owner] = pet.id;
     Save.write();
@@ -1487,58 +1673,64 @@ async function trySeal(u, e) {
   return say(`封印失敗……（成功率約 ${Math.round(chance * 100)}%，打到越少血越好抓）`);
 }
 
-/* ---------------- skills (24, from the action game; first one known, the rest bought, levelled by use) ---------------- */
-// t: enemy (pick one) / row (the picked one's row) / all / ally (pick one) / self / party; lab: how the range is shown when it differs
+/* ---------------- skills on the board (24, from the action game; first one known, the rest bought, levelled by use) ---------------- */
+// shape: one / around / area1 (3x3) / area2 (radius 2) / line / row / rand / ally / self / party;  r: reach in tiles; w: how much the auto play likes it
 const S_ = (u, lv, mult) => u.st.atk * mult * u.st.skillMul * (1 + 0.12 * (lv - 1)) * rand(0.9, 1.1);
-const MELEE_SK = { whirl: 1, charge: 1, smash: 1, bash: 1, flurry: 1, leap: 1 };
 const SK = {
-  whirl: { t: 'all', lab: 'row', go(u, lv, E) { for (const e of livingE().filter(e => e.y > 0.25 || E >= 2 || e.boss)) dmgEnemy(u, e, S_(u, lv, e.y > 0.25 || e.boss ? (E >= 1 ? 1.2 : 0.9) : 0.6)); } },
-  charge: { t: 'enemy', go(u, lv, E, t) { dmgEnemy(u, t, S_(u, lv, 1.6)); if (Math.random() < (E >= 1 ? 0.5 : 0.3)) stunE(t); if (E >= 2) for (const o of column(t)) dmgEnemy(u, o, S_(u, lv, 1)); } },
-  smash: { t: 'enemy', go(u, lv, E, t) { t.buffs.broke = 3; dmgEnemy(u, t, S_(u, lv, 2.2)); if (E >= 1) for (const o of neighbours(t)) { o.buffs.broke = 3; dmgEnemy(u, o, S_(u, lv, 0.8)); } if (E >= 2) { const r = retarget(t, 'enemy'); if (r) dmgEnemy(u, r, S_(u, lv, 1)); } } },
-  quake: { t: 'all', ult: 1, go(u, lv, E) { for (let k = 0; k < (E >= 2 ? 2 : 1); k++) for (const e of livingE()) { dmgEnemy(u, e, S_(u, lv, E >= 1 ? 1.8 : 1.5)); if (Math.random() < 0.2) stunE(e); } } },
-  fireball: { t: 'enemy', go(u, lv, E, t) { const ts = E >= 1 ? [t, ...livingE().filter(e => e !== t).sort(() => Math.random() - 0.5).slice(0, 2)] : [t]; for (const e of ts) { dmgEnemy(u, e, S_(u, lv, 1.8), { magic: true }); if (E >= 2 && e.hp > 0) e.buffs.burn = 3; for (const o of neighbours(e)) dmgEnemy(u, o, S_(u, lv, 0.6), { magic: true }); } } },
-  nova: { t: 'all', go(u, lv, E) { for (const e of livingE()) { dmgEnemy(u, e, S_(u, lv, E >= 2 ? 1.2 : 0.8), { magic: true }); if (e.hp > 0 && Math.random() < [0.3, 0.5, 0.7][E]) { stunE(e); pop(e, '凍住', '#9fe8ff'); } } } },
-  beam: { t: 'enemy', lab: 'col', go(u, lv, E, t) { for (const e of [t, ...column(t)]) dmgEnemy(u, e, S_(u, lv, E >= 1 ? 2 : 1.6), { magic: true }); if (E >= 2) for (const e of livingE()) dmgEnemy(u, e, S_(u, lv, 0.5), { magic: true }); } },
-  meteor: { t: 'all', ult: 1, go(u, lv, E) { for (const e of livingE()) { dmgEnemy(u, e, S_(u, lv, E >= 1 ? 2.4 : 2), { magic: true }); if (E >= 2 && e.hp > 0) e.buffs.burn = 3; } } },
-  bash: { t: 'enemy', go(u, lv, E, t) { for (const e of E >= 2 ? [t, ...neighbours(t)] : [t]) { dmgEnemy(u, e, S_(u, lv, 1.2)); if (Math.random() < (E >= 1 ? 0.7 : 0.5)) stunE(e); } } },
-  roar: { t: 'self', buff: 'taunt', go(u, lv, E) { u.buffs.taunt = 3 + Math.floor(lv / 3); u.tauntDr = 0.3 + 0.02 * (lv - 1); u.counter = E >= 1; burst(u, '#ffd27a'); pop(u, '嘲諷！全部衝著我來！', '#ffd27a'); if (E >= 2) for (const e of livingE()) if (Math.random() < 0.2) stunE(e); } },
-  wall: { t: 'party', buff: 'wall', go(u, lv, E) { for (const p of livingP()) { p.buffs.wall = E >= 1 ? 3 : 2; p.wallAmt = E >= 1 ? 0.5 : 0.4; p.reflect = E >= 2 ? 0.3 : 0; burst(p, '#a8c8ff'); } } },
-  ram: { t: 'all', ult: 1, go(u, lv, E) { for (const e of livingE()) { dmgEnemy(u, e, S_(u, lv, E >= 2 ? 2 : 1.2)); if (Math.random() < (E >= 1 ? 0.6 : 0.4)) stunE(e); } } },
-  holyslash: { t: 'row', go(u, lv, E, t) { for (const e of rowOf(t)) { dmgEnemy(u, e, S_(u, lv, E >= 1 ? 1.6 : 1.3), { magic: true }); if (E >= 2) healUnit(u, u.maxHp * 0.05); } } },
-  heal: { t: 'party', heal: 1, go(u, lv, E) { const pct = 0.2 + 0.025 * (lv - 1); if (E >= 2) for (const p of B.party) if (p.hp <= 0 && p.kind === 'hero') { p.hp = Math.round(p.maxHp * 0.2); pop(p, '救起來了！', '#7dff8a'); } for (const p of livingP()) { burst(p, '#7dff8a'); healUnit(p, p.maxHp * pct * (p.buffs.taunt > 0 && p.cls === 'shield' ? 1.5 : 1)); if (E >= 1) { p.buffs.burn = 0; p.buffs.bleed = 0; } } } },
-  aegis: { t: 'ally', heal: 1, go(u, lv, E, t) { t.absorb = t.maxHp * (0.5 + 0.05 * (lv - 1)); t.aegisDr = E >= 1; t.buffs.shield = 3; t.burst = E >= 2; t.burstBy = u; burst(t, '#ffe9a0'); pop(t, '神聖護盾', '#ffe9a0'); } },
-  judge: { t: 'enemy', ult: 1, go(u, lv, E, t) { dmgEnemy(u, t, S_(u, lv, E >= 1 ? 4 : 3.5), { magic: true }); if (E >= 2) for (const o of neighbours(t)) dmgEnemy(u, o, S_(u, lv, 2), { magic: true }); } },
-  flurry: { t: 'all', lab: 'rand', go(u, lv, E) { for (let k = 0; k < 4 + Math.floor(lv / 2); k++) { const e = pick(livingE()); if (!e) break; slash(e, '#ff8a5a'); const got = dmgEnemy(u, e, S_(u, lv, E >= 1 ? 0.5 : 0.4)); if (E >= 2) healUnit(u, got * 0.2); } } },
-  leap: { t: 'enemy', go(u, lv, E, t) { dmgEnemy(u, t, S_(u, lv, E >= 1 ? 1.8 : 1.5)); for (const o of neighbours(t)) { dmgEnemy(u, o, S_(u, lv, 0.8)); if (E >= 2 && Math.random() < 0.4) stunE(o); } if (E >= 2 && Math.random() < 0.4) stunE(t); } },
-  bloodlust: { t: 'self', buff: 'lust', go(u, lv, E) { u.buffs.lust = E >= 1 ? 4 : 3; u.lustAmt = E >= 1 ? 0.4 : 0.3; if (E >= 2) u.buffs.might = u.buffs.lust; burst(u, '#ff4a3a'); } },
-  frenzy: { t: 'self', buff: 'frenzy', ult: 1, go(u, lv, E) { u.buffs.frenzy = E >= 1 ? 4 : 3; u.frenzyMul = E >= 2 ? 1.8 : 1.5; burst(u, '#ff4a3a'); } },
-  triple: { t: 'all', lab: 'rand', go(u, lv, E) { const n = Math.min(8, 3 + Math.floor(lv / 2)); pop(u, n + ' 箭！', '#d8ffb0'); for (let k = 0; k < n; k++) { const e = pick(livingE()); if (!e) break; slash(e, '#d8ffb0'); dmgEnemy(u, e, S_(u, lv, [0.7, 0.8, 0.9][E])); } } },
-  backshot: { t: 'enemy', go(u, lv, E, t) { dmgEnemy(u, t, S_(u, lv, E >= 1 ? 1.7 : 1.4)); u.buffs.dodge = 1; if (E >= 2) { const o = livingE().filter(e => e !== t); if (o.length) dmgEnemy(u, pick(o), S_(u, lv, 1)); } } },
-  blast: { t: 'enemy', go(u, lv, E, t) { dmgEnemy(u, t, S_(u, lv, E >= 1 ? 1.9 : 1.6)); for (const o of neighbours(t)) { dmgEnemy(u, o, S_(u, lv, 0.8)); if (E >= 2 && o.hp > 0) o.buffs.burn = 2; } if (E >= 2 && t.hp > 0) t.buffs.burn = 2; } },
-  rain: { t: 'all', ult: 1, go(u, lv, E) { const v = E >= 2 ? 2 : 1; for (let k = 0; k < v; k++) for (const e of livingE()) dmgEnemy(u, e, S_(u, lv, E >= 1 ? 1.6 : 1.3) * (v > 1 ? 0.6 : 1)); } }
+  whirl: { shape: 'around', w: 1.2, go(u, lv, E, T) { for (const e of T) { dmgEnemy(u, e, S_(u, lv, E >= 1 ? 1.2 : 0.9)); if (E >= 2 && Math.random() < 0.3) stunE(e); } } },
+  charge: { shape: 'line', r: 3, len: 3, go(u, lv, E, T) { T.forEach((e, i) => { if (i && E < 2) return; dmgEnemy(u, e, S_(u, lv, i ? 1 : 1.6)); if (Math.random() < (E >= 1 ? 0.5 : 0.3)) stunE(e); }); } },
+  smash: { shape: 'one', r: 1, go(u, lv, E, T) { const t = T[0]; if (!t) return; t.buffs.broke = 3; dmgEnemy(u, t, S_(u, lv, 2.2)); if (E >= 1) for (const o of adjFoes(t)) { o.buffs.broke = 3; dmgEnemy(u, o, S_(u, lv, 0.8)); } if (E >= 2 && t.hp > 0) dmgEnemy(u, t, S_(u, lv, 1)); } },
+  quake: { shape: 'party', rad: 3, foe: 1, w: 1.5, go(u, lv, E, T) { for (let k = 0; k < (E >= 2 ? 2 : 1); k++) for (const e of T) { dmgEnemy(u, e, S_(u, lv, E >= 1 ? 1.8 : 1.5)); if (Math.random() < 0.2) stunE(e); } } },
+  fireball: { shape: 'area1', r: 4, magic: 1, go(u, lv, E, T, tg) { for (const e of T) { const center = e.c === tg.c && e.r === tg.r; dmgEnemy(u, e, S_(u, lv, center ? (E >= 1 ? 2 : 1.8) : 0.6), { magic: true }); if (E >= 2 && e.hp > 0) e.buffs.burn = 3; } } },
+  nova: { shape: 'party', rad: 2, foe: 1, magic: 1, w: 1.2, go(u, lv, E, T) { for (const e of T) { dmgEnemy(u, e, S_(u, lv, E >= 2 ? 1.2 : 0.8), { magic: true }); if (e.hp > 0 && Math.random() < [0.3, 0.5, 0.7][E]) { stunE(e); pop(e, '凍住', '#9fe8ff'); } } } },
+  beam: { shape: 'line', r: 5, len: 5, magic: 1, go(u, lv, E, T) { for (const e of T) dmgEnemy(u, e, S_(u, lv, E >= 1 ? 2 : 1.6), { magic: true }); if (E >= 2) for (const e of foes()) dmgEnemy(u, e, S_(u, lv, 0.5), { magic: true }); } },
+  meteor: { shape: 'area2', r: 5, magic: 1, w: 1.6, go(u, lv, E, T) { for (const e of T) { dmgEnemy(u, e, S_(u, lv, E >= 1 ? 2.4 : 2), { magic: true }); if (E >= 2 && e.hp > 0) e.buffs.burn = 3; } } },
+  bash: { shape: 'one', r: 1, go(u, lv, E, T) { const t = T[0]; if (!t) return; for (const e of E >= 2 ? [t, ...adjFoes(t)] : [t]) { dmgEnemy(u, e, S_(u, lv, 1.2)); if (Math.random() < (E >= 1 ? 0.7 : 0.5)) stunE(e); } } },
+  roar: { shape: 'self', buff: 'taunt', go(u, lv, E) { u.buffs.taunt = 3 + Math.floor(lv / 3); u.tauntDr = 0.3 + 0.02 * (lv - 1); u.counter = E >= 1; burst(u, '#ffd27a'); pop(u, '嘲諷！全部衝著我來！', '#ffd27a'); if (E >= 2) for (const e of foes()) if (mdist(u, e) <= 3 && Math.random() < 0.2) stunE(e); } },
+  wall: { shape: 'party', rad: 2, buff: 'wall', go(u, lv, E, T) { for (const p of T) { p.buffs.wall = E >= 1 ? 3 : 2; p.wallAmt = E >= 1 ? 0.5 : 0.4; p.reflect = E >= 2 ? 0.3 : 0; burst(p, '#a8c8ff'); } } },
+  ram: { shape: 'line', r: 3, len: 3, w: 1.3, go(u, lv, E, T) { for (const e of T) { dmgEnemy(u, e, S_(u, lv, E >= 2 ? 2 : 1.2)); if (Math.random() < (E >= 1 ? 0.6 : 0.4)) stunE(e); } } },
+  holyslash: { shape: 'row', r: 2, magic: 1, go(u, lv, E, T) { for (const e of T) { dmgEnemy(u, e, S_(u, lv, E >= 1 ? 1.6 : 1.3), { magic: true }); if (E >= 2) healUnit(u, u.maxHp * 0.05); } } },
+  heal: { shape: 'party', rad: 2, heal: 1, go(u, lv, E, T) { const pct = 0.2 + 0.025 * (lv - 1); if (E >= 2) for (const p of B.party) if (p.hp <= 0 && p.kind === 'hero' && mdist(u, p) <= 3) { p.hp = Math.round(p.maxHp * 0.2); pop(p, '救起來了！', '#7dff8a'); } for (const p of T) { burst(p, '#7dff8a'); healUnit(p, p.maxHp * pct * (p.buffs.taunt > 0 && p.cls === 'shield' ? 1.5 : 1)); if (E >= 1) { p.buffs.burn = 0; p.buffs.bleed = 0; } } } },
+  aegis: { shape: 'ally', r: 3, heal: 1, go(u, lv, E, T) { const t = T[0]; if (!t) return; t.absorb = t.maxHp * (0.5 + 0.05 * (lv - 1)); t.aegisDr = E >= 1; t.buffs.shield = 3; t.burst = E >= 2; t.burstBy = u; burst(t, '#ffe9a0'); pop(t, '神聖護盾', '#ffe9a0'); } },
+  judge: { shape: 'area1', r: 4, magic: 1, w: 1.4, go(u, lv, E, T, tg) { for (const e of T) { const center = e.c === tg.c && e.r === tg.r; if (!center && E < 2) continue; dmgEnemy(u, e, S_(u, lv, center ? (E >= 1 ? 4 : 3.5) : 2), { magic: true }); } } },
+  flurry: { shape: 'rand', r: 1, go(u, lv, E, T) { for (let k = 0; k < 4 + Math.floor(lv / 2); k++) { const e = pick(T.filter(x => x.hp > 0)); if (!e) break; slash(e, '#ff8a5a'); const got = dmgEnemy(u, e, S_(u, lv, E >= 1 ? 0.5 : 0.4)); if (E >= 2) healUnit(u, got * 0.2); } } },
+  leap: { shape: 'area1', r: 3, go(u, lv, E, T, tg) { for (const e of T) { const center = e.c === tg.c && e.r === tg.r; dmgEnemy(u, e, S_(u, lv, center ? (E >= 1 ? 1.8 : 1.5) : 0.8)); if (E >= 2 && Math.random() < 0.4) stunE(e); } } },
+  bloodlust: { shape: 'self', buff: 'lust', go(u, lv, E) { u.buffs.lust = E >= 1 ? 4 : 3; u.lustAmt = E >= 1 ? 0.4 : 0.3; if (E >= 2) u.buffs.might = u.buffs.lust; burst(u, '#ff4a3a'); } },
+  frenzy: { shape: 'self', buff: 'frenzy', go(u, lv, E) { u.buffs.frenzy = E >= 1 ? 4 : 3; u.frenzyMul = E >= 2 ? 1.8 : 1.5; burst(u, '#ff4a3a'); } },
+  triple: { shape: 'rand', r: 4, w: 1.2, go(u, lv, E, T) { const n = Math.min(8, 3 + Math.floor(lv / 2)); pop(u, n + ' 箭！', '#d8ffb0'); for (let k = 0; k < n; k++) { const e = pick(T.filter(x => x.hp > 0)); if (!e) break; slash(e, '#d8ffb0'); dmgEnemy(u, e, S_(u, lv, [0.7, 0.8, 0.9][E])); } } },
+  backshot: { shape: 'one', r: 4, go(u, lv, E, T) { const t = T[0]; if (!t) return; dmgEnemy(u, t, S_(u, lv, E >= 1 ? 1.7 : 1.4)); u.buffs.dodge = 1; if (E >= 2) { const o = foes().filter(e => e !== t && mdist(u, e) <= 4); if (o.length) dmgEnemy(u, pick(o), S_(u, lv, 1)); } } },
+  blast: { shape: 'area1', r: 4, go(u, lv, E, T, tg) { for (const e of T) { const center = e.c === tg.c && e.r === tg.r; dmgEnemy(u, e, S_(u, lv, center ? (E >= 1 ? 1.9 : 1.6) : 0.8)); if (E >= 2 && e.hp > 0) e.buffs.burn = 2; } } },
+  rain: { shape: 'area2', r: 5, w: 1.5, go(u, lv, E, T) { const v = E >= 2 ? 2 : 1; for (let k = 0; k < v; k++) for (const e of T) dmgEnemy(u, e, S_(u, lv, E >= 1 ? 1.6 : 1.3) * (v > 1 ? 0.6 : 1)); } }
 };
 const SK_COL = { warrior: '#ffb070', mage: '#c79bff', shield: '#a8c8ff', paladin: '#ffe9a0', berserker: '#ff6a4a', archer: '#d8ffb0' };
-async function castSkill(u, i, t) {
-  const s = CLASSES[u.cls].skills[i], def = SK[s.id], lv = u.ch.skills[i], E = evo(lv), cost = skillMp(u, i);
-  if (u.mp < cost) { await say(u.name + '魔力不夠，改成普通攻擊'); const tt = retarget(t, 'enemy'); if (tt) { await dashTo(u, tt); slash(tt); heroAttack(u, tt); await dashBack(u); } return; }
+const MELEE_SK = { smash: 1, bash: 1, whirl: 1, flurry: 1, charge: 1, ram: 1 };
+async function castSkill(u, i, tg) {
+  const s = CLASSES[u.cls].skills[i], sk = SK[s.id], lv = u.ch.skills[i], E = evo(lv), cost = skillMp(u, i);
+  if (u.mp < cost) return say(u.name + '魔力不夠！');
   if (!(u.st.special === 'cdReset' && Math.random() < 0.1)) u.mp -= cost;
-  const target = def.t === 'enemy' || def.t === 'row' ? retarget(t, 'enemy') : def.t === 'ally' ? retarget(t, 'ally') : u;
-  if (!target) return;
+  const act = { shape: sk.shape, r: sk.r, len: sk.len, rad: sk.rad };
+  const cells = areaOf(u, act, tg);
+  const friendly = sk.heal || sk.buff;
+  let T = sk.shape === 'self' ? [u] : unitsIn(cells, friendly ? 'ally' : 'enemy');
+  if (sk.foe) T = unitsIn(cells, 'enemy');
   note(u.name + '使出' + s.name + (lv > 1 ? ' Lv' + lv : '') + '！'); pop(u, s.name, '#ffe9a0', 24);
-  if (!SIM.on) def.ult ? SFX.ult() : SFX.skill();
-  if (def.ult && BANTER_TD[u.cls]) sayB(u, pick(BANTER_TD[u.cls].ult));
+  if (!SIM.on) (i === 3 ? SFX.ult : SFX.skill)();
+  if (i === 3 && BANTER_TD[u.cls]) sayB(u, pick(BANTER_TD[u.cls].ult));
   const col = SK_COL[u.cls];
   u.castEl = SKILL_EL[s.id] || null;
-  // how it looks: melee skills run up and strike, ranged ones fly, area ones step out and blow up on every target
-  if ((def.t === 'enemy' || def.t === 'row') && MELEE_SK[s.id]) { await dashTo(u, target); slash(target, col); def.go(u, lv, E, target); await ANIM(160); await dashBack(u); }
-  else if (def.t === 'enemy' || def.t === 'row') { await shoot(u, target, u.cls === 'archer' ? 'arrow' : 'bolt', col); for (const e of def.t === 'row' ? rowOf(target) : [target]) burst(e, col); def.go(u, lv, E, target); await ANIM(260); }
-  else if (def.t === 'all') { await stepOut(u); if (def.ult) shake(); for (const e of livingE()) burst(e, col); def.go(u, lv, E, target); await ANIM(380); await dashBack(u); }
-  else { def.go(u, lv, E, target); await ANIM(380); }
+  const first = T[0];
+  if (MELEE_SK[s.id] && first && first.side === 'enemy') await lungeAt(u, first);
+  else if (sk.r && first && first.side === 'enemy' && sk.shape !== 'area2') await shoot(u, first, u.cls === 'archer' ? 'arrow' : 'bolt', col);
+  else await ANIM(150);
+  for (const c of cells) burstTile(c.c, c.r, friendly ? '#7dff8a' : col);
+  if (sk.shape === 'area2' || sk.shape === 'party' && !friendly) shake();
+  sk.go(u, lv, E, T, tg);
+  await ANIM(380);
+  if (MELEE_SK[s.id] && first && first.side === 'enemy') await lungeBack(u);
   u.castEl = null;
   // skill experience: using a skill is how it levels up (Lv1 → 10)
   const ch = u.ch;
   if (ch.skills[i] < SKILL_MAX) { ch.skx[i]++; if (ch.skx[i] >= skillNeed(ch.skills[i])) { ch.skx[i] = 0; ch.skills[i]++; B.skillUps.push(u.name + '的' + s.name + ' → Lv' + ch.skills[i] + (ch.skills[i] === 5 || ch.skills[i] === 10 ? '（進化！）' : '')); } }
-  return ANIM(120);
 }
 
 /* ---------------- end of a battle ---------------- */
@@ -1550,6 +1742,7 @@ async function endBattle(how) {
     else u.pet.hp = Math.max(1, Math.round(u.hp));
   }
   const rw = { how, gold: 0, exp: 0, ups: [], items: [], caught: B.caught, skillUps: B.skillUps, burned: 0, petUps: [] };
+  if (F.engaged) { if (how === 'win') F.mobs = F.mobs.filter(m => m !== F.engaged); else { F.engaged.stun = 3; F.cool = 2.5; } F.engaged = null; }
   if (how === 'win') {
     const greedy = B.party.some(u => u.kind === 'pet' && u.hp > 0 && u.pet.trait === 'greedy');
     rw.gold = Math.round(B.gold * (greedy ? 1.15 : 1)); rw.greedy = greedy; rw.exp = B.exp; d.gold += rw.gold;
@@ -1606,27 +1799,62 @@ function showReward(rw) {
   }, null, true);
 }
 
-/* ---------------- battle drawing ---------------- */
+
+
+/* ---------------- battle drawing: the diorama board ---------------- */
 const BIMG = img('battlebg', TDART + 'battle_forest.webp');
 function pop(u, text, col, size) { if (SIM.on || !B) return; B.floats.push({ u, text, col, size: Math.round((size || 22) * 1.3), t: 1.2, dy: 0 }); }
 function shake() { if (SIM.on || !B) return; B.shake = 0.35; }
 function sayB(u, text) { if (SIM.on || !B || !u) return; u.bubble = { text, t: 3.2 }; }
+const TOP_COL = [['#6f9a48', '#7fae52'], ['#86a85a', '#94b864'], ['#9db86c', '#acc678']];
 function drawBattle(now, dt) {
-  const g = bctx, k = bc.width / L, LH = B.LH;
-  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#0d150c'; g.fillRect(0, 0, bc.width, bc.height);
+  const g = bctx, k = bc.width / L, LH = B.LH, I = iso(), t = now / 1000;
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.fillStyle = '#1a1d24'; g.fillRect(0, 0, bc.width, bc.height);
   g.setTransform(k, 0, 0, k, 0, 0);
+  // backdrop: the painted forest, darkened, so the board reads like a model on a table
+  if (ready(BIMG)) { const s = Math.max(L / BIMG.naturalWidth, LH / BIMG.naturalHeight), w = BIMG.naturalWidth * s, hh = BIMG.naturalHeight * s; g.globalAlpha = 0.45; g.drawImage(BIMG, (L - w) / 2, (LH - hh) / 2, w, hh); g.globalAlpha = 1; }
+  const vg = g.createRadialGradient(L / 2, LH * 0.5, LH * 0.2, L / 2, LH * 0.5, LH * 0.75); vg.addColorStop(0, 'rgba(20,24,32,0)'); vg.addColorStop(1, 'rgba(12,14,20,.85)'); g.fillStyle = vg; g.fillRect(0, 0, L, LH);
   if (B.shake > 0) { B.shake -= dt; g.translate(rand(-5, 5), rand(-4, 4)); }
-  if (ready(BIMG)) { const s = Math.max(L / BIMG.naturalWidth, LH / BIMG.naturalHeight), w = BIMG.naturalWidth * s, hh = BIMG.naturalHeight * s; g.drawImage(BIMG, (L - w) / 2, (LH - hh) / 2, w, hh); }
-  const gr = g.createLinearGradient(0, LH * 0.45, 0, LH); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.45)'); g.fillStyle = gr; g.fillRect(0, LH * 0.45, L, LH * 0.55);
-  // movement
-  for (const u of [...B.enemies, ...B.party]) if (u.mv) { const q = clamp((now - u.mv.t0) / u.mv.d, 0, 1), e = q < 0.5 ? 2 * q * q : 1 - Math.pow(-2 * q + 2, 2) / 2; u.px = u.mv.fx + (u.mv.tx - u.mv.fx) * e; u.py = u.mv.fy + (u.mv.ty - u.mv.fy) * e; u.moving = q < 1; if (q >= 1) u.mv = null; }
-  const all = [...B.enemies.filter(e => !e.gone && (e.hp > 0 || (e.fade = (e.fade == null ? 1 : e.fade) - dt * 2) > 0)), ...B.party];
-  all.sort((a, b) => pos(a).y - pos(b).y);
-  const picking = B.mode && B.mode.pick, t = now / 1000, cmdU = commander();
-  for (const u of all) drawUnit(g, u, t, dt, picking, u === cmdU);
+  for (const u of B.units) if (u.mvA) { const q = clamp((now - u.mvA.t0) / u.mvA.d, 0, 1); u.px = u.mvA.fx + (u.mvA.tx - u.mvA.fx) * q; u.py = u.mvA.fy + (u.mvA.ty - u.mvA.fy) * q; u.moving = q < 1; if (q >= 1) u.mvA = null; } else u.moving = false;
+  // overlays
+  const moveSet = B.mode === 'move' && B.moves ? B.moves : null;
+  let rangeSet = null, areaSet = null;
+  if (B.mode === 'target' && B.sel) { const a = B.act; if (a.r) rangeSet = new Set(inRangeTiles(B.sel, a.r).map(tt => key2(tt.c, tt.r))); if (B.target) areaSet = new Set(areaOf(B.sel, a, B.target).map(c => key2(c.c, c.r))); }
+  else if (B.mode === 'act' && B.sel) rangeSet = new Set(inRangeTiles(B.sel, B.sel.rng).map(tt => key2(tt.c, tt.r)));
+  // tiles back to front, with earthen sides like a diorama
+  const tiles = B.tiles.slice().sort((a, b) => (a.c + a.r) - (b.c + b.r) || a.c - b.c);
+  for (const tl of tiles) {
+    const p = scr(tl.c, tl.r, tl.h), hw = I.TW / 2, hh = I.TH / 2;
+    const base = (tl.c === BW - 1 || tl.r === BH - 1) ? -1.4 : 0;            // the board's own thickness on the front edges
+    const sideH = (tl.h - base) * I.HZ;
+    // left face
+    g.fillStyle = '#6a4a2a'; g.beginPath(); g.moveTo(p.x - hw, p.y); g.lineTo(p.x, p.y + hh); g.lineTo(p.x, p.y + hh + sideH); g.lineTo(p.x - hw, p.y + sideH); g.closePath(); g.fill();
+    // right face
+    g.fillStyle = '#52381e'; g.beginPath(); g.moveTo(p.x + hw, p.y); g.lineTo(p.x, p.y + hh); g.lineTo(p.x, p.y + hh + sideH); g.lineTo(p.x + hw, p.y + sideH); g.closePath(); g.fill();
+    // plank lines on the sides
+    g.strokeStyle = 'rgba(0,0,0,.25)'; g.lineWidth = 1;
+    for (let z = 1; z < (tl.h - base) * 2; z++) { const yy = z * I.HZ / 2; g.beginPath(); g.moveTo(p.x - hw, p.y + yy); g.lineTo(p.x, p.y + hh + yy); g.lineTo(p.x + hw, p.y + yy); g.stroke(); }
+    // top
+    const [c1, c2] = TOP_COL[tl.h]; const path = (dx) => { g.beginPath(); g.moveTo(p.x, p.y - hh + dx); g.lineTo(p.x + hw - dx * 2, p.y); g.lineTo(p.x, p.y + hh - dx); g.lineTo(p.x - hw + dx * 2, p.y); g.closePath(); };
+    g.fillStyle = (tl.c + tl.r) % 2 ? c1 : c2; path(0); g.fill();
+    g.strokeStyle = 'rgba(0,0,0,.18)'; g.lineWidth = 1; path(0); g.stroke();
+    if (tl.grass > 0.6 && !tl.block) { g.strokeStyle = 'rgba(40,70,20,.55)'; g.lineWidth = 1.5; for (let q = 0; q < 4; q++) { const gx = p.x + (q - 1.5) * 9, gy = p.y + ((q * 7) % 9) - 4; g.beginPath(); g.moveTo(gx, gy); g.lineTo(gx - 2, gy - 6); g.moveTo(gx, gy); g.lineTo(gx + 2, gy - 5); g.stroke(); } }
+    const kk = key2(tl.c, tl.r);
+    if (moveSet && moveSet.has(kk)) { g.fillStyle = `rgba(90,230,110,${0.35 + 0.1 * Math.sin(t * 4)})`; path(2); g.fill(); g.strokeStyle = 'rgba(180,255,190,.9)'; g.lineWidth = 2; path(2); g.stroke(); }
+    if (rangeSet && rangeSet.has(kk)) { g.fillStyle = 'rgba(255,80,60,.28)'; path(2); g.fill(); g.strokeStyle = 'rgba(255,140,120,.8)'; g.lineWidth = 1.5; path(2); g.stroke(); }
+    if (areaSet && areaSet.has(kk)) { g.fillStyle = `rgba(255,170,60,${0.45 + 0.15 * Math.sin(t * 6)})`; path(1); g.fill(); }
+    if (B.cursor && KB.used && B.cursor.c === tl.c && B.cursor.r === tl.r && B.phase === 'player') { g.strokeStyle = '#ffffff'; g.lineWidth = 3; path(1); g.stroke(); }
+    if (tl.block) { const im = IMG['prop' + (1 + tl.deco % 3)]; if (ready(im)) { const w = I.TW * 0.95, h2 = w * im.naturalHeight / im.naturalWidth; g.drawImage(im, p.x - w / 2, p.y + hh * 0.6 - h2, w, h2); } }
+  }
+  for (const f of B.fx) if (f.kind === 'tile') { f.t -= dt * B.speed; const a = clamp(f.t / f.t0, 0, 1), tl = tileOf(f.c, f.r), p = scr(f.c, f.r, tl ? tl.h : 0); g.globalAlpha = a; g.fillStyle = f.col; g.beginPath(); g.moveTo(p.x, p.y - I.TH / 2); g.lineTo(p.x + I.TW / 2, p.y); g.lineTo(p.x, p.y + I.TH / 2); g.lineTo(p.x - I.TW / 2, p.y); g.closePath(); g.fill(); g.globalAlpha = 1; }
+  // units back to front
+  const live = B.units.filter(u => !u.gone && (u.hp > 0 || u.side === 'ally' || (u.fade = (u.fade == null ? 1 : u.fade) - dt * 2) > 0));
+  live.sort((a, b) => upos(a).y - upos(b).y);
+  for (const u of live) drawUnit(g, u, t, dt);
   // projectiles and hit effects
   for (const p of B.proj) {
-    const q = clamp((now - p.t0) / p.d, 0, 1), tp = upos(p.to), x0 = p.from.x * L, y0 = p.from.y * LH - 50, x = x0 + (tp.x - x0) * q, y = y0 + (tp.y - tp.h * 0.5 - y0) * q - Math.sin(q * Math.PI) * (p.kind === 'arrow' ? 30 : 10);
+    const q = clamp((now - p.t0) / p.d, 0, 1), tp = upos(p.to), x0 = p.from.x, y0 = p.from.y - 40, x = x0 + (tp.x - x0) * q, y = y0 + (tp.y - tp.h * 0.5 - y0) * q - Math.sin(q * Math.PI) * (p.kind === 'arrow' ? 40 : 14);
     g.save(); g.translate(x, y);
     if (p.kind === 'arrow') { g.rotate(Math.atan2(tp.y - tp.h * 0.5 - y0, tp.x - x0)); g.strokeStyle = p.col; g.lineWidth = 3; g.beginPath(); g.moveTo(-16, 0); g.lineTo(8, 0); g.stroke(); g.fillStyle = p.col; g.beginPath(); g.moveTo(12, 0); g.lineTo(4, -4); g.lineTo(4, 4); g.fill(); }
     else if (p.kind === 'card') { g.rotate(q * 12); g.fillStyle = '#fff4d0'; g.strokeStyle = '#c9a45c'; g.lineWidth = 2; g.fillRect(-9, -12, 18, 24); g.strokeRect(-9, -12, 18, 24); }
@@ -1635,6 +1863,7 @@ function drawBattle(now, dt) {
   }
   B.proj = B.proj.filter(p => !p.done);
   for (const f of B.fx) {
+    if (f.kind === 'tile') continue;
     f.t -= dt * B.speed; const a = clamp(f.t / f.t0, 0, 1), p = upos(f.u), cy = p.y - p.h * 0.5;
     g.globalAlpha = a;
     if (f.kind === 'slash') { g.strokeStyle = f.col; g.lineWidth = 6; g.lineCap = 'round'; g.beginPath(); const r = p.h * 0.45, s = 1 - a; g.moveTo(p.x - r + s * 10, cy - r * 0.8); g.quadraticCurveTo(p.x + r * 0.2, cy, p.x + r * (0.4 + s), cy + r * 0.9); g.stroke(); g.lineWidth = 2; g.strokeStyle = '#fff'; g.stroke(); g.lineCap = 'butt'; }
@@ -1642,48 +1871,47 @@ function drawBattle(now, dt) {
     g.globalAlpha = 1;
   }
   B.fx = B.fx.filter(f => f.t > 0);
-  for (const f of B.floats) { f.t -= dt; f.dy += dt * 40; const p = upos(f.u); g.globalAlpha = clamp(f.t * 2, 0, 1); g.font = `900 ${f.size}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000'; const y = p.y - p.h - 8 - f.dy; g.strokeText(f.text, p.x, y); g.fillStyle = f.col; g.fillText(f.text, p.x, y); g.globalAlpha = 1; }
+  for (const f of B.floats) { f.t -= dt; f.dy += dt * 40; const p = upos(f.u); g.globalAlpha = clamp(f.t * 2, 0, 1); g.font = `900 ${f.size}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 4; g.strokeStyle = '#000'; const y = p.y - p.h - 22 - f.dy; g.strokeText(f.text, p.x, y); g.fillStyle = f.col; g.fillText(f.text, p.x, y); g.globalAlpha = 1; }
   B.floats = B.floats.filter(f => f.t > 0);
-  for (const u of all) if (u.bubble && (u.bubble.t -= dt) > 0) { const p = upos(u); bubble(g, u.bubble.text, p.x, p.y - p.h - 34, clamp(u.bubble.t / 0.4, 0, 1), L); }
+  for (const u of live) if (u.bubble && (u.bubble.t -= dt) > 0) { const p = upos(u); bubble(g, u.bubble.text, p.x, p.y - p.h - 40, clamp(u.bubble.t / 0.4, 0, 1), L); }
+  if (B.banner && (B.banner.t -= dt) > 0) { g.globalAlpha = clamp(B.banner.t * 2, 0, 1); g.font = '900 34px "Noto Serif TC", serif'; g.textAlign = 'center'; g.lineWidth = 6; g.strokeStyle = '#000'; g.strokeText(B.banner.text, L / 2, 70); g.fillStyle = B.phase === 'enemy' ? '#ff9a8a' : '#ffe9a8'; g.fillText(B.banner.text, L / 2, 70); g.globalAlpha = 1; }
 }
-function drawUnit(g, u, t, dt, picking, isCmd) {
-  const p = upos(u), im = IMG[u.kind === 'hero' ? u.cls : u.type], down = u.hp <= 0;
+function drawUnit(g, u, t, dt) {
+  const p = upos(u), im = IMG[u.kind === 'hero' ? u.cls : u.type], down = u.hp <= 0, isSel = B.sel === u;
   let jx = 0; if (u.hitT > 0) { u.hitT -= dt; jx = Math.sin(u.hitT * 80) * 4; }
-  g.save(); g.globalAlpha = u.kind === 'enemy' && down ? clamp(u.fade || 0, 0, 1) : 1;
-  g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(p.x, p.y, p.h * 0.32, p.h * 0.08, 0, 0, 7); g.fill();
-  if (isCmd) { const gl = g.createRadialGradient(p.x, p.y - p.h * 0.4, 4, p.x, p.y - p.h * 0.4, p.h * 0.75); gl.addColorStop(0, 'rgba(255,224,102,.45)'); gl.addColorStop(1, 'rgba(255,224,102,0)'); g.fillStyle = gl; g.fillRect(p.x - p.h, p.y - p.h * 1.3, p.h * 2, p.h * 1.5); g.strokeStyle = `rgba(255,224,102,${0.7 + 0.3 * Math.sin(t * 8)})`; g.lineWidth = 4; g.beginPath(); g.ellipse(p.x, p.y, p.h * 0.42, p.h * 0.12, 0, 0, 7); g.stroke(); }
-  if (u.elite || u.boss) { g.strokeStyle = u.boss ? '#ff5a3a' : '#ffcf5a'; g.lineWidth = 3; g.beginPath(); g.ellipse(p.x, p.y, p.h * 0.36, p.h * 0.1, 0, 0, 7); g.stroke(); }
-  const valid = picking && !down && (picking === 'enemy' ? u.kind === 'enemy' : picking === 'hero' ? u.kind === 'hero' : u.kind !== 'enemy');
-  const kbT = picking && B.mode.kbT === u;
-  if (kbT) { g.strokeStyle = '#ffffff'; g.lineWidth = 5; g.beginPath(); g.ellipse(p.x, p.y, p.h * 0.5, p.h * 0.15, 0, 0, 7); g.stroke(); }
-  if ((valid && (!B.mode.kbT || kbT || IS_TOUCH)) || isCmd) { g.fillStyle = isCmd ? '#ffe066' : kbT ? '#ffffff' : '#ff9a4a'; const ay = p.y - p.h - 30 - Math.abs(Math.sin(t * 6)) * 7; g.beginPath(); g.moveTo(p.x, ay + 16); g.lineTo(p.x - 11, ay); g.lineTo(p.x + 11, ay); g.fill(); g.strokeStyle = '#000'; g.lineWidth = 2; g.stroke(); }
-  if (valid) { g.strokeStyle = `rgba(255,154,74,${0.6 + 0.4 * Math.sin(t * 8)})`; g.lineWidth = 3; g.beginPath(); g.ellipse(p.x, p.y, p.h * 0.4, p.h * 0.12, 0, 0, 7); g.stroke(); }
+  g.save(); g.globalAlpha = u.side === 'enemy' && down ? clamp(u.fade || 0, 0, 1) : 1;
+  // team ring on the tile
+  g.strokeStyle = u.side === 'ally' ? (isSel ? '#ffe066' : u.acted ? 'rgba(160,160,160,.6)' : 'rgba(120,230,140,.9)') : (u.boss ? '#ff5a3a' : u.elite ? '#ffcf5a' : 'rgba(255,90,70,.9)');
+  g.lineWidth = isSel ? 4 : 2.5; g.beginPath(); g.ellipse(p.x, p.y, 24, 11, 0, 0, 7); g.stroke();
+  g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(p.x, p.y, 20, 8, 0, 0, 7); g.fill();
   if (ready(im)) {
     const w = p.h * im.naturalWidth / im.naturalHeight;
     g.translate(p.x + jx, p.y);
-    if (down && u.kind !== 'enemy') { g.rotate(-Math.PI / 2 * 0.9); g.translate(-p.h * 0.2, 0); g.globalAlpha = 0.5; }
-    if (u.kind === 'enemy') g.scale(-1, 1);
-    const bob = down ? 0 : u.moving ? -Math.abs(Math.sin(t * 22)) * 6 : Math.sin(t * 3 + p.x) * 2;
+    if (down && u.side === 'ally') { g.rotate(-Math.PI / 2 * 0.9); g.translate(-p.h * 0.2, 0); g.globalAlpha = 0.5; }
+    if (u.side === 'enemy') g.scale(-1, 1);
+    if (u.acted && u.side === 'ally' && B.phase === 'player') g.globalAlpha *= 0.6;
+    const bob = down ? 0 : u.moving ? -Math.abs(Math.sin(t * 22)) * 5 : (isSel ? -Math.abs(Math.sin(t * 5)) * 6 : 0);
     g.drawImage(im, -w / 2, -p.h + bob, w, p.h);
-    if (u.flash > 0) { u.flash -= dt; g.globalCompositeOperation = 'lighter'; g.globalAlpha = 0.55; g.drawImage(im, -w / 2, -p.h + bob, w, p.h); g.globalCompositeOperation = 'source-over'; } // white hit flash on the sprite only
+    if (u.flash > 0) { u.flash -= dt; g.globalCompositeOperation = 'lighter'; g.globalAlpha = 0.55; g.drawImage(im, -w / 2, -p.h + bob, w, p.h); g.globalCompositeOperation = 'source-over'; }
   }
   g.restore();
-  if (u.moving) return; // no bars while running across the field
-  const bw = u.boss ? 130 : u.kind === 'pet' ? 62 : 80, by = p.y + 6;
-  g.fillStyle = 'rgba(0,0,0,.7)'; g.fillRect(p.x - bw / 2 - 2, by - 2, bw + 4, u.kind === 'hero' ? 14 : 9);
-  g.fillStyle = u.kind === 'enemy' ? '#e05a4a' : '#5fd04a'; g.fillRect(p.x - bw / 2, by, bw * clamp(u.hp / u.maxHp, 0, 1), 5);
-  if (u.kind === 'hero') { g.fillStyle = '#4a7ff0'; g.fillRect(p.x - bw / 2, by + 7, bw * clamp(u.mp / u.maxMp, 0, 1), 4); }
-  if (u.shield > 0 || u.absorb > 0) { g.fillStyle = '#9fd3ff'; g.fillRect(p.x - bw / 2, by - 4, bw * clamp((u.shield || u.absorb) / (u.maxHp * 0.5), 0, 1), 2); }
-  g.font = `900 ${isCmd ? 21 : 17}px "Noto Serif TC", serif`; g.textAlign = 'center'; g.lineWidth = 3; g.strokeStyle = '#000';
-  const el = u.kind === 'enemy' ? ELEM[u.el] : u.kind === 'pet' ? ELEM[MON_EL[u.type]] : null;
-  const tag = u.kind === 'enemy' ? `Lv${u.lvl} ${u.name}` + (u.elite ? '・' + EAFFIX[u.aff[0]].n : '') : u.kind === 'pet' ? `${u.name} ${Math.ceil(u.hp)}` : `${u.name} ${Math.max(0, Math.ceil(u.hp))}`;
-  const ty = by + (u.kind === 'hero' ? 31 : 25);
-  g.strokeText(tag, p.x, ty); g.fillStyle = isCmd ? '#ffe066' : u.kind === 'enemy' ? (u.elite ? '#ffcf5a' : '#ffd0c8') : '#e8ffe0'; g.fillText(tag, p.x, ty);
-  if (el) { const tw2 = g.measureText(tag).width; g.font = '900 17px sans-serif'; g.fillStyle = el.c; g.strokeText(el.n, p.x + tw2 / 2 + 9, ty); g.fillText(el.n, p.x + tw2 / 2 + 9, ty); }
+  if (u.moving || down && u.side === 'enemy') return;
+  // portrait chip + HP bar above the head, like a board-game piece label
+  const bw = u.boss ? 92 : 58, bx = p.x - bw / 2 + 10, by = p.y - p.h - 14;
+  g.fillStyle = 'rgba(0,0,0,.75)'; g.fillRect(bx - 2, by - 2, bw + 4, u.kind === 'hero' ? 12 : 9);
+  g.fillStyle = u.side === 'enemy' ? '#e0483a' : '#5fd04a'; g.fillRect(bx, by, bw * clamp(u.hp / u.maxHp, 0, 1), 5);
+  if (u.kind === 'hero') { g.fillStyle = '#4a7ff0'; g.fillRect(bx, by + 6, bw * clamp(u.mp / u.maxMp, 0, 1), 3); }
+  // diamond chip with the element / team colour
+  const el = u.side === 'enemy' ? ELEM[u.el] : u.kind === 'pet' ? ELEM[MON_EL[u.type]] : null;
+  g.save(); g.translate(bx - 10, by + 3); g.rotate(Math.PI / 4); g.fillStyle = u.side === 'ally' ? '#2f6a3c' : '#7a2a1a'; g.strokeStyle = '#ffe9a8'; g.lineWidth = 2; g.fillRect(-8, -8, 16, 16); g.strokeRect(-8, -8, 16, 16); g.restore();
+  g.font = '900 13px sans-serif'; g.textAlign = 'center'; g.fillStyle = el ? el.c : '#ffe9a8'; g.fillText(el ? el.n : (u.kind === 'hero' ? CLASSES[u.cls].name[0] : '?'), bx - 10, by + 8);
+  g.font = '900 15px "Noto Serif TC", serif'; g.lineWidth = 3; g.strokeStyle = '#000';
+  const tag = u.side === 'enemy' ? `Lv${u.lvl} ${u.name}` : `${u.name}`;
+  g.strokeText(tag, p.x, by - 6); g.fillStyle = isSel ? '#ffe066' : u.side === 'enemy' ? (u.elite ? '#ffcf5a' : '#ffd0c8') : '#e8ffe0'; g.fillText(tag, p.x, by - 6);
   const st = [], bf = u.buffs || {};
   if (bf.stun > 0) st.push('暈'); if (bf.burn > 0) st.push('燃'); if (bf.bleed > 0) st.push('血'); if (bf.broke > 0) st.push('破甲'); if (bf.slow > 0) st.push('慢');
   if (bf.taunt > 0) st.push('嘲諷'); if (bf.wall > 0) st.push('盾牆'); if (bf.guard > 0) st.push('石化'); if (bf.frenzy > 0) st.push('狂暴'); if (bf.lust > 0) st.push('嗜血'); if (u.defend) st.push('防禦');
-  if (st.length) { g.font = 'bold 16px sans-serif'; const s = st.join('・'); g.strokeText(s, p.x, p.y - p.h - 4); g.fillStyle = '#ffe066'; g.fillText(s, p.x, p.y - p.h - 4); }
+  if (st.length) { g.font = 'bold 14px sans-serif'; const s = st.join('・'); g.strokeText(s, p.x, p.y + 24); g.fillStyle = '#ffe066'; g.fillText(s, p.x, p.y + 24); }
 }
 function wrapLines(g, text, maxW) { const lines = []; let cur = ''; for (const chr of text) { if (g.measureText(cur + chr).width > maxW) { lines.push(cur); cur = chr; } else cur += chr; } if (cur) lines.push(cur); return lines; }
 function bubble(g, text, x, y, alpha, W) {
@@ -1698,8 +1926,14 @@ function bubble(g, text, x, y, alpha, W) {
   g.globalAlpha = 1;
 }
 function flash() { const f = $('flash'); f.style.opacity = '0.9'; setTimeout(() => { f.style.opacity = '0'; }, 120); }
+bc.addEventListener('pointerdown', e => {
+  e.preventDefault(); SFX.resume();
+  if (!B) return;
+  const r = bc.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * L, y = (e.clientY - r.top) / r.height * B.LH;
+  const t = pickTile(x, y); if (t) tapTile(t);
+});
 $('bSpeed').addEventListener('click', () => { if (!B) return; B.speed = B.speed === 1 ? 2 : B.speed === 2 ? 3 : 1; speedPref = B.speed; $('bSpeed').textContent = B.speed + 'x'; });
-$('bAuto').addEventListener('click', () => { Save.d.auto = !Save.d.auto; Save.write(); updateAutoBtn(); if (Save.d.auto && B && B.phase === 'cmd') { for (let i = Math.max(0, B.cur); i < B.queue.length; i++) B.cmds.push(aiCommand(B.queue[i])); resolveRound(); } });
+$('bAuto').addEventListener('click', () => { Save.d.auto = !Save.d.auto; Save.write(); updateAutoBtn(); if (Save.d.auto && B && B.phase === 'player' && B.mode !== 'busy') { B.sel = null; autoPlayer(); } });
 function updateAutoBtn() { $('bAuto').classList.toggle('on', !!Save.d.auto); $('bAuto').textContent = (Save.d.auto ? '自動中' : '自動') + (IS_TOUCH ? '' : ' A'); }
 
 /* ================= windows ================= */
@@ -1808,7 +2042,7 @@ function skillCards(cls, trainer) {
   const d = Save.d, ch = heroCh(cls), box = h('div', { class: 'sk4' });
   CLASSES[cls].skills.forEach((s, i) => {
     const known = ch.known[i], lv = ch.skills[i], on = ch.load.includes(i), info = SKDESC[s.id], E = evo(lv);
-    const t = h('div', { class: 't' }, h('b', null, s.name), known ? h('span', { class: 'lvb' }, 'Lv' + lv) : h('span', { class: 'muted' }, '（還沒學）'), ' ', h('span', { class: 'rng', style: `background:${TCOL[SK[s.id].lab || SK[s.id].t]}` }, info[0]), h('div', { class: 'muted' }, `MP ${s.mp}` + (i === 3 ? '・大絕招' : '') + (i === STARTER[cls] ? '・天生就會' : '')),
+    const t = h('div', { class: 't' }, h('b', null, s.name), known ? h('span', { class: 'lvb' }, 'Lv' + lv) : h('span', { class: 'muted' }, '（還沒學）'), ' ', h('span', { class: 'rng', style: `background:${TCOL[SK[s.id].shape]}` }, info[0]), h('div', { class: 'muted' }, `MP ${s.mp}` + (i === 3 ? '・大絕招' : '') + (i === STARTER[cls] ? '・天生就會' : '')),
       h('div', null, info[1]), h('div', { class: 'ev' + (E >= 1 ? ' got' : '') }, info[2]), h('div', { class: 'ev' + (E >= 2 ? ' got' : '') }, info[3]),
       known && lv < SKILL_MAX ? h('div', null, h('span', { class: 'muted' }, `熟練度 ${ch.skx[i]}/${skillNeed(lv)}（用一次 +1）`), h('div', { class: 'xp' }, h('i', { style: `width:${ch.skx[i] / skillNeed(lv) * 100}%` }))) : null);
     const btns = h('div', { style: 'display:flex;flex-direction:column;gap:6px' });
@@ -2203,16 +2437,34 @@ window.addEventListener('keydown', e => {
     else if (e.code === 'Escape') openMenu();
     return;
   }
-  if (B && (e.code === 'KeyA' || e.code === 'KeyQ') && !e.repeat) { $(e.code === 'KeyA' ? 'bAuto' : 'bSpeed').click(); return; }
-  if (B && B.phase === 'cmd' && B.mode && B.mode.pick && !e.repeat && KEYDIR4[e.code]) { e.preventDefault(); kbTarget(KEYDIR4[e.code] === 'left' || KEYDIR4[e.code] === 'up' ? -1 : 1); return; }
-  if (B && B.phase === 'cmd' && !B.mode && KEYDIR4[e.code]) { e.preventDefault(); kbMove($('bBtns'), KEYDIR4[e.code]); return; }
-  if (B && B.phase === 'cmd' && B.mode === 'skills' || B && B.phase === 'cmd' && B.mode === 'items') { if (KEYDIR4[e.code]) { e.preventDefault(); kbMove($('bBtns'), KEYDIR4[e.code]); return; } }
-  if (B && B.phase === 'cmd' && !e.repeat && (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Space') && !(B.mode && B.mode.pick)) { e.preventDefault(); if (KB.el && $('bBtns').contains(KB.el)) KB.el.click(); else kbMove($('bBtns'), 'down'); return; }
-  if (B && B.phase === 'cmd' && !e.repeat) {
+  if (B && !$('battle').hidden) {
+    if ((e.code === 'KeyA' || e.code === 'KeyQ') && !e.repeat) { $(e.code === 'KeyA' ? 'bAuto' : 'bSpeed').click(); return; }
+    if (e.code === 'KeyE' && !e.repeat) { endTurn(); return; }
+    if (B.phase !== 'player' || B.mode === 'busy') return;
+    const board = B.mode === 'idle' || B.mode === 'move' || B.mode === 'target';
+    if (KEYDIR4[e.code]) {
+      e.preventDefault();
+      if (!board) return kbMove($('bBtns'), KEYDIR4[e.code]);
+      const dc = { left: -1, right: 1 }[KEYDIR4[e.code]] || 0, dr = { up: -1, down: 1 }[KEYDIR4[e.code]] || 0;
+      B.cursor = { c: clamp(B.cursor.c + dc, 0, BW - 1), r: clamp(B.cursor.r + dr, 0, BH - 1) };
+      if (B.mode === 'target' && B.act.r && mdist(B.sel, B.cursor) <= B.act.r) { B.target = { ...B.cursor }; renderCmd(); }
+      return;
+    }
+    if ((e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Space') && !e.repeat) {
+      e.preventDefault();
+      if (KB.el && $('bBtns').contains(KB.el) && !board) return KB.el.click();
+      if (board) { if (B.mode === 'target' && !B.act.r) return confirmTarget(); return tapTile(tileOf(B.cursor.c, B.cursor.r)); }
+      return;
+    }
+    if ((e.code === 'Escape' || e.code === 'Backspace') && !e.repeat) {
+      e.preventDefault();
+      if (B.mode === 'target' || B.mode === 'skills' || B.mode === 'items') { B.mode = 'act'; B.target = null; renderCmd(); }
+      else if (B.mode === 'act') { if (B.sel && B.sel.moved) undoMove(); else { B.sel = null; B.mode = 'idle'; renderCmd(); } }
+      else if (B.mode === 'move') { B.sel = null; B.mode = 'idle'; renderCmd(); }
+      return;
+    }
     const map = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5 }, bt = [...$('bBtns').querySelectorAll('button')];
     if (e.code in map && bt[map[e.code]] && !bt[map[e.code]].disabled) { e.preventDefault(); bt[map[e.code]].click(); }
-    else if (e.code === 'Escape' || e.code === 'Backspace') { if (B.mode) { B.mode = B.mode.back || null; renderCmd(); } else undoCmd(); }
-    else if (B.mode && B.mode.pick && (e.code === 'Space' || e.code === 'Enter' || e.code === 'NumpadEnter')) { const pool = pickPool(); const t = B.mode.kbT && pool.includes(B.mode.kbT) ? B.mode.kbT : pool[0]; const f = B.mode.done; B.mode = null; f(t); }
   }
 });
 window.addEventListener('keyup', e => {
@@ -2307,14 +2559,13 @@ window.TD = {
   walk(dir, sec) { V.hold = dir; for (let i = 0; i < sec * 30; i++) villageStep(1 / 30); V.hold = 0; villageStep(0); drawVillage(performance.now()); return V.t.toFixed(2) + ' ' + (V.near ? V.near.id : '-'); },
   fwalk(dx, dy, sec) { F.hold = { x: dx, y: dy }; for (let i = 0; i < sec * 30 && F.active; i++) fieldStep(1 / 30); F.hold = null; if (F.active) drawField(performance.now()); return Math.floor(F.x / FT) + ',' + Math.floor(F.y / FT) + (B ? ' battle' : ''); },
   // n auto battles headless in a zone; HP carries over between fights like on the map unless heal; save restored afterwards
-  async sim(n, zone, heal) {
+  async sim(n, zone, heal, boss) {
     SIM.on = true; const out = { win: 0, lose: 0, rounds: 0 };
     const keep = JSON.stringify(Save.d);
     for (let i = 0; i < n; i++) {
       if (heal) healAll();
-      const z = ZONES[zone], list = []; for (let k = 0, m = randi(z.count[0], z.count[1]); k < m; k++) list.push({ type: pick(z.mobs), lvl: randi(z.lv[0], z.lv[1]) });
-      startBattle(list, false);
-      let g = 0; while (!B.result && g++ < 80) await resolveRound();
+      startBattle(boss ? [{ type: 'boss', lvl: 10 }, { type: 'mud', lvl: 8 }, { type: 'mud', lvl: 8 }] : makeGroup(zone), !!boss);
+      let g = 0; while (!B.result && g++ < 40) { if (B.phase === 'player') await autoPlayer(); else await enemyPhase(); }
       out[B.result === 'win' ? 'win' : 'lose']++; out.rounds += B.round;
       if (B.result === 'lose') healAll();
     }
