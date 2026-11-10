@@ -166,6 +166,14 @@
   .rng { display: inline-block; padding: 0 calc(var(--u) * 8); border-radius: calc(var(--u) * 8); color: #1b140c; font-weight: 900; font-size: .85em; }
   /* keyboard highlight (shown once the keyboard is used) */
   .kfoc { outline: calc(var(--u) * 4) solid #ffe066 !important; outline-offset: 2px; box-shadow: 0 0 calc(var(--u) * 16) rgba(255,224,102,.7) !important; }
+  /* defense stage: round skill buttons on the right thumb, next-wave pill on top */
+  #sSkills { position: absolute; right: calc(var(--u) * 12); bottom: max(calc(var(--u) * 16), env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column-reverse; gap: calc(var(--u) * 12); }
+  .skr { position: relative; width: calc(var(--u) * 96); height: calc(var(--u) * 96); border-radius: 50%; padding: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; touch-action: none; }
+  .skr img { width: 78%; height: 78%; border-radius: 50%; pointer-events: none; }
+  .skr b { position: absolute; left: 0; right: 0; bottom: calc(var(--u) * 4); font-size: calc(var(--u) * 14); text-shadow: 0 1px 2px #000; pointer-events: none; white-space: nowrap; }
+  .skr .cdm { position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: rgba(0,0,0,.6); pointer-events: none; }
+  #sNext { position: absolute; left: 50%; top: calc(var(--u) * 12); transform: translateX(-50%); font-size: calc(var(--u) * 22); padding: calc(var(--u) * 10) calc(var(--u) * 24); border-radius: 999px; }
+  #sNext:active { transform: translateX(-50%) translateY(calc(var(--u) * 3)) scale(.97); }
   #flash { position: absolute; inset: 0; z-index: 7; background: #fff; opacity: 0; pointer-events: none; transition: opacity .18s; }
   /* ===== mobile-game skin: glossy pressable buttons, framed windows, rarity cards (overrides the plain styles above) ===== */
   button { background: linear-gradient(180deg, #5c472a 0%, #3b2d19 55%, #2a1f11 100%); border: 1px solid #c9a45c; border-radius: calc(var(--u) * 14);
@@ -260,6 +268,10 @@
     <div class="bar"><div class="title" id="fTitle">迷霧森林</div><div class="sp"></div><button id="fParty" type="button">隊伍</button><button id="fPets" type="button">寵物</button><button id="fMenu" type="button" aria-label="選單">☰</button></div>
     <div id="fPartyBar"></div>
     <div class="cvwrap"><canvas id="fc"></canvas><div id="fHint" class="hint"></div></div>
+  </div>
+  <div id="stage" class="screen" hidden>
+    <div class="bar"><div class="stat" style="color:#ff9a8a">🏰 <span id="sCastle">20</span></div><div class="title" id="sWave">第 0 波</div><div class="sp"></div><div class="stat" style="color:#ffd76b"><img src="art/items/gold.webp" alt="金幣"><span id="sCoins">0</span></div><button id="sMenu" type="button" aria-label="暫停">☰</button></div>
+    <div class="cvwrap"><canvas id="sc"></canvas><div id="sToast" class="toast"></div><div id="sSkills"></div><button id="sNext" class="primary" type="button" hidden>下一波</button><div id="sTitle" hidden></div></div>
   </div>
   <div id="battle" class="screen" hidden>
     <div class="bar"><div class="title" id="bTitle">戰鬥</div><div class="sp"></div><button id="bSpeed" type="button">1x</button><button id="bAuto" type="button">自動</button></div>
@@ -845,8 +857,10 @@ const INTRO = [
   SL('warrior', 'shock', '真的耶！我只能往前走、往後走！左右呢？'),
   SL('npc_trainer', 'n', '走到我們 NPC 旁邊按「說話」，就能聊天、買東西。我這裡賣技能。一開始你們每人只會一招，其他的要用錢買，買了還要一直用才會練到十級。'),
   SL('archer', 'angry', '要錢？我的美貌不能抵嗎？'),
-  SL('npc_trainer', 'n', '出了城門就是迷霧森林。在草叢裡亂走會遇到怪，怪在上面、你們在下面，大家輪流出手。這叫「回合制」。我在程式碼裡看到的。'),
-  SL('mage', 'n', '寵物商人賣封印符。怪打到快死的時候丟出去，就能抓回來當寵物。呵，活的收藏品。'),
+  SL('npc_trainer', 'n', '出了城門是森林裡的城堡，怪物會從最下面一層一層往上爬。主神操控帶隊的那位跑來跑去打怪，打倒的怪會掉金幣。'),
+  SL('warrior', 'n', '撿金幣！我最會撿東西了！'),
+  SL('npc_trainer', 'n', '站在地上寫著數字的格子，就會把金幣倒進去，倒滿了，其他隊友就會在那裡變成塔幫忙打。被怪摸到會扣血，城堡被摸到也會扣血。'),
+  SL('mage', 'n', '所以我要站在那裡當塔？……哼，站著也比被主神亂操控好。'),
   SL('shield', 'sigh', '……不好意思，所以挨打的是我們，按按鈕的是主神。這樣分工好像怪怪的，對不起。')
 ];
 const SPEAKER = { warrior: '戰士', mage: '魔法師', shield: '盾戰士', paladin: '聖騎士', berserker: '狂戰士', archer: '弓箭手', boss: '腐根樹妖', elder: '聖堂老教主', npc_trainer: '技能導師', npc_smith: '鐵匠', npc_guard: '城門守衛', npc_elder: '聖堂老教主' };
@@ -953,7 +967,7 @@ let toastT = null;
 function toast(text, good) { if (SIM.on) return false; const b = $('toast'); b.textContent = text; b.style.borderColor = good ? '#7ddc7a' : ''; b.style.background = good ? 'rgba(20,50,20,.92)' : ''; b.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => b.classList.remove('show'), 2000); if (!good) SFX.bad(); return false; }
 const say1 = (cls, cat) => pick((BANTER_RPG[cls] && BANTER_RPG[cls][cat]) || BANTER[cls][cat] || ['……']);
 function resizeCanvasTo(cv) { const r = cv.getBoundingClientRect(); if (!r.width) return 0; const dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr); return L * r.height / r.width; }
-function showScreen(id) { for (const s of ['village', 'field', 'battle']) $(s).hidden = s !== id; }
+function showScreen(id) { for (const s of ['village', 'field', 'battle', 'stage']) $(s).hidden = s !== id; }
 
 /* ================= the forest field: walk anywhere, tall grass hides monsters ================= */
 const FT = 54, FC = 15, FR = 56;          // tile size, columns, rows
@@ -1936,6 +1950,475 @@ $('bSpeed').addEventListener('click', () => { if (!B) return; B.speed = B.speed 
 $('bAuto').addEventListener('click', () => { Save.d.auto = !Save.d.auto; Save.write(); updateAutoBtn(); if (Save.d.auto && B && B.phase === 'player' && B.mode !== 'busy') { B.sel = null; autoPlayer(); } });
 function updateAutoBtn() { $('bAuto').classList.toggle('on', !!Save.d.auto); $('bAuto').textContent = (Save.d.auto ? '自動中' : '自動') + (IS_TOUCH ? '' : ' A'); }
 
+/* ================= defense stage: run the leader around, build the others as towers, hold the castle at the top =================
+   A tall map in tiers joined by stairs. Monsters climb from the bottom along the path toward the castle; if one gets in,
+   the castle loses HP. The leader (moved with the joystick or the arrow keys) attacks whatever is near and gets hurt by
+   whatever touches them. Kills drop coins; standing on a build spot pours coins into it until a tower goes up there:
+   the other party heroes first, then the pets, then plain arrow towers. Paying again upgrades a tower. */
+const SW = 540, SH = 2400;
+const SPATH = [[270, 2390], [270, 2230], [110, 2110], [110, 1960], [430, 1820], [430, 1600], [130, 1470], [130, 1230], [420, 1100], [420, 860], [250, 730], [250, 560], [270, 330]];
+const SSEG = []; let SPLEN = 0;
+for (let i = 1; i < SPATH.length; i++) { const [ax, ay] = SPATH[i - 1], [bx, by] = SPATH[i], l = Math.hypot(bx - ax, by - ay); SSEG.push({ ax, ay, bx, by, l, s: SPLEN }); SPLEN += l; }
+function spos(d) { d = clamp(d, 0, SPLEN); for (const s of SSEG) if (d <= s.s + s.l) { const t = (d - s.s) / s.l; return { x: s.ax + (s.bx - s.ax) * t, y: s.ay + (s.by - s.ay) * t }; } return { x: 270, y: 330 }; }
+const LEDGES = [2020, 1680, 1290, 930, 600];     // cliff lines between the tiers (stairs where the path crosses)
+const SPOTS = [[400, 2130, 5], [120, 2290, 10], [260, 1960, 15], [300, 1640, 20], [290, 1440, 25], [300, 1220, 30], [250, 940, 40], [110, 760, 50], [420, 640, 60]];
+const CANDLES = [[60, 2350], [480, 2300], [40, 2000], [500, 1900], [60, 1650], [490, 1500], [40, 1200], [500, 1150], [70, 880], [480, 800], [60, 520], [480, 480], [200, 2050], [350, 1730], [230, 1350]];
+const STAGES = [
+  { id: 0, name: '迷霧森林・外圍', zone: 0, waves: 8 },
+  { id: 1, name: '迷霧森林・深處（魔王）', zone: 1, waves: 8, boss: true, hpMul: 1.5 }
+];
+const sc = $('sc'), sctx = sc.getContext('2d');
+let ST = null;
+const RT_CD = [5, 9, 15, 40];
+function startStage(id) {
+  const d = Save.d, def = STAGES[id], lead = d.leader, ch = heroCh(lead);
+  const mods = { atk: 1, spd: 1, hp: 1 };
+  if (d.bless === 'atk') mods.atk *= 1.1;
+  if (d.curse === 'weak') mods.atk *= 0.88; else if (d.curse === 'slow') mods.spd *= 0.85; else if (d.curse === 'frail') mods.hp *= 0.9;
+  d.bless = null; d.curse = null;
+  const st = heroStats(lead, ch, mods);
+  ST = { def, wave: 0, castle: 20, castleMax: 20, coins: 5, mobs: [], coinsOnMap: [], towers: [], shots: [], fx: [], floats: [], queue: [], qT: 0, waitT: 6, t: 0, kills: 0, exp: 0, gold: 0, drops: 0, caught: [], skillUps: [], result: null, LH: 900, camY: SH - 900, speed: 1,
+    hero: { cls: lead, ch, st, x: 270, y: 2150, hp: Math.max(1, Math.min(curHp(lead), st.maxHp)), maxHp: st.maxHp, face: 1, cd: 0, scd: {}, down: 0, buffs: {}, anim: 0, hitT: 0, mods },
+    spots: SPOTS.map(([x, y, cost], i) => ({ i, x, y, cost, paid: 0, tower: null })),
+    joy: null, mspd: 190 * mods.spd };
+  // who can become a tower: the other party heroes, then every pet the party carries
+  ST.builders = d.party.filter(c => c !== lead).map(c => ({ kind: 'hero', cls: c })).concat(d.party.map(c => petOf(c)).filter(Boolean).map(p => ({ kind: 'pet', pet: p })));
+  Save.write();
+  showScreen('stage'); V.active = false; F.active = false; B = null;
+  ST.LH = resizeCanvasTo(sc) || 900; ST.camY = SH - ST.LH;
+  $('sTitle').textContent = def.name; renderSkillBtns(); updateStageHud();
+  BGM.play(def.boss ? 'boss' : 'stage');
+  sayS(say1(lead, 'meet'));
+  stageToast(IS_TOUCH ? '手指按住畫面拖曳＝移動，靠近怪物會自動攻擊\n站在金幣格子上＝花金幣蓋塔' : '方向鍵移動，靠近怪物會自動攻擊\n站在金幣格子上＝花金幣蓋塔　1/2/3 技能　N 下一波');
+}
+let sToastT = null;
+function stageToast(text) { const b = $('sToast'); b.textContent = text; b.classList.add('show'); clearTimeout(sToastT); sToastT = setTimeout(() => b.classList.remove('show'), 3200); }
+function sayS(text) { if (ST) ST.bubble = { text, t: 3.4 }; }
+function updateStageHud() {
+  if (!ST) return;
+  $('sCastle').textContent = ST.castle; $('sWave').textContent = `第 ${ST.wave}/${ST.def.waves} 波`; $('sCoins').textContent = ST.coins;
+  const nb = $('sNext'); nb.hidden = !(ST.waitT > 0 && ST.wave < ST.def.waves && !ST.queue.length);
+  if (!nb.hidden) nb.textContent = `下一波 ${Math.ceil(ST.waitT)}` + (IS_TOUCH ? '' : '（N）');
+}
+function renderSkillBtns() {
+  const box = $('sSkills'); box.innerHTML = '';
+  const hcls = ST.hero.cls, ch = ST.hero.ch;
+  ch.load.forEach((i, k) => {
+    const s = CLASSES[hcls].skills[i];
+    box.append(h('button', { type: 'button', class: 'skr', id: 'skr' + k, 'aria-label': s.name, on: { pointerdown: e => { e.preventDefault(); e.stopPropagation(); castRT(k); } } },
+      h('img', { src: skillIcon(hcls, i, ch.skills[i]), alt: '' }), h('span', { class: 'cdm', id: 'skrm' + k }), h('b', null, IS_TOUCH ? s.name : (k + 1) + ' ' + s.name)));
+  });
+}
+// ---------- waves ----------
+function buildWave() {
+  const z = ZONES[ST.def.zone], w = ST.wave, n = 4 + w * 2, list = [];
+  for (let i = 0; i < n; i++) list.push({ type: pick(z.mobs), lvl: clamp(z.lv[0] + Math.floor((w - 1) * (z.lv[1] - z.lv[0]) / (ST.def.waves - 1)) + randi(0, 1), z.lv[0], z.lv[1]), elite: false });
+  if (w % 2 === 0) for (let i = 0; i < Math.floor(w / 3) + 1; i++) list.push({ type: pick(z.elite), lvl: z.lv[0] + Math.floor(w / 2), elite: true });
+  if (ST.def.boss && w === ST.def.waves) list.push({ type: 'boss', lvl: 10, boss: true });
+  ST.queue = list.map((m, i) => ({ ...m, at: i * 0.9 })); ST.qT = 0;
+}
+function nextWave() {
+  if (!ST || ST.result || ST.queue.length || ST.wave >= ST.def.waves) return;
+  ST.wave++; ST.waitT = 0; buildWave(); SFX.meet();
+  stageToast(ST.def.boss && ST.wave === ST.def.waves ? '最後一波：腐根樹妖來了！' : `第 ${ST.wave} 波來了！`);
+  if (ST.wave === ST.def.waves && ST.def.boss) sayS('主神！樹在走路！樹在走路！');
+  updateStageHud();
+}
+function sSpawn(m) {
+  const s = monsterStats(m.type, m.lvl, m.elite, m.boss), p = spos(0);
+  ST.mobs.push(Object.assign({ type: m.type, lvl: m.lvl, elite: !!m.elite, boss: !!m.boss, name: ENEMY[m.type].name, el: MON_EL[m.type], d: 0, x: p.x + rand(-20, 20), y: p.y, spdPx: ENEMY[m.type].speed * 0.33, hitCd: 0, buffs: {}, aff: m.elite ? [pick(Object.keys(EAFFIX))] : [], face: 1 }, s, { hp: Math.round(s.hp * RT.mobHp * (ST.def.hpMul || 1)), maxHp: Math.round(s.hp * RT.mobHp * (ST.def.hpMul || 1)) }));
+  const e = ST.mobs[ST.mobs.length - 1]; if (e.aff[0] === 'shield') e.shield = Math.round(e.maxHp * 0.4);
+}
+const RT = { mobHp: 0.5, touch: 0.5, coinDrop: 1.4 };   // real-time tuning on top of the RPG numbers
+// ---------- the leader ----------
+const heroRange = hr => (WRNG[hr.st.wtype] ? 80 + WRNG[hr.st.wtype] * 40 : 74);
+function heroDmg(hr, e, mult, skill, lv, o) {
+  const st = hr.st; let d = st.atk * mult * rand(0.9, 1.1) * (skill ? st.skillMul * (1 + 0.12 * ((lv || 1) - 1)) : st.basicMul) * (CLASSES[hr.cls].cmul || 1);
+  if (hr.cls === 'berserker') d *= 1 + 0.6 * (1 - hr.hp / hr.maxHp);
+  if (hr.buffs.frenzy > 0) d *= hr.frenzyMul || 1.5;
+  return mobHurt(e, d, { crit: st.crit, pierce: st.waff === 'pierce', el: o && o.el || WAFF_EL[st.waff], magic: o && o.magic, from: hr, steal: st.steal + (hr.buffs.lust > 0 ? hr.lustAmt : 0) });
+}
+function mobHurt(e, d, o) {
+  if (!e || e.hp <= 0) return 0;
+  const crit = Math.random() < (o.crit || 0.08); if (crit) d *= 1.8;
+  if ((e.elite || e.boss) && o.pierce) d *= 1.4;
+  if (e.buffs.broke > 0) d *= 1.3;
+  if (e.buffs.stun > 0 && !o.magic) d *= 1.3;
+  if (e.armor && !o.pierce && !(e.buffs.broke > 0) && !o.magic) d *= e.armor;
+  const em = elemMul(o.el, e.el); d *= em;
+  d = Math.max(1, Math.round(d)); let rem = d;
+  if (e.shield > 0) { const a = Math.min(e.shield, rem); e.shield -= a; rem -= a; }
+  e.hp -= rem; e.flash = 0.12;
+  if (o.steal && o.from && o.from.hp > 0) o.from.hp = Math.min(o.from.maxHp, o.from.hp + d * o.steal);
+  sFloat(e.x, e.y - 50, String(d) + (em > 1 ? ' 剋！' : ''), crit ? '#ffd23a' : em > 1 ? '#ffb36b' : '#ffffff', crit ? 30 : 22);
+  if (crit) SFX.crit(); else SFX.hit();
+  if (e.hp <= 0) mobDie(e);
+  return d;
+}
+function mobDie(e) {
+  if (e.dead) return; e.dead = true; ST.kills++;
+  const lvM = 1 + 0.2 * (e.lvl - 1);
+  ST.exp += Math.round(EXPV[e.type] * lvM * (e.elite ? 3 : 1) * TB.exp);
+  ST.gold += Math.round(GOLDV[e.type] * lvM * (e.elite ? 3 : 1) * rand(0.8, 1.2) * 0.6);
+  if (Math.random() < (e.boss ? 1 : e.elite ? 0.3 : 0.04)) ST.drops += e.boss ? 2 : 1;
+  const n = Math.round((e.boss ? 30 : e.elite ? 7 : randi(1, 2)) * RT.coinDrop);
+  for (let i = 0; i < n; i++) ST.coinsOnMap.push({ x: e.x + rand(-26, 26), y: e.y + rand(-20, 20), vy: -rand(60, 140), z: 0, t: 0 });
+  SFX.kill();
+  for (let i = 0; i < 8; i++) ST.fx.push({ kind: 'spark', x: e.x, y: e.y - 20, vx: rand(-90, 90), vy: rand(-150, 0), t: rand(0.3, 0.6), t0: 0.6, c: e.elite || e.boss ? '#ffcf5a' : '#cfe8b0' });
+  if (e.aff.includes('deathbomb') && Math.hypot(ST.hero.x - e.x, ST.hero.y - e.y) < 110) heroHurt(e.atk * 1.2, e);
+  if (e.boss) sayS('打倒了！主神，這次算你操控得還行。只是還行喔。');
+}
+function heroHurt(dmg, src) {
+  const hr = ST.hero; if (hr.down > 0) return;
+  let d = dmg * 100 / (100 + hr.st.def);
+  if (hr.buffs.wall > 0) d *= 0.5;
+  if (hr.buffs.taunt > 0) d *= 0.6;
+  if (hr.buffs.frenzy > 0) d *= 1.2;
+  if (hr.absorb > 0) { const a = Math.min(hr.absorb, d); hr.absorb -= a; d -= a; }
+  d = Math.round(d); if (d <= 0) return;
+  hr.hp -= d; hr.hitT = 0.25; sFloat(hr.x, hr.y - 80, '-' + d, '#ff6a5a', 22); SFX.hurt();
+  if (hr.hp <= 0) {
+    if (hr.cls === 'paladin' && !hr.martyr) { hr.martyr = true; hr.hp = Math.round(hr.maxHp * 0.3); sFloat(hr.x, hr.y - 100, '殉道！', '#ffe9a0', 26); sayS('聖光說，我太帥了，還不能死。'); return; }
+    hr.hp = 0; hr.down = 6; sayS(pick(BANTER[hr.cls].death));
+    stageToast('倒下了！6 秒後在城堡前爬起來');
+  } else if (hr.hp < hr.maxHp * 0.3 && !hr.lowSaid) { hr.lowSaid = true; sayS(pick(BANTER[hr.cls].lowhp)); }
+}
+// ---------- real-time skills: the 24 skills as quick bursts around the leader ----------
+const nearMobs = (x, y, r) => ST.mobs.filter(e => !e.dead && Math.hypot(e.x - x, e.y - y) <= r);
+const nearestMob = (x, y, r) => nearMobs(x, y, r).sort((a, b) => Math.hypot(a.x - x, a.y - y) - Math.hypot(b.x - x, b.y - y))[0];
+function densestMob(r, range) { const hr = ST.hero, list = nearMobs(hr.x, hr.y, range); let best = null, bn = 0; for (const e of list) { const n = list.filter(o => Math.hypot(o.x - e.x, o.y - e.y) < r).length; if (n > bn) { bn = n; best = e; } } return best; }
+function lineMobs(x, y, tx, ty, len, w) { const dx = tx - x, dy = ty - y, l = Math.hypot(dx, dy) || 1, ux = dx / l, uy = dy / l; return { ux, uy, list: ST.mobs.filter(e => { if (e.dead) return false; const px = e.x - x, py = e.y - y, al = px * ux + py * uy; return al > -10 && al < len && Math.abs(px * uy - py * ux) < w; }) }; }
+function ring(x, y, r, col) { ST.fx.push({ kind: 'ring', x, y, r, t: 0.45, t0: 0.45, c: col }); }
+function castRT(k) {
+  if (!ST || ST.result || uiBlocked()) return;
+  const hr = ST.hero; if (hr.down > 0) return;
+  const i = hr.ch.load[k]; if (i == null) return;
+  if ((hr.scd[k] || 0) > 0) return stageToast('技能冷卻中');
+  const s = CLASSES[hr.cls].skills[i], lv = hr.ch.skills[i], E = evo(lv), id = s.id, col = SK_COL[hr.cls], el = SKILL_EL[id];
+  const D = (e, m, o) => heroDmg(hr, e, m, true, lv, Object.assign({ el }, o || {}));
+  const near = nearestMob(hr.x, hr.y, 300);
+  const needTarget = !['roar', 'wall', 'heal', 'aegis', 'bloodlust', 'frenzy', 'whirl', 'quake', 'nova'].includes(id);
+  if (needTarget && !near) return stageToast('附近沒有怪');
+  switch (id) {
+    case 'whirl': ring(hr.x, hr.y, 95, col); for (const e of nearMobs(hr.x, hr.y, 95)) { D(e, E >= 1 ? 1.4 : 1.1); if (E >= 2) e.buffs.stun = 0.8; } break;
+    case 'charge': case 'ram': { const { ux, uy, list } = lineMobs(hr.x, hr.y, near.x, near.y, 210, 40); for (const e of list) { D(e, id === 'ram' ? (E >= 2 ? 2.2 : 1.5) : 1.7); e.buffs.stun = E >= 1 ? 1.2 : 0.7; } heroDash(hr, ux, uy, 170); break; }
+    case 'smash': D(near, 2.4); near.buffs.broke = 5; if (E >= 1) for (const e of nearMobs(near.x, near.y, 70)) if (e !== near) { e.buffs.broke = 5; D(e, 0.9); } ring(near.x, near.y, 50, col); break;
+    case 'quake': for (let q = 0; q < (E >= 2 ? 2 : 1); q++) { ring(hr.x, hr.y, 160, col); for (const e of nearMobs(hr.x, hr.y, 160)) { D(e, E >= 1 ? 2 : 1.7); e.buffs.stun = 0.6; } } sShake(); break;
+    case 'fireball': for (const t of E >= 1 ? nearMobs(hr.x, hr.y, 280).slice(0, 3) : [near]) { ring(t.x, t.y, 70, '#ff8a3a'); for (const e of nearMobs(t.x, t.y, 70)) { D(e, e === t ? 1.9 : 0.7, { magic: true }); if (E >= 2) e.buffs.burn = 3; } } break;
+    case 'nova': ring(hr.x, hr.y, 150, '#9fe8ff'); for (const e of nearMobs(hr.x, hr.y, 150)) { D(e, E >= 2 ? 1.3 : 0.9, { magic: true }); e.buffs.slow = 2.5; if (Math.random() < [0.3, 0.5, 0.7][E]) e.buffs.stun = 1.5; } break;
+    case 'beam': case 'holyslash': { const { list } = lineMobs(hr.x, hr.y, near.x, near.y, id === 'beam' ? 320 : 240, 34); ST.fx.push({ kind: 'line', x: hr.x, y: hr.y - 30, x2: hr.x + (near.x - hr.x) * 3, y2: hr.y - 30 + (near.y - hr.y) * 3, t: 0.3, t0: 0.3, c: col }); for (const e of list) D(e, id === 'beam' ? (E >= 1 ? 2.1 : 1.8) : (E >= 1 ? 1.8 : 1.5), { magic: true }); if (id === 'holyslash' && E >= 2) hr.hp = Math.min(hr.maxHp, hr.hp + hr.maxHp * 0.05 * list.length); break; }
+    case 'meteor': case 'rain': { const t = densestMob(110, 320) || near; const r = id === 'meteor' ? (E >= 1 ? 130 : 110) : 130; const ticks = id === 'rain' ? (E >= 2 ? 5 : 3) : 1; for (let q = 0; q < ticks; q++) setTimeout(() => { if (!ST) return; ring(t.x, t.y, r, col); for (const e of nearMobs(t.x, t.y, r)) { D(e, id === 'meteor' ? (E >= 1 ? 2.8 : 2.4) : 0.8, { magic: id === 'meteor' }); if (id === 'meteor' && E >= 2) e.buffs.burn = 3; } }, q * 300); sShake(); break; }
+    case 'bash': D(near, 1.5); near.buffs.stun = E >= 1 ? 1.6 : 1.2; if (E >= 2) for (const e of nearMobs(near.x, near.y, 70)) e.buffs.stun = 1; ring(near.x, near.y, 40, col); break;
+    case 'roar': hr.buffs.taunt = 4 + lv * 0.3; ring(hr.x, hr.y, 260, '#ffd27a'); for (const e of nearMobs(hr.x, hr.y, 260)) { e.taunted = 4; if (E >= 2 && Math.random() < 0.3) e.buffs.stun = 1; } sayS('嘲諷！全部衝著我來！'); break;
+    case 'wall': hr.buffs.wall = E >= 1 ? 8 : 6; ring(hr.x, hr.y, 60, '#a8c8ff'); break;
+    case 'heal': { const pct = 0.25 + 0.025 * (lv - 1); hr.hp = Math.min(hr.maxHp, hr.hp + hr.maxHp * pct); sFloat(hr.x, hr.y - 90, '+' + Math.round(hr.maxHp * pct), '#7dff8a', 24); if (E >= 1 && ST.castle < ST.castleMax) { ST.castle++; sFloat(270, 300, '城堡 +1', '#7dff8a', 24); } ring(hr.x, hr.y, 70, '#7dff8a'); break; }
+    case 'aegis': hr.absorb = hr.maxHp * (0.5 + 0.05 * (lv - 1)); hr.buffs.shield = 8; ring(hr.x, hr.y, 60, '#ffe9a0'); break;
+    case 'judge': ST.fx.push({ kind: 'pillar', x: near.x, y: near.y, t: 0.6, t0: 0.6, c: '#ffe9a0' }); D(near, E >= 1 ? 4.4 : 3.8, { magic: true }); if (E >= 2) for (const e of nearMobs(near.x, near.y, 80)) if (e !== near) D(e, 2, { magic: true }); break;
+    case 'flurry': case 'triple': { const n = Math.min(id === 'triple' ? 8 : 9, (id === 'triple' ? 3 : 4) + Math.floor(lv / 2)), pool = nearMobs(hr.x, hr.y, id === 'triple' ? 280 : 110); if (!pool.length) return stageToast('附近沒有怪'); for (let q = 0; q < n; q++) setTimeout(() => { if (!ST) return; const e = pick(pool.filter(x => !x.dead)); if (!e) return; if (id === 'triple') ST.shots.push({ x: hr.x, y: hr.y - 40, t: e, sp: 900, dmg: 0, col: '#d8ffb0', kind: 'arrow', on: () => D(e, [0.9, 1, 1.1][E]) }); else { ST.fx.push({ kind: 'slash', x: e.x, y: e.y - 25, t: 0.2, t0: 0.2, c: '#ff8a5a' }); const got = D(e, E >= 1 ? 0.65 : 0.55); if (E >= 2) hr.hp = Math.min(hr.maxHp, hr.hp + got * 0.2); } }, q * 90); if (id === 'triple') sFloat(hr.x, hr.y - 100, n + ' 箭！', '#d8ffb0', 22); break; }
+    case 'leap': { heroDash(hr, (near.x - hr.x) / (Math.hypot(near.x - hr.x, near.y - hr.y) || 1), (near.y - hr.y) / (Math.hypot(near.x - hr.x, near.y - hr.y) || 1), Math.max(0, Math.hypot(near.x - hr.x, near.y - hr.y) - 30)); ring(near.x, near.y, 85, col); for (const e of nearMobs(near.x, near.y, 85)) { D(e, e === near ? (E >= 1 ? 2.1 : 1.8) : 1); if (E >= 2) e.buffs.stun = 1; } sShake(); break; }
+    case 'bloodlust': hr.buffs.lust = E >= 1 ? 8 : 6; hr.lustAmt = E >= 1 ? 0.4 : 0.3; ring(hr.x, hr.y, 60, '#ff4a3a'); break;
+    case 'frenzy': hr.buffs.frenzy = E >= 1 ? 10 : 8; hr.frenzyMul = E >= 2 ? 1.8 : 1.5; ring(hr.x, hr.y, 70, '#ff4a3a'); sayS(pick(BANTER_TD.berserker.ult)); break;
+    case 'backshot': D(near, E >= 1 ? 1.9 : 1.6); { const dx = hr.x - near.x, dy = hr.y - near.y, l = Math.hypot(dx, dy) || 1; heroDash(hr, dx / l, dy / l, 90); } if (E >= 2) { const o = nearMobs(hr.x, hr.y, 280).filter(e => e !== near); if (o.length) D(pick(o), 1.1); } break;
+    case 'blast': ring(near.x, near.y, 85, '#ffb24a'); for (const e of nearMobs(near.x, near.y, 85)) { D(e, e === near ? (E >= 1 ? 2.1 : 1.8) : 0.9); if (E >= 2) e.buffs.burn = 2; } break;
+  }
+  hr.scd[k] = RT_CD[i] * (1 - hr.st.cdr); hr.anim = 0.3;
+  sFloat(hr.x, hr.y - 120, s.name, '#ffe9a0', 22); (i === 3 ? SFX.ult : SFX.skill)();
+  if (i === 3) sayS(pick(BANTER_TD[hr.cls].ult));
+  const ch = hr.ch; if (ch.skills[i] < SKILL_MAX) { ch.skx[i]++; if (ch.skx[i] >= skillNeed(ch.skills[i])) { ch.skx[i] = 0; ch.skills[i]++; ST.skillUps.push(CLASSES[hr.cls].name + '的' + s.name + ' → Lv' + ch.skills[i] + (ch.skills[i] === 5 || ch.skills[i] === 10 ? '（進化！）' : '')); renderSkillBtns(); } }
+}
+function heroDash(hr, ux, uy, dist) { const steps = 8; for (let q = 1; q <= steps; q++) { const nx = hr.x + ux * dist / steps, ny = hr.y + uy * dist / steps; if (!sWalkable(nx, ny)) break; hr.x = nx; hr.y = ny; } }
+function sWalkable(x, y) { return x > 24 && x < SW - 24 && y > 380 && y < SH - 20; }
+function sFloat(x, y, s, c, size) { ST.floats.push({ x, y, s, c, size: size || 20, t: 1.1, t0: 1.1 }); }
+function sShake() { ST.shake = 0.3; }
+// ---------- towers ----------
+function towerStats(b, lvl) {
+  const up = 1 + 0.35 * (lvl - 1);
+  if (b.kind === 'hero') { const ch = heroCh(b.cls), st = heroStats(b.cls, ch); return { atk: st.atk * st.basicMul * up, rng: WRNG[st.wtype] ? 150 + WRNG[st.wtype] * 25 : 120, cd: (WRNG[st.wtype] ? 1.0 : 0.85) / st.aspd, crit: st.crit, el: WAFF_EL[st.waff], pierce: st.waff === 'pierce', ranged: !!WRNG[st.wtype], col: SK_COL[b.cls], img: b.cls };
+  }
+  if (b.kind === 'pet') { const ps = petStats(b.pet); return { atk: ps.atk * 1.2 * up, rng: 130, cd: 0.9, crit: ps.crit, el: MON_EL[b.pet.type], ranged: false, col: '#ffd0a0', img: b.pet.type }; }
+  return { atk: (16 + ST.wave * 2) * up, rng: 190, cd: 1.0, crit: 0.08, ranged: true, col: '#f5f0d0', img: null };
+}
+function buildAt(sp) {
+  const b = ST.builders.shift() || { kind: 'arrow' };
+  sp.tower = { b, lvl: 1, cd: 0.5, name: b.kind === 'hero' ? CLASSES[b.cls].name : b.kind === 'pet' ? b.pet.name : '箭塔', anim: 0 };
+  sp.paid = 0; sp.cost = Math.round(sp.cost * 1.6);
+  ring(sp.x, sp.y, 70, '#ffe066'); SFX.win();
+  sFloat(sp.x, sp.y - 90, sp.tower.name + '上場！', '#ffe066', 24);
+  if (b.kind === 'hero') { const lines = BANTER_TD[b.cls].place; sayS(CLASSES[b.cls].name + '：「' + pick(lines) + '」'); }
+}
+function upgradeTower(sp) { sp.tower.lvl++; sp.paid = 0; sp.cost = Math.round(sp.cost * 1.6); ring(sp.x, sp.y, 70, '#7dff8a'); SFX.win(); sFloat(sp.x, sp.y - 90, sp.tower.name + ' Lv' + sp.tower.lvl, '#7dff8a', 24); }
+// ---------- the main step ----------
+function stageStep(dt) {
+  const S2 = ST; if (!S2 || S2.result) return;
+  dt *= S2.speed; S2.t += dt;
+  const hr = S2.hero;
+  // waves
+  if (S2.queue.length) { S2.qT += dt; while (S2.queue.length && S2.queue[0].at <= S2.qT) sSpawn(S2.queue.shift()); }
+  else if (!S2.mobs.some(e => !e.dead) && S2.wave < S2.def.waves) { if (S2.waitT <= 0) { S2.waitT = S2.wave === 0 ? 8 : 9; if (S2.wave) { SFX.coin(); stageToast(`第 ${S2.wave} 波清光了！`); } } S2.waitT -= dt; if (S2.waitT <= 0) nextWave(); }
+  else if (!S2.mobs.some(e => !e.dead) && S2.wave >= S2.def.waves) return endStage(true);
+  // the leader
+  for (const k in hr.buffs) if (hr.buffs[k] > 0) hr.buffs[k] -= dt;
+  for (const k in hr.scd) if (hr.scd[k] > 0) hr.scd[k] -= dt;
+  if (hr.hitT > 0) hr.hitT -= dt; if (hr.anim > 0) hr.anim -= dt;
+  if (hr.down > 0) { hr.down -= dt; if (hr.down <= 0) { hr.hp = Math.round(hr.maxHp * 0.5); hr.x = 270; hr.y = 620; hr.lowSaid = false; sayS(pick(BANTER[hr.cls].revive)); } }
+  else {
+    let mx = 0, my = 0;
+    if (S2.joy && S2.joy.dx != null) { mx = S2.joy.dx; my = S2.joy.dy; }
+    for (const k in held) { mx += KEYDIR[k][0]; my += KEYDIR[k][1]; }
+    if (S2.auto) { // test autopilot: build when it can afford a spot, grab coins, fight the closest monster
+      const sp = S2.spots.filter(q => (!q.tower || q.tower.lvl < 3) && S2.coins + q.paid >= q.cost).sort((a, b) => Math.hypot(a.x - hr.x, a.y - hr.y) - Math.hypot(b.x - hr.x, b.y - hr.y))[0];
+      const coin = S2.coinsOnMap.filter(c => Math.hypot(c.x - hr.x, c.y - hr.y) < 260)[0];
+      const mob = S2.mobs.filter(e => !e.dead).sort((a, b) => b.d - a.d)[0];
+      const tgt = sp ? sp : coin ? coin : mob ? { x: mob.x, y: mob.y + 40 } : { x: 270, y: 1500 };
+      mx = tgt.x - hr.x; my = tgt.y - hr.y; const l0 = Math.hypot(mx, my); if (l0 < 12) { mx = my = 0; } else { mx /= l0; my /= l0; }
+      for (let k = 0; k < hr.ch.load.length; k++) if (!(hr.scd[k] > 0) && nearMobs(hr.x, hr.y, 160).length >= 2) castRT(k);
+    }
+    const ml = Math.hypot(mx, my);
+    if (ml > 0.15) { const sp = S2.mspd * Math.min(1, ml); const nx = hr.x + mx / ml * sp * dt, ny = hr.y + my / ml * sp * dt; if (sWalkable(nx, hr.y)) hr.x = nx; if (sWalkable(hr.x, ny)) hr.y = ny; if (Math.abs(mx) > 0.1) hr.face = mx > 0 ? 1 : -1; hr.moving = true; hr.walkT = (hr.walkT || 0) + dt; } else hr.moving = false;
+    // auto attack
+    hr.cd -= dt;
+    const rng = heroRange(hr), t = nearestMob(hr.x, hr.y, rng);
+    if (t && hr.cd <= 0) {
+      hr.cd = (WRNG[hr.st.wtype] ? 0.85 : 0.65) / (hr.st.aspd * (hr.buffs.frenzy > 0 ? 1.4 : 1)); hr.anim = 0.2; hr.face = t.x > hr.x ? 1 : -1;
+      const A = hr.st.A;
+      if (WRNG[hr.st.wtype]) ST.shots.push({ x: hr.x, y: hr.y - 45, t, sp: 760, col: wcol(hr), kind: hr.cls === 'archer' ? 'arrow' : 'bolt', on: () => { heroDmg(hr, t, A.mult * (A.hits || 1) * 0.9, false); if (A.area === 'adj') for (const e of nearMobs(t.x, t.y, 60)) if (e !== t) heroDmg(hr, e, A.mult * (A.side || 0.5), false); rtWeaponFx(hr, t); } });
+      else { ST.fx.push({ kind: 'slash', x: t.x, y: t.y - 25, t: 0.2, t0: 0.2, c: wcol(hr) }); heroDmg(hr, t, A.mult * (A.hits || 1) * 0.9, false); if (A.area) for (const e of nearMobs(t.x, t.y, A.area === 'row' ? 90 : 60)) if (e !== t) heroDmg(hr, e, A.mult * (A.side || 0.6), false); if (A.stun && Math.random() < A.stun) t.buffs.stun = 0.8; rtWeaponFx(hr, t); }
+    }
+    // coins: walk over them (a little magnet)
+    for (const c of S2.coinsOnMap) { const dd = Math.hypot(c.x - hr.x, c.y - hr.y); if (dd < 95 && c.t > 0.35) { c.x += (hr.x - c.x) * Math.min(1, dt * 9); c.y += (hr.y - c.y) * Math.min(1, dt * 9); } if (dd < 28 && c.t > 0.35) { c.got = true; S2.coins++; SFX.coin(); } }
+    // build spots: stand on one to pour coins in
+    for (const sp of S2.spots) {
+      const on = Math.hypot(sp.x - hr.x, sp.y - hr.y) < 44 && (!sp.tower || sp.tower.lvl < 3);
+      sp.on = on;
+      if (on && S2.coins > 0) { sp.pour = (sp.pour || 0) + dt * Math.max(6, sp.cost * 0.9); while (sp.pour >= 1 && S2.coins > 0 && sp.paid < sp.cost) { sp.pour -= 1; S2.coins--; sp.paid++; SFX.tick(); } if (sp.paid >= sp.cost) { if (sp.tower) upgradeTower(sp); else buildAt(sp); } }
+    }
+  }
+  S2.coinsOnMap = S2.coinsOnMap.filter(c => { c.t += dt; if (c.z < 0 || c.vy < 0) { c.vy += 500 * dt; c.z = Math.min(0, c.z + c.vy * dt); } return !c.got && c.t < 30; });
+  // monsters
+  for (const e of S2.mobs) {
+    if (e.dead) continue;
+    for (const k in e.buffs) if (e.buffs[k] > 0) e.buffs[k] -= dt;
+    if (e.flash > 0) e.flash -= dt;
+    if (e.taunted > 0) e.taunted -= dt;
+    if (e.buffs.burn > 0) { e.burnT = (e.burnT || 0) + dt; if (e.burnT > 1) { e.burnT = 0; mobHurt(e, e.maxHp * 0.05, {}); if (e.dead) continue; } }
+    if (e.aff.includes('vamp')) e.hp = Math.min(e.maxHp, e.hp + e.maxHp * 0.01 * dt);
+    if (e.buffs.stun > 0) continue;
+    const sp = e.spdPx * (e.buffs.slow > 0 ? 0.5 : 1) * (e.aff.includes('frenzy') && e.hp < e.maxHp * 0.5 ? 1.4 : 1);
+    const dh = Math.hypot(hr.x - e.x, hr.y - e.y);
+    const chase = hr.down <= 0 && (dh < (e.boss ? 150 : 115) || e.taunted > 0) && !e.boss || (e.boss && dh < 140 && hr.down <= 0);
+    let tx, ty;
+    if (chase) { tx = hr.x; ty = hr.y; }
+    else { const p = spos(e.d); if (Math.hypot(p.x - e.x, p.y - e.y) < 10) { e.d += sp * dt; } tx = spos(e.d).x; ty = spos(e.d).y; }
+    const dx = tx - e.x, dy = ty - e.y, l = Math.hypot(dx, dy);
+    if (l > (chase ? 26 : 1)) { e.x += dx / l * Math.min(l, sp * dt); e.y += dy / l * Math.min(l, sp * dt); if (Math.abs(dx) > 1) e.face = dx > 0 ? 1 : -1; }
+    // touching the leader hurts
+    e.hitCd -= dt;
+    if (hr.down <= 0 && dh < (e.boss ? 70 : 36) && e.hitCd <= 0) { e.hitCd = e.boss ? 1.6 : 1.1; heroHurt(e.atk * RT.touch, e); if (e.aff.includes('vamp')) e.hp = Math.min(e.maxHp, e.hp + e.atk * 0.3); }
+    if (e.d >= SPLEN - 4) { e.dead = true; e.leaked = true; const loss = e.boss ? 5 : e.elite ? 2 : 1; S2.castle = Math.max(0, S2.castle - loss); sFloat(270, 340, '城堡 -' + loss, '#ff6a5a', 28); SFX.bad(); sShake(); if (S2.castle <= 6 && !S2.lowSaid) { S2.lowSaid = true; sayS(pick(BANTER[hr.cls].lowhp)); } }
+  }
+  if (S2.castle <= 0) return endStage(false);
+  // towers fire
+  for (const sp of S2.spots) {
+    const tw = sp.tower; if (!tw) continue;
+    const ts = towerStats(tw.b, tw.lvl); tw.cd -= dt; if (tw.anim > 0) tw.anim -= dt;
+    if (tw.cd > 0) continue;
+    const t = nearestMob(sp.x, sp.y, ts.rng); if (!t) { tw.cd = 0.1; continue; }
+    tw.cd = ts.cd; tw.anim = 0.2; tw.face = t.x > sp.x ? 1 : -1;
+    const hit = () => mobHurt(t, ts.atk * rand(0.9, 1.1), { crit: ts.crit, el: ts.el, pierce: ts.pierce });
+    if (ts.ranged) S2.shots.push({ x: sp.x, y: sp.y - 50, t, sp: 720, col: ts.col, kind: tw.b.cls === 'archer' || tw.b.kind === 'arrow' ? 'arrow' : 'bolt', on: hit });
+    else { S2.fx.push({ kind: 'slash', x: t.x, y: t.y - 25, t: 0.2, t0: 0.2, c: ts.col }); hit(); }
+  }
+  // shots
+  for (const s of S2.shots) { const tx = s.t.x, ty = s.t.y - 30, dx = tx - s.x, dy = ty - s.y, l = Math.hypot(dx, dy), mv = s.sp * dt; if (l <= mv + 6 || s.t.dead) { s.done = true; if (!s.t.dead) s.on(); } else { s.x += dx / l * mv; s.y += dy / l * mv; s.ang = Math.atan2(dy, dx); } }
+  S2.shots = S2.shots.filter(s => !s.done);
+  S2.mobs = S2.mobs.filter(e => !e.dead);
+  for (const f of S2.fx) { f.t -= dt; if (f.kind === 'spark') { f.x += f.vx * dt; f.y += f.vy * dt; f.vy += 300 * dt; } }
+  S2.fx = S2.fx.filter(f => f.t > 0);
+  for (const f of S2.floats) { f.t -= dt; f.y -= 40 * dt; }
+  S2.floats = S2.floats.filter(f => f.t > 0);
+  if (S2.bubble && (S2.bubble.t -= dt) <= 0) S2.bubble = null;
+  // camera follows the leader up and down the tiers
+  const target = clamp(hr.y - S2.LH * 0.58, 0, SH - S2.LH); S2.camY += (target - S2.camY) * Math.min(1, dt * 6);
+  if ((S2.hudT = (S2.hudT || 0) - dt) <= 0) { S2.hudT = 0.2; updateStageHud(); updateSkillCd(); }
+}
+function rtWeaponFx(hr, t) {
+  const w = hr.st.waff; if (!w || t.dead) return;
+  if (w === 'frost' && Math.random() < 0.25) { t.buffs.stun = 1; sFloat(t.x, t.y - 70, '凍住', '#9fe8ff', 18); }
+  if (w === 'fire') t.buffs.burn = 3;
+  if (w === 'stun' && Math.random() < 0.15) t.buffs.stun = 0.8;
+  if (w === 'split' || w === 'chain') { const o = nearMobs(t.x, t.y, 160).filter(e => e !== t); if (o.length) heroDmg(hr, pick(o), 0.5, false); }
+  if (w === 'blast') for (const e of nearMobs(t.x, t.y, 60)) if (e !== t) heroDmg(hr, e, 0.4, false);
+}
+function updateSkillCd() {
+  const hr = ST.hero;
+  hr.ch.load.forEach((i, k) => { const m = $('skrm' + k); if (!m) return; const full = RT_CD[i] * (1 - hr.st.cdr), left = Math.max(0, hr.scd[k] || 0); m.style.height = (left > 0 ? left / full * 100 : 0) + '%'; });
+}
+// ---------- drawing (warm cave-like stone tiers, candles, the castle and its treasure on top) ----------
+let stonePat = null;
+function stonePattern(g) {
+  if (stonePat) return stonePat;
+  const c = document.createElement('canvas'); c.width = 120; c.height = 120; const x = c.getContext('2d');
+  x.fillStyle = '#3a342b'; x.fillRect(0, 0, 120, 120);
+  for (let i = 0; i < 9; i++) { const sx = (i % 3) * 40 + ((Math.floor(i / 3) % 2) * 20), sy = Math.floor(i / 3) * 40; x.fillStyle = ['#443c31', '#3e372d', '#4a4135'][i % 3]; x.beginPath(); x.roundRect ? x.roundRect(sx + 3, sy + 3, 34, 34, 8) : x.rect(sx + 3, sy + 3, 34, 34); x.fill(); }
+  stonePat = g.createPattern(c, 'repeat'); return stonePat;
+}
+function drawStage(now) {
+  const S2 = ST, g = sctx, k = sc.width / L, LH = S2.LH, t = now / 1000, cam = S2.camY;
+  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#1e1a15'; g.fillRect(0, 0, sc.width, sc.height);
+  g.setTransform(k, 0, 0, k, 0, 0);
+  if (S2.shake > 0) { S2.shake -= 1 / 60; g.translate(rand(-5, 5), rand(-4, 4)); }
+  g.translate(0, -cam);
+  // floor
+  g.fillStyle = stonePattern(g); g.fillRect(0, cam - 10, SW, LH + 20);
+  // tier cliffs: a dark drop with a lit edge
+  for (const y of LEDGES) { if (y < cam - 60 || y > cam + LH + 60) continue; g.fillStyle = '#17130f'; g.fillRect(0, y, SW, 38); const gr = g.createLinearGradient(0, y - 10, 0, y + 6); gr.addColorStop(0, '#6a5a44'); gr.addColorStop(1, '#2a241c'); g.fillStyle = gr; g.fillRect(0, y - 10, SW, 16); g.fillStyle = 'rgba(0,0,0,.35)'; for (let x = 0; x < SW; x += 46) g.fillRect(x, y + 6, 22, 32); }
+  // the path: a lighter flagstone road with stairs where it crosses a cliff
+  const road = (w, col) => { g.strokeStyle = col; g.lineWidth = w; g.lineJoin = 'round'; g.lineCap = 'round'; g.beginPath(); SPATH.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.stroke(); };
+  road(110, '#2a241c'); road(94, '#b8a07a'); road(70, '#cbb48c');
+  for (const y of LEDGES) for (const s of SSEG) { if ((s.ay - y) * (s.by - y) > 0) continue; const tt = (y - s.ay) / (s.by - s.ay), x = s.ax + (s.bx - s.ax) * tt; for (let q = 0; q < 5; q++) { g.fillStyle = q % 2 ? '#9a8664' : '#c2ab84'; g.fillRect(x - 46, y - 12 + q * 10, 92, 9); } }
+  // candles with warm pools of light
+  for (const [x, y] of CANDLES) { if (y < cam - 80 || y > cam + LH + 80) continue; const fl = 0.85 + Math.sin(t * 9 + x) * 0.15, lg = g.createRadialGradient(x, y - 10, 2, x, y - 10, 80 * fl); lg.addColorStop(0, 'rgba(255,190,90,.45)'); lg.addColorStop(1, 'rgba(255,160,60,0)'); g.fillStyle = lg; g.fillRect(x - 90, y - 100, 180, 180); g.fillStyle = '#efe2c0'; g.fillRect(x - 4, y - 14, 8, 16); g.fillStyle = '#ffcf5a'; g.beginPath(); g.ellipse(x, y - 19, 3.5, 6 * fl, 0, 0, 7); g.fill(); }
+  // the castle and its treasure
+  drawCastle(g, 270, 300, t);
+  // build spots
+  for (const sp of S2.spots) {
+    if (sp.y < cam - 120 || sp.y > cam + LH + 120) continue;
+    if (sp.tower) continue;
+    g.save(); g.translate(sp.x, sp.y);
+    g.fillStyle = 'rgba(20,16,12,.85)'; g.fillRect(-42, -30, 84, 60);
+    g.strokeStyle = sp.on ? '#ffe066' : '#e8e0c8'; g.lineWidth = 4; g.setLineDash([16, 10]); g.strokeRect(-42, -30, 84, 60); g.setLineDash([]);
+    if (sp.paid) { g.fillStyle = 'rgba(255,214,90,.35)'; g.fillRect(-42, 30 - 60 * sp.paid / sp.cost, 84, 60 * sp.paid / sp.cost); }
+    g.font = '900 30px sans-serif'; g.textAlign = 'center'; g.fillStyle = '#ffffff'; g.fillText(String(sp.cost - sp.paid), 12, 10);
+    drawCoinIcon(g, -22, 0, 11);
+    g.restore();
+  }
+  // things in depth order: towers, monsters, coins, the leader
+  const ents = [];
+  for (const sp of S2.spots) if (sp.tower) ents.push({ y: sp.y, f: () => drawTower(g, sp, t) });
+  for (const e of S2.mobs) ents.push({ y: e.y, f: () => drawStageMob(g, e, t) });
+  for (const c of S2.coinsOnMap) ents.push({ y: c.y - 1, f: () => drawCoinIcon(g, c.x, c.y + c.z - 8, 9) });
+  ents.push({ y: S2.hero.y, f: () => drawLeader(g, S2.hero, t) });
+  ents.sort((a, b) => a.y - b.y).forEach(o => o.f());
+  for (const s of S2.shots) { g.save(); g.translate(s.x, s.y); if (s.kind === 'arrow') { g.rotate(s.ang || 0); g.strokeStyle = s.col; g.lineWidth = 3; g.beginPath(); g.moveTo(-14, 0); g.lineTo(8, 0); g.stroke(); } else { const gg = g.createRadialGradient(0, 0, 1, 0, 0, 13); gg.addColorStop(0, '#fff'); gg.addColorStop(0.4, s.col); gg.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gg; g.beginPath(); g.arc(0, 0, 13, 0, 7); g.fill(); } g.restore(); }
+  for (const f of S2.fx) {
+    const a = clamp(f.t / f.t0, 0, 1); g.globalAlpha = a;
+    if (f.kind === 'ring') { g.strokeStyle = f.c; g.lineWidth = 5; g.beginPath(); g.ellipse(f.x, f.y, f.r * (1.1 - a * 0.4), f.r * 0.55 * (1.1 - a * 0.4), 0, 0, 7); g.stroke(); g.fillStyle = f.c; g.globalAlpha = a * 0.2; g.fill(); }
+    else if (f.kind === 'slash') { g.strokeStyle = f.c; g.lineWidth = 5; g.lineCap = 'round'; g.beginPath(); g.moveTo(f.x - 20, f.y - 18); g.quadraticCurveTo(f.x, f.y, f.x + 22, f.y + 18); g.stroke(); g.lineCap = 'butt'; }
+    else if (f.kind === 'line') { g.strokeStyle = f.c; g.lineWidth = 14 * a; g.beginPath(); g.moveTo(f.x, f.y); g.lineTo(f.x2, f.y2); g.stroke(); }
+    else if (f.kind === 'pillar') { const gr = g.createLinearGradient(f.x, f.y - 300, f.x, f.y); gr.addColorStop(0, 'rgba(255,240,180,0)'); gr.addColorStop(1, f.c); g.fillStyle = gr; g.fillRect(f.x - 28, f.y - 300, 56, 300); }
+    else if (f.kind === 'spark') { g.fillStyle = f.c; g.fillRect(f.x - 2, f.y - 2, 4, 4); }
+    g.globalAlpha = 1;
+  }
+  g.textAlign = 'center';
+  for (const f of S2.floats) { g.globalAlpha = clamp(f.t / f.t0 * 1.6, 0, 1); g.font = `900 ${f.size}px "Noto Serif TC", serif`; g.lineWidth = 4; g.strokeStyle = '#000'; g.strokeText(f.s, f.x, f.y); g.fillStyle = f.c; g.fillText(f.s, f.x, f.y); }
+  g.globalAlpha = 1;
+  if (S2.bubble) bubble(g, S2.bubble.text, S2.hero.x, S2.hero.y - 120, clamp(S2.bubble.t / 0.4, 0, 1), SW);
+  g.setTransform(k, 0, 0, k, 0, 0);
+  // vignette and the joystick
+  const vg = g.createRadialGradient(L / 2, LH * 0.55, LH * 0.3, L / 2, LH * 0.55, LH * 0.8); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.55)'); g.fillStyle = vg; g.fillRect(0, 0, L, LH);
+  if (S2.joy) { const j = S2.joy; g.fillStyle = 'rgba(255,255,255,.1)'; g.beginPath(); g.arc(j.ox, j.oy, 62, 0, 7); g.fill(); g.strokeStyle = 'rgba(255,224,102,.5)'; g.lineWidth = 3; g.stroke(); g.fillStyle = 'rgba(255,224,102,.6)'; g.beginPath(); g.arc(j.ox + (j.dx || 0) * 50, j.oy + (j.dy || 0) * 50, 26, 0, 7); g.fill(); }
+  if (S2.hero.down > 0) { g.fillStyle = 'rgba(0,0,0,.4)'; g.fillRect(0, 0, L, LH); g.font = '900 34px "Noto Serif TC", serif'; g.fillStyle = '#ffd0c0'; g.textAlign = 'center'; g.fillText(`${Math.ceil(S2.hero.down)} 秒後爬起來`, L / 2, LH * 0.45); }
+}
+function drawCoinIcon(g, x, y, r) { const gg = g.createRadialGradient(x - r * 0.3, y - r * 0.3, 1, x, y, r); gg.addColorStop(0, '#fff3b0'); gg.addColorStop(0.5, '#f0c040'); gg.addColorStop(1, '#a87a10'); g.fillStyle = gg; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); g.strokeStyle = '#6a4a08'; g.lineWidth = 1.5; g.stroke(); g.fillStyle = '#8a5a0a'; g.font = `900 ${r}px sans-serif`; g.textAlign = 'center'; g.fillText('♛', x, y + r * 0.38); }
+function drawCastle(g, x, y, t) {
+  // a heap of coins and gems, then the keep with four blue-roofed towers
+  for (let i = 0; i < 60; i++) { const a = i * 2.399, rr = 40 + (i % 13) * 9, cx = x + Math.cos(a) * rr * 1.5, cy = y + 40 + Math.sin(a) * rr * 0.55; drawCoinIcon(g, cx, cy, 8); }
+  const tower = (tx, ty, w, hh) => { g.fillStyle = '#8a8478'; g.fillRect(tx - w / 2, ty - hh, w, hh); g.fillStyle = '#a49d90'; g.fillRect(tx - w / 2, ty - hh, w, 8); g.fillStyle = '#2a4aa0'; g.beginPath(); g.moveTo(tx - w / 2 - 6, ty - hh); g.lineTo(tx, ty - hh - w * 1.1); g.lineTo(tx + w / 2 + 6, ty - hh); g.fill(); g.fillStyle = 'rgba(255,190,90,.9)'; g.fillRect(tx - 4, ty - hh * 0.6, 8, 12); };
+  tower(x - 70, y + 10, 34, 90); tower(x + 70, y + 10, 34, 90);
+  g.fillStyle = '#7a7468'; g.fillRect(x - 60, y - 60, 120, 90); g.fillStyle = '#948d80'; for (let q = 0; q < 6; q++) g.fillRect(x - 60 + q * 22, y - 72, 14, 14);
+  g.fillStyle = '#5a3a22'; g.beginPath(); g.moveTo(x - 20, y + 30); g.lineTo(x - 20, y); g.arc(x, y, 20, Math.PI, 0); g.lineTo(x + 20, y + 30); g.fill();
+  tower(x - 38, y - 40, 30, 70); tower(x + 38, y - 40, 30, 70);
+  g.strokeStyle = '#6a4a2a'; g.lineWidth = 4; g.beginPath(); g.moveTo(x, y - 75); g.lineTo(x, y - 150); g.stroke(); g.fillStyle = '#2a4aa0'; g.beginPath(); g.moveTo(x, y - 150); g.quadraticCurveTo(x + 30 + Math.sin(t * 3) * 5, y - 140, x + 40, y - 128); g.lineTo(x, y - 125); g.fill();
+  // castle HP over the gate
+  const S2 = ST; g.fillStyle = 'rgba(0,0,0,.7)'; g.fillRect(x - 62, y + 50, 124, 12); g.fillStyle = S2.castle <= 6 ? '#ff5a3a' : '#5fd04a'; g.fillRect(x - 60, y + 52, 120 * S2.castle / S2.castleMax, 8);
+}
+function drawLeader(g, hr, t) {
+  const im = IMG[hr.cls], hh = 96, bob = hr.moving ? -Math.abs(Math.sin(hr.walkT * 12)) * 6 : 0;
+  g.fillStyle = 'rgba(0,0,0,.4)'; g.beginPath(); g.ellipse(hr.x, hr.y, 26, 10, 0, 0, 7); g.fill();
+  g.strokeStyle = '#7dff8a'; g.lineWidth = 3; g.beginPath(); g.ellipse(hr.x, hr.y, 30, 12, 0, 0, 7); g.stroke();
+  if (hr.down > 0) return;
+  if (hr.buffs.taunt > 0) { g.strokeStyle = 'rgba(255,210,120,.8)'; g.lineWidth = 3; g.beginPath(); g.arc(hr.x, hr.y - 40, 48 + Math.sin(t * 8) * 3, 0, 7); g.stroke(); }
+  if (hr.absorb > 0 || hr.buffs.wall > 0) { g.strokeStyle = 'rgba(168,200,255,.8)'; g.lineWidth = 3; g.beginPath(); g.arc(hr.x, hr.y - 44, 44, 0, 7); g.stroke(); }
+  if (ready(im)) { const w = hh * im.naturalWidth / im.naturalHeight, lunge = hr.anim > 0 ? Math.sin(hr.anim / 0.2 * Math.PI) * 6 : 0; g.save(); g.translate(hr.x + lunge * hr.face, hr.y + bob); g.scale(hr.face, 1); g.drawImage(im, -w / 2, -hh, w, hh); if (hr.hitT > 0) { g.globalCompositeOperation = 'lighter'; g.globalAlpha = 0.5; g.drawImage(im, -w / 2, -hh, w, hh); } g.restore(); }
+  const bw = 70; g.fillStyle = 'rgba(0,0,0,.75)'; g.fillRect(hr.x - bw / 2 - 2, hr.y - hh - 16, bw + 4, 10); g.fillStyle = hr.hp / hr.maxHp < 0.3 ? '#ff5a3a' : '#5fd04a'; g.fillRect(hr.x - bw / 2, hr.y - hh - 14, bw * clamp(hr.hp / hr.maxHp, 0, 1), 6);
+}
+function drawStageMob(g, e, t) {
+  const im = IMG[e.type], hh = (e.boss ? 170 : (SIZE[e.type] || 70) * 0.85), bob = Math.sin(t * 8 + e.x) * 2;
+  g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(e.x, e.y, hh * 0.3, 8, 0, 0, 7); g.fill();
+  if (e.elite || e.boss) { g.strokeStyle = e.boss ? '#ff5a3a' : '#ffcf5a'; g.lineWidth = 3; g.beginPath(); g.ellipse(e.x, e.y, hh * 0.34, 10, 0, 0, 7); g.stroke(); }
+  if (ready(im)) { const w = hh * im.naturalWidth / im.naturalHeight; g.save(); g.translate(e.x, e.y + bob); g.scale(e.face || 1, 1); g.drawImage(im, -w / 2, -hh, w, hh); if (e.flash > 0) { g.globalCompositeOperation = 'lighter'; g.globalAlpha = 0.5; g.drawImage(im, -w / 2, -hh, w, hh); } g.restore(); }
+  if (e.buffs.stun > 0) { g.fillStyle = '#ffe066'; g.font = 'bold 16px sans-serif'; g.textAlign = 'center'; g.fillText('★', e.x, e.y - hh - 14); }
+  const bw = e.boss ? 120 : 46; g.fillStyle = 'rgba(0,0,0,.7)'; g.fillRect(e.x - bw / 2 - 1, e.y - hh - 8, bw + 2, 7); g.fillStyle = e.boss ? '#ff4a3a' : e.elite ? '#ffb83a' : '#e0483a'; g.fillRect(e.x - bw / 2, e.y - hh - 7, bw * clamp(e.hp / e.maxHp, 0, 1), 5);
+}
+function drawTower(g, sp, t) {
+  const tw = sp.tower, ts = towerStats(tw.b, tw.lvl), im = ts.img ? IMG[ts.img] : null;
+  // stone plinth
+  g.fillStyle = '#4a4238'; g.beginPath(); g.ellipse(sp.x, sp.y + 4, 44, 18, 0, 0, 7); g.fill(); g.fillStyle = '#6a6052'; g.beginPath(); g.ellipse(sp.x, sp.y, 40, 15, 0, 0, 7); g.fill();
+  g.strokeStyle = ['', '#c9a45c', '#7dff8a', '#ff9a2e'][tw.lvl]; g.lineWidth = 3; g.beginPath(); g.ellipse(sp.x, sp.y, 42, 16, 0, 0, 7); g.stroke();
+  if (im && ready(im)) { const hh = tw.b.kind === 'pet' ? 62 : 90, w = hh * im.naturalWidth / im.naturalHeight, l = tw.anim > 0 ? Math.sin(tw.anim / 0.2 * Math.PI) * 5 : 0; g.save(); g.translate(sp.x + l * (tw.face || 1), sp.y); g.scale(tw.face || 1, 1); g.drawImage(im, -w / 2, -hh, w, hh); g.restore(); }
+  else { g.fillStyle = '#7a6a52'; g.fillRect(sp.x - 18, sp.y - 70, 36, 70); g.fillStyle = '#a0402a'; g.beginPath(); g.moveTo(sp.x - 24, sp.y - 70); g.lineTo(sp.x, sp.y - 100); g.lineTo(sp.x + 24, sp.y - 70); g.fill(); }
+  g.font = '900 15px "Noto Serif TC", serif'; g.textAlign = 'center'; g.lineWidth = 3; g.strokeStyle = '#000'; const s = tw.name + (tw.lvl > 1 ? ' Lv' + tw.lvl : ''); g.strokeText(s, sp.x, sp.y + 34); g.fillStyle = '#ffe9a8'; g.fillText(s, sp.x, sp.y + 34);
+  if (tw.lvl < 3) { g.font = '900 14px sans-serif'; const u2 = `升級 ${sp.cost - sp.paid}`; g.strokeText(u2, sp.x, sp.y + 52); g.fillStyle = sp.on ? '#ffe066' : '#c9b48a'; g.fillText(u2, sp.x, sp.y + 52); }
+}
+// ---------- input: drag anywhere for a floating joystick ----------
+sc.addEventListener('pointerdown', e => { e.preventDefault(); SFX.resume(); BGM.kick(); if (!ST) return; const r = sc.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * L, y = (e.clientY - r.top) / r.height * ST.LH; ST.joy = { id: e.pointerId, ox: x, oy: y, dx: 0, dy: 0 }; try { sc.setPointerCapture(e.pointerId); } catch (er) {} });
+sc.addEventListener('pointermove', e => { if (!ST || !ST.joy || ST.joy.id !== e.pointerId) return; const r = sc.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * L, y = (e.clientY - r.top) / r.height * ST.LH, dx = x - ST.joy.ox, dy = y - ST.joy.oy, l = Math.hypot(dx, dy); const m = Math.min(1, l / 50); ST.joy.dx = l ? dx / l * m : 0; ST.joy.dy = l ? dy / l * m : 0; });
+['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => sc.addEventListener(ev, e => { if (ST && ST.joy && ST.joy.id === e.pointerId) ST.joy = null; }));
+// ---------- the end of a stage ----------
+function endStage(won) {
+  if (!ST || ST.result) return; ST.result = won ? 'win' : 'lose';
+  const d = Save.d, hr = ST.hero;
+  heroCh(hr.cls).hp = Math.max(1, Math.round(hr.hp)); if (heroCh(hr.cls).hp >= hr.maxHp) heroCh(hr.cls).hp = null;
+  const rw = { how: won ? 'win' : 'lose', gold: 0, exp: 0, ups: [], items: [], caught: [], skillUps: ST.skillUps, burned: 0, petUps: [] };
+  if (won) {
+    rw.gold = ST.gold + ST.coins * 5; rw.exp = ST.exp; d.gold += rw.gold;
+    const ilvl = 1 + Math.floor(avgPartyLv() / 2) + (ST.def.boss ? 2 : 0);
+    for (let k = 0; k < ST.drops + 1; k++) { const it = makeItem(pick(d.party), ilvl, ST.def.boss ? 1 : 0.3); if (d.bag.length < BAG_MAX) { d.bag.push(it); rw.items.push(it); } else { d.crystals += RAR[it.rarity].salvage; rw.burned++; } }
+    d.crystals += 2;
+    for (const c of d.party) {
+      const ch = heroCh(c), was = ch.lvl; ch.exp += rw.exp;
+      while (ch.lvl < levelCap() && ch.exp >= expNext(ch.lvl)) { ch.exp -= expNext(ch.lvl); ch.lvl++; ch.pts += 5; ch.hp = null; ch.mp = null; }
+      if (ch.lvl >= levelCap()) ch.exp = Math.min(ch.exp, expNext(ch.lvl) - 1);
+      if (ch.lvl > was) rw.ups.push(c);
+    }
+    for (const c of d.party) { const p = petOf(c); if (!p) continue; const was = p.lvl; p.exp += rw.exp; while (p.lvl < 30 && p.exp >= expNext(p.lvl)) { p.exp -= expNext(p.lvl); p.lvl++; p.hp = null; } if (p.lvl > was) rw.petUps.push(p.name + ' Lv' + was + ' → Lv' + p.lvl); }
+    d.stageBest = Math.max(d.stageBest || 0, ST.def.id + 1);
+    if (ST.def.boss) { d.clears = (d.clears || 0) + 1; d.crystals += 5; rw.boss = true; }
+    SFX.win();
+  } else { const lost = Math.round(d.gold * 0.1); d.gold -= lost; rw.lost = lost; SFX.bad(); }
+  Save.write();
+  setTimeout(() => showStageResult(rw), 600);
+}
+function showStageResult(rw) {
+  const win = rw.how === 'win', lead = ST.hero.cls;
+  Modal.open(win ? (rw.boss ? '打倒腐根樹妖！' : '守住了！') : '城堡被攻破了……', b => {
+    if (win) {
+      b.append(h('div', { class: 'say2' }, CLASSES[lead].name + '：「' + pick(BANTER_TD[lead].win) + '」'));
+      b.append(h('div', null, '經驗值 ', h('b', { class: 'tdaff' }, '+' + rw.exp), '（全隊都拿到）　金幣 ', h('b', { class: 'tdaff' }, '+' + rw.gold), '（剩下的關卡金幣 1 枚換 5 金）'));
+      if (rw.boss) b.append(h('div', { class: 'say2' }, `迷霧森林的守護者倒下了！等級上限提高到 ${levelCap()}，晶石 +5。`));
+      for (const c of rw.ups) b.append(h('div', { class: 'ok' }, `${CLASSES[c].name}升到 Lv${heroCh(c).lvl}！屬性點 +5`));
+      for (const s of rw.petUps) b.append(h('div', { class: 'ok' }, '寵物 ' + s));
+      for (const s of rw.skillUps) b.append(h('div', { class: 'tdaff' }, '技能升級：' + s));
+      for (const it of rw.items) b.append(h('div', { class: 'hrow' }, iconEl(it), h('div', { class: 'nm' }, ...itemLines(it))));
+    } else {
+      b.append(h('div', { class: 'say2' }, CLASSES[lead].name + '：「' + pick(BANTER[lead].death) + '」'));
+      b.append(h('div', null, `撐到第 ${ST.wave} 波。掉了 ${rw.lost} 金幣，回村莊整理一下再來。`));
+    }
+    b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', class: 'primary', on: { click: () => { Modal.close(); ST = null; goVillage(); } } }, '回村莊'), h('button', { type: 'button', on: { click: () => { const id = ST.def.id; Modal.close(); startStage(id); } } }, '再打一次')));
+  }, null, true);
+}
+function stageMenu() {
+  Modal.open('暫停', b => {
+    b.append(h('div', { class: 'say2' }, '技能導師：「主神，你按了暫停。怪物也在等你，牠們很有禮貌。」'));
+    b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', class: 'primary', on: { click: () => Modal.close() } }, '繼續'),
+      h('button', { type: 'button', on: { click: () => { ST.speed = ST.speed === 1 ? 2 : 1; Modal.refresh(); } } }, '速度 ' + ST.speed + 'x'),
+      h('button', { type: 'button', on: { click: () => { Save.d.music = !Save.d.music; Save.write(); if (Save.d.music) BGM.play('stage'); else BGM.stop(); Modal.refresh(); } } }, Save.d.music ? '音樂：開' : '音樂：關'),
+      h('button', { type: 'button', on: { click: () => { Modal.close(); endStage(false); } } }, '放棄這關')));
+  });
+}
+$('sMenu').addEventListener('click', () => stageMenu());
+$('sNext').addEventListener('click', () => nextWave());
+
 /* ================= windows ================= */
 const Modal = {
   onClose: null,
@@ -2150,12 +2633,13 @@ function openShop(n, chat) {
     const d = Save.d;
     switch (id) {
       case 'gate': {
-        b.append(npcHead(n, chat || pick(['站住！……喔，是你啊。城外是迷霧森林，草叢裡全是怪。對，草叢。牠們很愛躲。', '出城記得帶紅藥水。還有，記得帶腦子。', '主神，你的英雄裝備配好了嗎？技能買了嗎？……算了，反正挨打的是他們。', '森林最深處有一棵會罵人的大樹。打倒牠，你們的等級上限就會提高。我也不知道為什麼，程式碼這樣寫。'])));
+        b.append(npcHead(n, chat || pick(['站住！……喔，是你啊。城外的森林城堡快守不住了，怪物一層一層往上爬。快去幫忙！', '出城記得帶紅藥水。還有，記得帶腦子。', '主神，你的英雄裝備配好了嗎？技能買了嗎？……算了，反正挨打的是他們。', '森林最深處有一棵會罵人的大樹。打倒牠，你們的等級上限就會提高。我也不知道為什麼，程式碼這樣寫。'])));
         b.append(h('div', null, '出城隊伍：', h('b', null, d.party.map(c => CLASSES[c].name + (c === d.leader ? '（帶隊）' : '')).join('、')), d.party.some(c => petOf(c)) ? '　寵物：' + d.party.filter(c => petOf(c)).map(c => petOf(c).name).join('、') : ''));
         if (d.party.some(c => curHp(c) < heroStats(c, heroCh(c)).maxHp * 0.5)) b.append(h('div', { class: 'bad' }, '有人受傷了，先去找聖堂老教主治療比較好。'));
         if (d.bless || d.curse) b.append(h('div', { class: d.curse ? 'bad' : 'ok' }, [d.bless ? '祝福：攻擊 +10%' : '', d.curse ? '詛咒：' + CURSES[d.curse] : ''].filter(Boolean).join('　') + '（只有下一場戰鬥）'));
         b.append(h('div', { class: 'muted' }, `紅藥水 ×${d.pots.red}、藍藥水 ×${d.pots.blue}、封印符 ×${d.seals}`));
-        b.append(h('div', { class: 'btnrow' }, h('button', { type: 'button', class: 'primary', on: { click: () => { Modal.close(); goField(true); } } }, '出城！'), h('button', { type: 'button', on: { click: () => { Modal.close(); openParty(); } } }, '整理隊伍')));
+        b.append(h('div', { class: 'muted' }, `你操控帶隊的${CLASSES[d.leader].name}，其他隊友和寵物在關卡裡花金幣蓋成塔。`));
+        b.append(h('div', { class: 'btnrow' }, ...STAGES.map(sg => h('button', { type: 'button', class: sg.id === 0 || (d.stageBest || 0) >= sg.id ? 'primary' : '', disabled: sg.id > (d.stageBest || 0), on: { click: () => { Modal.close(); startStage(sg.id); } } }, sg.name + (sg.id > (d.stageBest || 0) ? '（先守住上一關）' : ''))), h('button', { type: 'button', on: { click: () => { Modal.close(); openParty(); } } }, '整理隊伍')));
         break;
       }
       case 'elder': {
@@ -2437,6 +2921,13 @@ window.addEventListener('keydown', e => {
     else if (e.code === 'Escape') openMenu();
     return;
   }
+  if (ST && !$('stage').hidden) {
+    if (KEYDIR[e.code]) { e.preventDefault(); held[e.code] = 1; return; }
+    if (/^Digit[1-4]$/.test(e.code) && !e.repeat) { castRT(+e.code.slice(5) - 1); return; }
+    if (e.code === 'KeyN' && !e.repeat) { nextWave(); return; }
+    if (e.code === 'Escape' && !e.repeat) { stageMenu(); return; }
+    return;
+  }
   if (B && !$('battle').hidden) {
     if ((e.code === 'KeyA' || e.code === 'KeyQ') && !e.repeat) { $(e.code === 'KeyA' ? 'bAuto' : 'bSpeed').click(); return; }
     if (e.code === 'KeyE' && !e.repeat) { endTurn(); return; }
@@ -2480,6 +2971,7 @@ function frame(now) {
   const dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
   if (V.active) { if (!uiBlocked()) villageStep(dt); else V.hold = 0; drawVillage(now); return; }
   if (F.active) { if (!uiBlocked()) fieldStep(dt); else F.hold = null; drawField(now); return; }
+  if (ST && !$('stage').hidden) { if (!uiBlocked()) stageStep(dt); else if (ST.joy) ST.joy = null; drawStage(now); return; }
   if (B && !$('battle').hidden) drawBattle(now, dt);
 }
 requestAnimationFrame(frame);
@@ -2488,7 +2980,7 @@ requestAnimationFrame(frame);
 ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, () => { SFX.resume(); BGM.kick(); }, { passive: true }));
 /* phones sometimes never deliver the "finger lifted" event (a window popped up under the finger, iOS cancelled the touch):
    when the last finger leaves the screen, a held walk is dropped, whatever the page saw */
-function releaseTouch() { V.hold = 0; V.ptr = null; F.hold = null; F.ptr = null; for (const k in held) delete held[k]; }
+function releaseTouch() { V.hold = 0; V.ptr = null; F.hold = null; F.ptr = null; for (const k in held) delete held[k]; if (ST) ST.joy = null; }
 ['touchend', 'touchcancel'].forEach(ev => window.addEventListener(ev, e => { if (!e.touches || e.touches.length === 0) setTimeout(releaseTouch, 0); }, { capture: true, passive: true }));
 window.addEventListener('blur', releaseTouch);
 const ExitGuard = {
@@ -2537,6 +3029,7 @@ function layout() {
   if (V.active) V.LH = resizeCanvasTo(vc) || V.LH;
   if (F.active) F.LH = resizeCanvasTo(fc) || F.LH;
   if (B && !$('battle').hidden) B.LH = resizeCanvasTo(bc) || B.LH;
+  if (ST && !$('stage').hidden) ST.LH = resizeCanvasTo(sc) || ST.LH;
 }
 const unzoom = () => {
   const vv = window.visualViewport; if (!vv || vv.scale < 1.02) return;
@@ -2555,6 +3048,8 @@ window.addEventListener('pageshow', awayOff);
 
 /* ---------------- testing hooks ---------------- */
 window.TD = {
+  get ST() { return ST; },
+  stageSim(id, maxSec) { startStage(id); ST.auto = true; let t = 0; while (!ST.result && t < (maxSec || 900)) { for (let i = 0; i < 30; i++) stageStep(1 / 30); t += 1; } const r = { stuck: ST.result ? '' : ST.mobs.map(e => Math.round(e.x) + ',' + Math.round(e.y) + ',d' + Math.round(e.d) + (e.taunted > 0 ? 't' : '')).join(' ') + ' q' + ST.queue.length + ' w' + ST.waitT.toFixed(1), result: ST.result, wave: ST.wave, castle: ST.castle, coins: ST.coins, towers: ST.spots.filter(q => q.tower).map(q => q.tower.name + q.tower.lvl).join(','), heroHp: Math.round(ST.hero.hp), t }; return JSON.stringify(r); },
   Save, F, V, TB, get B() { return B; },
   walk(dir, sec) { V.hold = dir; for (let i = 0; i < sec * 30; i++) villageStep(1 / 30); V.hold = 0; villageStep(0); drawVillage(performance.now()); return V.t.toFixed(2) + ' ' + (V.near ? V.near.id : '-'); },
   fwalk(dx, dy, sec) { F.hold = { x: dx, y: dy }; for (let i = 0; i < sec * 30 && F.active; i++) fieldStep(1 / 30); F.hold = null; if (F.active) drawField(performance.now()); return Math.floor(F.x / FT) + ',' + Math.floor(F.y / FT) + (B ? ' battle' : ''); },
